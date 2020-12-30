@@ -4,7 +4,17 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import *
 import sys, uvicorn
 
+# Endpoints
+from endpoints.server import router as server_router
+
 app = FastAPI()
+
+# Routers
+app.include_router(
+    server_router,
+    prefix='/server',
+    tags=['server']
+)
 
 files = list(os.walk('client'))
 
@@ -44,6 +54,8 @@ async def api_root(response: Response):
         'timestamp':time.time(),
         'runtime':CONFIG['runtime']
     }
+
+
 
 if __name__ == "__main__":
     uvicorn.run('main:app',host=CONFIG['runtime']['ip'],port=CONFIG['runtime']['port'],log_level='info',access_log=False)

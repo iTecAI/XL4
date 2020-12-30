@@ -81,6 +81,8 @@ class User(BaseObject):
             'participating':[]
         })
         self._update = error(dct,'_update',False)
+        self.passhash = dct['passhash']
+
     def update(self):
         self._update = True
     def check_update(self):
@@ -142,6 +144,9 @@ class Server:
                 self.connections[fp] = Connection(cur_lock['connections'][fp].copy())
             else:
                 self.connections[fp] = Connection({'id':fp})
+                cur_lock['connections'][fp] = self.connections[fp].to_dict()
+            with open(os.path.join(*CONFIG['session_lock'].split('/')),'w') as f:
+                json.dump(cur_lock,f)
         updates = {
             'user':False,
             'characters':False,
