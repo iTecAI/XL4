@@ -153,3 +153,5 @@ class Server:
             updates['user'] = self.connections[fp].user.check_update()
             updates['characters'] = any([self.get('characters',i).check_update() for i in self.connections[fp].characters])
         return updates
+
+server = Server()
