@@ -1,0 +1,143 @@
+:root {
+    --primary: #601eb9;
+    --primary-dark: #250088;
+    --primary-light: #954fec;
+    --primary-text: #ffffff;
+
+    --secondary: #77d6cb;
+    --secondary-dark: #43a49a;
+    --secondary-light: #aafffe;
+    --secondary-text: #000000;
+
+    --gradient0: #000000;
+    --gradient1: #222222;
+    --gradient2: #444444;
+    --gradient3: #666666;
+    --gradient4: #888888;
+    --gradient5: #aaaaaa;
+    --gradient6: #cccccc;
+    --gradient7: #eeeeee;
+    --gradient8: #ffffff;
+
+    --dnd-text: #a82315;
+    --dnd-small-text: #111111;
+}
+
+.small-box-shadow {
+    -webkit-box-shadow: 0px 0px 7px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 7px 0px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 7px 0px rgba(0,0,0,0.75);
+}
+
+.noscroll::-webkit-scrollbar {
+    display: none;
+}
+.noscroll {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+button:focus, input:focus {
+    outline: none;
+}
+
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+      -webkit-user-select: none; /* Safari */
+       -khtml-user-select: none; /* Konqueror HTML */
+         -moz-user-select: none; /* Old versions of Firefox */
+          -ms-user-select: none; /* Internet Explorer/Edge */
+              user-select: none; /* Non-prefixed version, currently
+                                    supported by Chrome, Edge, Opera and Firefox */
+}
+body {
+    overflow: hidden;
+}
+
+#head-bar {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    display: inline-block;
+    width: 100vw;
+    height: 5%;
+    background-color: var(--primary);
+    z-index: 102;
+}
+#head-menu-btn {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    display: inline-block;
+    height: calc(5vh - 10px);
+    width: calc(5vh - 10px);
+    background-color: var(--primary);
+    border: none;
+}
+#head-menu-btn img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: 90%;
+    height: 90%;
+    opacity: 1;
+    transition: opacity 0.2s;
+}
+#head-menu-btn:hover img {
+    opacity: 0.7;
+}
+
+#side-bar {
+    position: absolute;
+    top: 5vh;
+    left: 0px;
+    width: 0px;
+    height: 95vh;
+    background-color: var(--primary-dark);
+    display: inline-block;
+    z-index: 101;
+    overflow-x: hidden;
+    transition: width 0.2s;
+}
+#side-bar.active {
+    width: 400px;
+}
+
+#content-area {
+    position: absolute;
+    top: 5vh;
+    left: 0px;
+    display: inline-block;
+    width: 100vw;
+    height: 95vh;
+    z-index: 100;
+}
+#content-modal {
+    opacity: 0.5;
+    z-index: 100;
+    background-color: var(--gradient0);
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    display: inline-block;
+    width: 0%;
+    height: 100%;
+    backdrop-filter: blur(8px);
+    transition: width 0.2s;
+}
+#content-modal.active {
+    width: 100%;
+}
+#content-box {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    z-index: 99;
+    padding: 10px;
+    overflow: scroll;
+    box-sizing: border-box;
+}

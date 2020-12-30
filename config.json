@@ -17,5 +17,9 @@
     "loaded_object_timeout":60,
     "lock_defaults":{
         "connections":{}
+    },
+    "runtime":{
+        "ip":"127.0.0.1",
+        "port":5000
     }
 }

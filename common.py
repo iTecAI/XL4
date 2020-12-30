@@ -1,6 +1,5 @@
 import json, os, time
 from api import *
-from fastapi import FastAPI
 
 class XLCharacter(Character):
     def __init__(self, dct):
