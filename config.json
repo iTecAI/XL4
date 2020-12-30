@@ -1,3 +1,21 @@
 {
-    "gapi":"local/gapi.json"
+    "gapi":"local/gapi.json",
+    "database_path":"database",
+    "database_endpoints":[
+        "users",
+        "characters",
+        {
+            "name":"campaigns",
+            "folders":[
+                "campaigns",
+                "maps"
+            ]
+        }
+    ],
+    "session_lock":"session.lock",
+    "connection_timeout":15,
+    "loaded_object_timeout":60,
+    "lock_defaults":{
+        "connections":{}
+    }
 }
