@@ -1,5 +1,6 @@
 function generate_creature(creature) {
     var main = $('<div class="small-box-shadow generated-item creature"></div>');
+    var converter = new showdown.Converter({tables: true, strikethrough: true});
     var basicInfo = $('<div class="basic-info noselect"></div>')
         .append(
             $('<div class="name"></div>')
@@ -104,7 +105,7 @@ function generate_creature(creature) {
         traits.append(
             $('<div class="trait"></div>')
                 .append($('<span class="trait-title"></span>').text(creature.traits[i].name + '. '))
-                .append($('<span class="trait-desc"></span>').text(creature.traits[i].desc))
+                .append($('<span class="trait-desc"></span>').html(converter.makeHtml(creature.traits[i].desc)))
         );
     }
 
@@ -112,7 +113,7 @@ function generate_creature(creature) {
     for (var i = 0; i < creature.actions.length; i++) {
         var action = $('<div class="trait"></div>')
             .append($('<span class="trait-title"></span>').text(creature.actions[i].name + '. '))
-            .append($('<span class="trait-desc"></span>').text(creature.actions[i].desc));
+            .append($('<span class="trait-desc"></span>').html(converter.makeHtml(creature.actions[i].desc)));
         if (creature.actions[i].automated) {
             action.append(
                 $('<div class="action-automated"></div>')
@@ -151,7 +152,7 @@ function generate_creature(creature) {
             legendary_actions.append(
                 $('<div class="trait"></div>')
                     .append($('<span class="trait-title"></span>').text(creature.legendary_actions.actions[i].name + '. '))
-                    .append($('<span class="trait-desc"></span>').text(creature.legendary_actions.actions[i].desc))
+                    .append($('<span class="trait-desc"></span>').html(converter.makeHtml(creature.legendary_actions.actions[i].desc)))
             );
         }
     }
@@ -161,7 +162,7 @@ function generate_creature(creature) {
             reactions.append(
                 $('<div class="trait"></div>')
                     .append($('<span class="trait-title"></span>').text(creature.reactions[i].name + '. '))
-                    .append($('<span class="trait-desc"></span>').text(creature.reactions[i].desc))
+                    .append($('<span class="trait-desc"></span>').html(converter.makeHtml(creature.reactions[i].desc)))
             );
         }
     }
@@ -257,5 +258,46 @@ function generate_creature(creature) {
 
     $(main).children('.expanded-monster').slideUp(0);
 
+    return main;
+}
+
+function generate_spell(spell) {
+    var main = $('<div class="small-box-shadow generated-item spell"></div>');
+    var converter = new showdown.Converter({tables: true, strikethrough: true});
+    main.append(
+        $('<div class="name"></div>').text(spell.name)
+    )
+    .append(
+        $('<div class="name-subtitle"></div>').text(spell.level.label+' '+spell.categories.school)
+    )
+    .append(
+        $('<div class="casting-time"></div>')
+            .append($('<span class="smallstat-title">Casting Time:</span>'))
+            .append($('<span class="smallstat-value"></span>').text(spell.casting_time.quantity + ' ' + spell.casting_time.type))
+    )
+    .append(
+        $('<div class="range"></div>')
+            .append($('<span class="smallstat-title">Range:</span>'))
+            .append($('<span class="smallstat-value"></span>').text(spell.range + cond(isNaN(spell.range),'',' ft.')))
+    ).append(
+        $('<div class="components"></div>')
+            .append($('<span class="smallstat-title">Components:</span>'))
+            .append($('<span class="smallstat-value"></span>').text(spell.components.join(', ') + cond(spell.material.length > 0, ' ('+spell.material+')','')))
+    ).append(
+        $('<div class="duration"></div>')
+            .append($('<span class="smallstat-title">Duration:</span>'))
+            .append($('<span class="smallstat-value"></span>').text(
+                cond(
+                    typeof(spell.duration) == 'string',
+                    {
+                        'instant':'Instantaneous',
+                        'dispelled':'Until dispelled',
+                        'special':'Special'
+                    }[spell.duration],
+                    cond(spell.concentration,'Concentration, ','')+cond(spell.duration.up_to,cond(spell.concentration,'up to ','Up to '),'')+spell.duration.quantity+' '+spell.duration.type
+                )
+            ))
+    )
+    .append($('<div class="spell-desc"></div>').html(converter.makeHtml(spell.desc)));
     return main;
 }

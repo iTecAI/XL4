@@ -29,6 +29,8 @@ function processCompendiumListing(data) {
         }
         if (endpoint == 'monsters') {
             $(dummy_area).children('#compendium-category-'+endpoint).children('.items').append(generate_creature(item));
+        } else if (endpoint == 'spells') {
+            $(dummy_area).children('#compendium-category-'+endpoint).children('.items').append(generate_spell(item));
         }
     }
 
@@ -36,6 +38,7 @@ function processCompendiumListing(data) {
 }
 
 $(document).ready(function(){
+    //post('/compendium/categories/',processCompendiumListing,{search:'e'},{cats:['spells']});
     $('.content-type').on('click',function(event){
         $('.content-type[data-type='+$(this).attr('data-type')+']').toggleClass('type-selected');
         var selected = $.map($('.content-type.type-selected').toArray(),function(e,i){

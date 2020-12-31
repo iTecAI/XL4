@@ -227,3 +227,28 @@
 #compendium-area::-webkit-scrollbar-thumb:hover {
   background: var(--primary-darker2);
 }
+
+/* SPELLS */
+.spell {
+    font-family: serif;
+}
+.spell .name {
+    font-family: serif;
+    color: var(--dnd-text);
+    font-weight: 400;
+    font-size: 15pt;
+}
+.spell .name-subtitle {
+    font-family: serif;
+    font-style: italic;
+    font-size: 10pt;
+    margin-top: -5px;
+}
+.spell .smallstat-title {
+    margin-right: 5px;
+    font-weight: 600;
+    color: var(--dnd-small-text);
+}
+.spell .spell-desc {
+    margin-top: 15px;
+}
