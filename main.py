@@ -16,6 +16,11 @@ app.include_router(
     tags=['server']
 )
 
+@app.get('/', include_in_schema=False)
+async def get_compendium():
+    return FileResponse(os.path.join('client','index.html'))
+
+
 files = list(os.walk('client'))
 
 slashtype = '/'

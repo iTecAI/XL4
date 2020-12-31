@@ -4,15 +4,27 @@ var refresh_interval = 200;
 var activating = false;
 
 // Functions
-function post(path,callback,parameters,body) {
-    $.post({
-        url:path+$.param(parameters),
-        data:JSON.stringify(body),
-        success:callback,
-        beforeSend:function(xhr){xhr.setRequestHeader('FP', fingerprint)}
-    }).fail(function(result){
-        console.log(result);
-    });
+function post(path,callback,parameters,body,showFailMessage) {
+    if (showFailMessage) {
+        return $.post({
+            url:path+$.param(parameters),
+            data:JSON.stringify(body),
+            success:callback,
+            beforeSend:function(xhr){xhr.setRequestHeader('FP', fingerprint)}
+        }).fail(function(result){
+            bootbox.alert({
+                title: "Error: "+result.statusText,
+                message: result.responseJSON.result
+            });
+        });
+    } else {
+        return $.post({
+            url:path+$.param(parameters),
+            data:JSON.stringify(body),
+            success:callback,
+            beforeSend:function(xhr){xhr.setRequestHeader('FP', fingerprint)}
+        });
+    }
 }
 function root_refresh(data) {
     if (data.new_fp) {
@@ -64,7 +76,7 @@ $(document).ready(function(){
             bootbox.alert('Email and password boxes must be filled out.');
             return;
         }
-        post('/server/login/',function(){$(document).trigger('click');},{},{username:email,passhash:pass});
+        post('/server/login/',function(){$(document).trigger('click');bootbox.alert('Logged in.');},{},{username:email,passhash:pass},true);
     });
     $('#signup-submit').on('click',async function(){
         var email = $('#signup-email').val();
@@ -78,7 +90,7 @@ $(document).ready(function(){
             bootbox.alert('Email and password boxes must be filled out.');
             return;
         }
-        post('/server/signup/',function(){$(document).trigger('click');},{},{username:email,passhash:pass});
+        post('/server/signup/',function(){$(document).trigger('click');bootbox.alert('Logged in.');},{},{username:email,passhash:pass},true);
     });
     $('#logout-btn').on('click',function(){
         $('#head-menu-btn').trigger('click');

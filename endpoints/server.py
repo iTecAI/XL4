@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Header, Response, status
 from typing import Optional
 
-from starlette.status import HTTP_403_FORBIDDEN, HTTP_404_NOT_FOUND
+from starlette.status import HTTP_403_FORBIDDEN, HTTP_404_NOT_FOUND, HTTP_409_CONFLICT
 from common import *
 from api import *
 from models import *
@@ -43,7 +43,11 @@ async def signup(user: UserLoginModel, response: Response, fp: Optional[str] = H
     if len(fp) != 43:
         response.status_code = status.HTTP_400_BAD_REQUEST
         return {'result':f'Invalid fingerprint. Must be of length 43, recieved fingerprint "{fp}" with length {str(len(fp))}'}
-    
+    with open(os.path.join(*CONFIG['session_lock'].split('/')),'r') as f:
+        lock = json.load(f)
+    if user.username in lock['user_map'].keys():
+        response.status_code = status.HTTP_409_CONFLICT
+        return {'result':'User already exists. Please login.'}
     obj = server.add_object(User({
         'connection':fp,
         'username':user.username,

@@ -2,6 +2,7 @@
     --primary: #37474f;
     --primary-dark: #102027;
     --primary-darker: #0b161b;
+    --primary-darker2: #070e11;
     --primary-light:#62727b;
     --primary-text: #ffffff;
 
@@ -121,7 +122,7 @@ body {
     position: absolute;
     bottom: 0px;
     left: 0px;
-    background-color: var(--primary-dark);
+    background-color: var(--primary-darker);
     color: var(--primary-text);
     font-family: Roboto;
     border: none;
@@ -133,7 +134,101 @@ body {
 }
 #logout-btn:hover {
     color: var(--secondary);
+    background-color: var(--primary-darker2);
+}
+#user-settings-btn {
+    position: absolute;
+    bottom: 0px;
+    left: 75%;
     background-color: var(--primary-darker);
+    color: var(--primary-text);
+    font-family: Roboto;
+    border: none;
+    font-size: 1.6em;
+    display: inline-block;
+    height: 5vh;
+    width: 25%;
+    transition: color 0.2s, background-color 0.2s;
+}
+#user-settings-btn:hover {
+    color: var(--secondary);
+    background-color: var(--primary-darker2);
+}
+#user-settings-btn i {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    display: inline-block;
+}
+#messages-btn {
+    position: absolute;
+    bottom: 0px;
+    left: 50%;
+    background-color: var(--primary-darker);
+    color: var(--primary-text);
+    font-family: Roboto;
+    border: none;
+    font-size: 1.6em;
+    display: inline-block;
+    height: 5vh;
+    width: 25%;
+    transition: color 0.2s, background-color 0.2s;
+}
+#messages-btn:hover {
+    color: var(--secondary);
+    background-color: var(--primary-darker2);
+}
+#messages-btn i {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    display: inline-block;
+}
+
+#page-links {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    display: inline-block;
+    height: calc(100% - 5vh);
+    width: 100%;
+}
+#page-links a {
+    position: relative;
+    display: inline-block;
+    height: 6vh;
+    width: 100%;
+    font-family: Roboto;
+    color: var(--primary-text);
+    background-color: var(--primary-dark);
+    text-decoration: none;
+    transition: background-color 0.2s, color 0.2s;
+    margin-top: -6px;
+}
+#page-links a:hover {
+    color: var(--secondary);
+    background-color: var(--primary-darker);
+}
+#page-links a span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+#page-links a i {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translate(0px,-50%);
+}
+#page-links a.link-current {
+    color: var(--secondary-light);
+    background-color: var(--primary-darker);
+}
+#page-links a.link-current:hover {
+    color: var(--secondary);
 }
 
 #content-area {
