@@ -131,3 +131,4 @@ local/
 database/
 jsconfig.json
 session.lock
+sensitive.*

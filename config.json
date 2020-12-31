@@ -16,7 +16,8 @@
     "connection_timeout":15,
     "loaded_object_timeout":60,
     "lock_defaults":{
-        "connections":{}
+        "connections":{},
+        "user_map":{}
     },
     "runtime":{
         "ip":"127.0.0.1",
