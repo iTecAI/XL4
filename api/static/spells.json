@@ -83,7 +83,8 @@
         "higher_level": "When you cast this spell using a spell slot of 3rd level or higher, the damage (both initial and later) increases by 1d4 for each slot level above 2nd.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Acid Splash",
@@ -167,7 +168,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Aid",
@@ -255,7 +257,8 @@
         "higher_level": "When you cast this spell using a spell slot of 3rd level or higher, a target's hit points increase by an additional 5 for each slot level above 2nd.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Alarm",
@@ -297,7 +300,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Alter Self",
@@ -337,7 +341,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Animal Friendship",
@@ -417,7 +422,8 @@
         "higher_level": "When you cast this spell using a spell slot of 2nd level or higher, you can affect one additional beast for each slot level above 1st.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Animal Messenger",
@@ -460,7 +466,8 @@
         "higher_level": "If you cast this spell using a spell slot of 3nd level or higher, the duration of the spell increases by 48 hours for each slot level above 2nd.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Animal Shapes",
@@ -499,7 +506,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Animate Dead",
@@ -536,7 +544,8 @@
         "higher_level": "When you cast this spell using a spell slot of 4th level or higher, you animate or reassert control over two additional undead creatures for each slot level above 3rd. Each of the creatures must come from a different corpse or pile of bones.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Animate Objects",
@@ -577,7 +586,8 @@
         "higher_level": "If you cast this spell using a spell slot of 6th level or higher, you can animate two additional objects for each slot level above 5th.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Antilife Shell",
@@ -626,7 +636,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Antimagic Field",
@@ -677,7 +688,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Antipathy/Sympathy",
@@ -718,7 +730,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Arcane Eye",
@@ -759,7 +772,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Arcane Hand",
@@ -799,7 +813,8 @@
         "higher_level": "When you cast this spell using a spell slot of 6th level or higher, the damage from the clenched fist option increases by 2d8 and the damage from the grasping hand increases by 2d6 for each slot level above 5th.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Arcane Lock",
@@ -835,7 +850,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Arcane Sword",
@@ -876,7 +892,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Arcanist's Magic Aura",
@@ -916,7 +933,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Astral Projection",
@@ -954,7 +972,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Augury",
@@ -991,7 +1010,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Awaken",
@@ -1028,7 +1048,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Bane",
@@ -1100,7 +1121,8 @@
         "higher_level": "When you cast this spell using a spell slot of 2nd level or higher, you can target one additional creature for each slot level above 1st.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Banishment",
@@ -1172,7 +1194,8 @@
         "higher_level": "When you cast this spell using a spell slot of 5th level or higher, you can target one additional creature for each slot level above 4th.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Barkskin",
@@ -1236,7 +1259,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Beacon of Hope",
@@ -1305,7 +1329,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Bestow Curse",
@@ -1492,7 +1517,8 @@
         "higher_level": "If you cast this spell using a spell slot of 4th level or higher, the duration is concentration, up to 10 minutes. If you use a spell slot of 5th level or higher, the duration is 8 hours. If you use a spell slot of 7th level or higher, the duration is 24 hours. If you use a 9th level spell slot, the spell lasts until it is dispelled. Using a spell slot of 5th level or higher grants a duration that doesn't require concentration.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Black Tentacles",
@@ -1597,7 +1623,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Blade Barrier",
@@ -1684,7 +1711,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Bless",
@@ -1747,7 +1775,8 @@
         "higher_level": "When you cast this spell using a spell slot of 2nd level or higher, you can target one additional creature for each slot level above 1st.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Blight",
@@ -1923,7 +1952,8 @@
         "higher_level": "When you cast this spell using a spell slot of 5th level of higher, the damage increases by 1d8 for each slot level above 4th.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Blindness/Deafness",
@@ -2005,7 +2035,8 @@
         "higher_level": "When you cast this spell using a spell slot of 3rd level or higher, you can target one additional creature for each slot level above 2nd.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Blink",
@@ -2047,7 +2078,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Blur",
@@ -2087,7 +2119,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Branding Smite",
@@ -2140,7 +2173,8 @@
         "higher_level": "When you cast this spell using a spell slot of 3rd level or higher, the extra damage increases by 1d6 for each slot level above 2nd.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Burning Hands",
@@ -2226,7 +2260,8 @@
         "higher_level": "When you cast this spell using a spell slot of 2nd level or higher, the damage increases by 1d6 for each slot level above 1st.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Call Lightning",
@@ -2266,7 +2301,8 @@
         "higher_level": "When you cast this spell using a spell slot of 4th or higher level, the damage increases by 1d10 for each slot level above 3rd.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Calm Emotions",
@@ -2307,7 +2343,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Chain Lightning",
@@ -2385,7 +2422,8 @@
         "higher_level": "When you cast this spell using a spell slot of 7th level or higher, one additional bolt leaps from the first target to another target for each slot level above 6th.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Charm Person",
@@ -2454,7 +2492,8 @@
         "higher_level": "When you cast this spell using a spell slot of 2nd level or higher, you can target one additional creature for each slot level above 1st. The creatures must be within 30 feet of each other when you target them.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Chill Touch",
@@ -2530,7 +2569,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Circle of Death",
@@ -2617,7 +2657,8 @@
         "higher_level": "When you cast this spell using a spell slot of 7th level or higher, the damage increases by 2d6 for each slot level above 6th.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Clairvoyance",
@@ -2661,7 +2702,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Clone",
@@ -2697,7 +2739,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Cloudkill",
@@ -2792,7 +2835,8 @@
         "higher_level": "When you cast this spell using a spell slot of 6th level or higher, the damage increases by 1d8 for each slot level above 5th.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Color Spray",
@@ -2874,7 +2918,8 @@
         "higher_level": "When you cast this spell using a spell slot of 2nd level or higher, roll an additional 2d10 for each slot level above 1st.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Command",
@@ -2914,7 +2959,8 @@
         "higher_level": "When you cast this spell using a spell slot of 2nd level or higher, you can affect one additional creature for each slot level above 1st. The creatures must be within 30 feet of each other when you target them.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Commune",
@@ -2956,7 +3002,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Commune with Nature",
@@ -2994,7 +3041,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Comprehend Languages",
@@ -3038,7 +3086,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Compulsion",
@@ -3077,7 +3126,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Cone of Cold",
@@ -3164,7 +3214,8 @@
         "higher_level": "When you cast this spell using a spell slot of 6th level or higher, the damage increases by 1d8 for each slot level above 5th.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Confusion",
@@ -3208,7 +3259,8 @@
         "higher_level": "When you cast this spell using a spell slot of 5th level or higher, the radius of the sphere increases by 5 feet for each slot level above 4th.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Conjure Animals",
@@ -3248,7 +3300,8 @@
         "higher_level": "When you cast this spell using certain higher-level spell slots, you choose one of the summoning options above, and more creatures appear: twice as many with a 5th-level slot, three times as many with a 7th-level, and four times as many with a 9th-level slot.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Conjure Celestial",
@@ -3287,7 +3340,8 @@
         "higher_level": "When you cast this spell using a 9th-level spell slot, you summon a celestial of challenge rating 5 or lower.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Conjure Elemental",
@@ -3328,7 +3382,8 @@
         "higher_level": "When you cast this spell using a spell slot of 6th level or higher, the challenge rating increases by 1 for each slot level above 5th.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Conjure Fey",
@@ -3368,7 +3423,8 @@
         "higher_level": "When you cast this spell using a spell slot of 7th level or higher, the challenge rating increases by 1 for each slot level above 6th.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Conjure Minor Elementals",
@@ -3408,7 +3464,8 @@
         "higher_level": "When you cast this spell using certain higher-level spell slots, you choose one of the summoning options above, and more creatures appear: twice as many with a 6th-level slot and three times as many with an 8th-level slot.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Conjure Woodland Beings",
@@ -3449,7 +3506,8 @@
         "higher_level": "When you cast this spell using certain higher-level spell slots, you choose one of the summoning options above, and more creatures appear: twice as many with a 6th-level slot and three times as many with an 8th-level slot.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Contact Other Plane",
@@ -3489,7 +3547,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Contagion",
@@ -3529,7 +3588,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Contingency",
@@ -3569,7 +3629,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Continual Flame",
@@ -3606,7 +3667,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Control Water",
@@ -3648,7 +3710,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Control Weather",
@@ -3690,7 +3753,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Counterspell",
@@ -3727,7 +3791,8 @@
         "higher_level": "When you cast this spell using a spell slot of 4th level or higher, the interrupted spell has no effect if its level is less than or equal to the level of the spell slot you used.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Create Food and Water",
@@ -3764,7 +3829,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Create Undead",
@@ -3802,7 +3868,8 @@
         "higher_level": "When you cast this spell using a 7th-level spell slot, you can animate or reassert control over four ghouls. When you cast this spell using an 8th-level spell slot, you can animate or reassert control over five ghouls or two ghasts or wights. When you cast this spell using a 9th-level spell slot, you can animate or reassert control over six ghouls, three ghasts or wights, or two mummies.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Create or Destroy Water",
@@ -3839,7 +3906,8 @@
         "higher_level": "When you cast this spell using a spell slot of 2nd level or higher, you create or destroy 10 additional gallons of water, or the size of the cube increases by 5 feet, for each slot level above 1st.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Creation",
@@ -3876,7 +3944,8 @@
         "higher_level": "When you cast this spell using a spell slot of 6th level or higher, the cube increases by 5 feet for each slot level above 5th.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Cure Wounds",
@@ -3941,7 +4010,8 @@
         "higher_level": "When you cast this spell using a spell slot of 2nd level or higher, the healing increases by 1d8 for each slot level above 1st.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Dancing Lights",
@@ -3983,7 +4053,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Darkness",
@@ -4025,7 +4096,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Darkvision",
@@ -4068,7 +4140,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Daylight",
@@ -4111,7 +4184,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Death Ward",
@@ -4151,7 +4225,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Delayed Blast Fireball",
@@ -4192,7 +4267,8 @@
         "higher_level": "When you cast this spell using a spell slot of 8th level or higher, the base damage increases by 1d6 for each slot level above 7th.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Demiplane",
@@ -4231,7 +4307,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Detect Evil and Good",
@@ -4271,7 +4348,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Detect Magic",
@@ -4317,7 +4395,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Detect Poison and Disease",
@@ -4361,7 +4440,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Detect Thoughts",
@@ -4404,7 +4484,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Dimension Door",
@@ -4443,7 +4524,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Disguise Self",
@@ -4485,7 +4567,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Disintegrate",
@@ -4550,7 +4633,8 @@
         "higher_level": "When you cast this spell using a spell slot of 7th level or higher, the damage increases by 3d6 for each slot level above 6th.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Dispel Evil and Good",
@@ -4591,7 +4675,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Dispel Magic",
@@ -4632,7 +4717,8 @@
         "higher_level": "When you cast this spell using a spell slot of 4th level or higher, you automatically end the effects of a spell on the target if the spell's level is equal to or less than the level of the spell slot you used.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Divination",
@@ -4670,7 +4756,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Divine Favor",
@@ -4724,7 +4811,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Divine Word",
@@ -4758,7 +4846,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Dominate Beast",
@@ -4800,7 +4889,8 @@
         "higher_level": "When you cast this spell with a 5th-\u00adlevel spell slot, the duration is concentration, up to 10 minutes. When you use a 6th-\u00adlevel spell slot, the duration is concentration, up to 1 hour. When you use a spell slot of 7th level or higher, the duration is concentration, up to 8 hours.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Dominate Monster",
@@ -4842,7 +4932,8 @@
         "higher_level": "When you cast this spell with a 9th-level spell slot, the duration is concentration, up to 8 hours.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Dominate Person",
@@ -4885,7 +4976,8 @@
         "higher_level": "When you cast this spell using a 6th-level spell slot, the duration is concentration, up to 10 minutes. When you use a 7th-level spell slot, the duration is concentration, up to 1 hour. When you use a spell slot of 8th level or higher, the duration is concentration, up to 8 hours.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Dream",
@@ -4928,7 +5020,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Druidcraft",
@@ -4963,7 +5056,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Earthquake",
@@ -5005,7 +5099,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Eldritch Blast",
@@ -5087,7 +5182,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Enhance Ability",
@@ -5130,7 +5226,8 @@
         "higher_level": "When you cast this spell using a spell slot of 3rd level or higher, you can target one additional creature for each slot level above 2nd.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Enlarge/Reduce",
@@ -5171,7 +5268,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Entangle",
@@ -5229,7 +5327,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Enthrall",
@@ -5269,7 +5368,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Etherealness",
@@ -5312,7 +5412,8 @@
         "higher_level": "When you cast this spell using a spell slot of 8th level or higher, you can target up to three willing creatures (including you) for each slot level above 7th. The creatures must be within 10 feet of you when you cast the spell.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Expeditious Retreat",
@@ -5353,7 +5454,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Eye bite",
@@ -5395,7 +5497,8 @@
         "higher_level": "",
         "document__slug": "o5e",
         "document__title": "Open5e OGL",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Eyebite",
@@ -5437,7 +5540,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Fabricate",
@@ -5472,7 +5576,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Faerie Fire",
@@ -5532,7 +5637,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Faithful Hound",
@@ -5572,7 +5678,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "False Life",
@@ -5634,7 +5741,8 @@
         "higher_level": "When you cast this spell using a spell slot of 2nd level or higher, you gain 5 additional temporary hit points for each slot level above 1st.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Fear",
@@ -5696,7 +5804,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Feather Fall",
@@ -5737,7 +5846,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Feeblemind",
@@ -5776,7 +5886,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Find Familiar",
@@ -5812,7 +5923,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Find Steed",
@@ -5847,7 +5959,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Find Traps",
@@ -5884,7 +5997,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Find the Path",
@@ -5926,7 +6040,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Finger of Death",
@@ -5997,7 +6112,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Fire Bolt",
@@ -6069,7 +6185,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Fire Shield",
@@ -6110,7 +6227,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Fire Storm",
@@ -6147,7 +6265,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Fireball",
@@ -6235,7 +6354,8 @@
         "higher_level": "When you cast this spell using a spell slot of 4th level or higher, the damage increases by 1d6 for each slot level above 3rd.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Flame Blade",
@@ -6275,7 +6395,8 @@
         "higher_level": "When you cast this spell using a spell slot of 4th level or higher, the damage increases by 1d6 for every two slot levels above 2nd.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Flame Strike",
@@ -6425,7 +6546,8 @@
         "higher_level": "When you cast this spell using a spell slot of 6th level or higher, the fire damage or the radiant damage (your choice) increases by 1d6 for each slot level above 5th.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Flaming Sphere",
@@ -6520,7 +6642,8 @@
         "higher_level": "When you cast this spell using a spell slot of 3rd level or higher, the damage increases by 1d6 for each slot level above 2nd.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Flesh to Stone",
@@ -6561,7 +6684,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Floating Disk",
@@ -6602,7 +6726,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Fly",
@@ -6644,7 +6769,8 @@
         "higher_level": "When you cast this spell using a spell slot of 4th level or higher, you can target one additional creature for each slot level above 3rd.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Fog Cloud",
@@ -6687,7 +6813,8 @@
         "higher_level": "When you cast this spell using a spell slot of 2nd level or higher, the radius of the fog increases by 20 feet for each slot level above 1st.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Forbiddance",
@@ -6728,7 +6855,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Forcecage",
@@ -6770,7 +6898,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Foresight",
@@ -6813,7 +6942,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Freedom of Movement",
@@ -6857,7 +6987,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Freezing Sphere",
@@ -6942,7 +7073,8 @@
         "higher_level": "When you cast this spell using a spell slot of 7th level or higher, the damage increases by 1d6 for each slot level above 6th.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Gaseous Form",
@@ -6985,7 +7117,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Gate",
@@ -7027,7 +7160,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Geas",
@@ -7089,7 +7223,8 @@
         "higher_level": "When you cast this spell using a spell slot of 7th or 8th level, the duration is 1 year. When you cast this spell using a spell slot of 9th level, the spell lasts until it is ended by one of the spells mentioned above.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Gentle Repose",
@@ -7131,7 +7266,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Giant Insect",
@@ -7170,7 +7306,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Glibness",
@@ -7209,7 +7346,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Globe of Invulnerability",
@@ -7250,7 +7388,8 @@
         "higher_level": "When you cast this spell using a spell slot of 7th level or higher, the barrier blocks spells of one level higher for each slot level above 6th.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Glyph of Warding",
@@ -7288,7 +7427,8 @@
         "higher_level": "When you cast this spell using a spell slot of 4th level or higher, the damage of an explosive runes glyph increases by 1d8 for each slot level above 3rd. If you create a spell glyph, you can store any spell of up to the same level as the slot you use for the glyph of warding.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Goodberry",
@@ -7325,7 +7465,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Grease",
@@ -7390,7 +7531,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Greater Invisibility",
@@ -7449,7 +7591,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Greater Restoration",
@@ -7487,7 +7630,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Guardian of Faith",
@@ -7525,7 +7669,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Guards and Wards",
@@ -7566,7 +7711,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Guidance",
@@ -7626,7 +7772,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Guiding Bolt",
@@ -7695,7 +7842,8 @@
         "higher_level": "When you cast this spell using a spell slot of 2nd level or higher, the damage increases by 1d6 for each slot level above 1st.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Gust of Wind",
@@ -7738,7 +7886,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Hallow",
@@ -7775,7 +7924,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Hallucinatory Terrain",
@@ -7818,7 +7968,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Harm",
@@ -7853,7 +8004,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Haste",
@@ -7896,7 +8048,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Heal",
@@ -7958,7 +8111,8 @@
         "higher_level": "When you cast this spell using a spell slot of 7th level or higher, the amount of healing increases by 10 for each slot level above 6th.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Healing Word",
@@ -8020,7 +8174,8 @@
         "higher_level": "When you cast this spell using a spell slot of 2nd level or higher, the healing increases by 1d4 for each slot level above 1st.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Heat Metal",
@@ -8061,7 +8216,8 @@
         "higher_level": "When you cast this spell using a spell slot of 3rd level or higher, the damage increases by 1d8 for each slot level above 2nd.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Hellish Rebuke",
@@ -8145,7 +8301,8 @@
         "higher_level": "When you cast this spell using a spell slot of 2nd level or higher, the damage increases by 1d10 for each slot level above 1st.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Heroes' Feast",
@@ -8182,7 +8339,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Heroism",
@@ -8222,7 +8380,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Hideous Laughter",
@@ -8296,7 +8455,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Hold Monster",
@@ -8368,7 +8528,8 @@
         "higher_level": "When you cast this spell using a level 6 or higher location, you can target an additional creature for each level of location beyond the fifth. The creatures must be within 30 feet o f each other when you target them.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Hold Person",
@@ -8448,7 +8609,8 @@
         "higher_level": "When you cast this spell using a spell slot of 3rd level or higher, you can target one additional humanoid for each slot level above 2nd. The humanoids must be within 30 feet of each other when you target them.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Holy Aura",
@@ -8488,7 +8650,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Hunter's Mark",
@@ -8527,7 +8690,8 @@
         "higher_level": " When you cast this spell using a spell slot of 3rd or 4th level, you can maintain your concentration on the spell for up to 8 hours. When you use a spell slot of 5th level or higher, you can maintain your concentration on the spell for up to 24 hours.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Hypnotic Pattern",
@@ -8592,7 +8756,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Ice Storm",
@@ -8695,7 +8860,8 @@
         "higher_level": "When you cast this spell using a spell slot of 5th level or higher, the bludgeoning damage increases by 1d8 for each slot level above 4th.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Identify",
@@ -8734,7 +8900,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Illusory Script",
@@ -8776,7 +8943,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Imprisonment",
@@ -8813,7 +8981,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Incendiary Cloud",
@@ -8893,7 +9062,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Inflict Wounds",
@@ -8955,7 +9125,8 @@
         "higher_level": "When you cast this spell using a spell slot of 2nd level or higher, the damage increases by 1d10 for each slot level above 1st.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Insect Plague",
@@ -9052,7 +9223,8 @@
         "higher_level": "When you cast this spell using a spell slot of 6th level or higher, the damage increases by 1d10 for each slot level above 5th.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Instant Summons",
@@ -9089,7 +9261,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Invisibility",
@@ -9156,7 +9329,8 @@
         "higher_level": "When you cast this spell using a spell slot of 3rd level or higher, you can target one additional creature for each slot level above 2nd.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Irresistible Dance",
@@ -9226,7 +9400,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Jump",
@@ -9269,7 +9444,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Knock",
@@ -9305,7 +9481,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Legend Lore",
@@ -9343,7 +9520,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Lesser Restoration",
@@ -9382,7 +9560,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Levitate",
@@ -9441,7 +9620,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Light",
@@ -9483,7 +9663,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Lightning Bolt",
@@ -9570,7 +9751,8 @@
         "higher_level": "When you cast this spell using a spell slot of 4th level or higher, the damage increases by 1d6 for each slot level above 3rd.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Locate Animals or Plants",
@@ -9609,7 +9791,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Locate Creature",
@@ -9654,7 +9837,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Locate Object",
@@ -9699,7 +9883,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Longstrider",
@@ -9742,7 +9927,8 @@
         "higher_level": "When you cast this spell using a spell slot of 2nd level or higher, you can target one additional creature for each spell slot above 1st.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Mage Armor",
@@ -9803,7 +9989,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Mage Hand",
@@ -9845,7 +10032,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Magic Circle",
@@ -9888,7 +10076,8 @@
         "higher_level": "When you cast this spell using a spell slot of 4th level or higher, the duration increases by 1 hour for each slot level above 3rd.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Magic Jar",
@@ -9924,7 +10113,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Magic Missile",
@@ -9988,7 +10178,8 @@
         "higher_level": "When you cast this spell using a spell slot of 2nd level or higher, the spell creates one more dart for each slot level above 1st.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Magic Mouth",
@@ -10026,7 +10217,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Magic Weapon",
@@ -10067,7 +10259,8 @@
         "higher_level": "When you cast this spell using a spell slot of 4th level or higher, the bonus increases to +2. When you use a spell slot of 6th level or higher, the bonus increases to +3.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Magnificent Mansion",
@@ -10108,7 +10301,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Major Image",
@@ -10151,7 +10345,8 @@
         "higher_level": "When you cast this spell using a spell slot of 6th level or higher, the spell lasts until dispelled, without requiring your concentration.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Mass Cure Wounds",
@@ -10217,7 +10412,8 @@
         "higher_level": "When you cast this spell using a spell slot of 6th level or higher, the healing increases by 1d8 for each slot level above 5th.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Mass Heal",
@@ -10252,7 +10448,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Mass Healing Word",
@@ -10312,7 +10509,8 @@
         "higher_level": "When you cast this spell using a spell slot of 4th level or higher, the healing increases by 1d4 for each slot level above 3rd.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Mass Suggestion",
@@ -10354,7 +10552,8 @@
         "higher_level": "When you cast this spell using a 7th-level spell slot, the duration is 10 days. When you use an 8th-level spell slot, the duration is 30 days. When you use a 9th-level spell slot, the duration is a year and a day.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Maze",
@@ -10393,7 +10592,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Meld into Stone",
@@ -10434,7 +10634,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Mending",
@@ -10474,7 +10675,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Message",
@@ -10516,7 +10718,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Meteor Swarm",
@@ -10552,7 +10755,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Mind Blank",
@@ -10592,7 +10796,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Minor Illusion",
@@ -10634,7 +10839,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Mirage Arcane",
@@ -10675,7 +10881,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Mirror Image",
@@ -10718,7 +10925,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Mislead",
@@ -10757,7 +10965,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Misty Step",
@@ -10795,7 +11004,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Modify Memory",
@@ -10836,7 +11046,8 @@
         "higher_level": "If you cast this spell using a spell slot of 6th level or higher, you can alter the target's memories of an event that took place up to 7 days ago (6th level), 30 days ago (7th level), 1 year ago (8th level), or any time in the creature's past (9th level).",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Moonbeam",
@@ -10934,7 +11145,8 @@
         "higher_level": "When you cast this spell using a spell slot of 3rd level or higher, the damage increases by 1d10 for each slot level above 2nd.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Move Earth",
@@ -10976,7 +11188,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Nondetection",
@@ -11019,7 +11232,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Pass without Trace",
@@ -11061,7 +11275,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Passwall",
@@ -11102,7 +11317,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Phantasmal Killer",
@@ -11141,7 +11357,8 @@
         "higher_level": "When you cast this spell using a spell slot of 5th level or higher, the damage increases by 1d10 for each slot level above 4th.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Phantom Steed",
@@ -11181,7 +11398,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Planar Ally",
@@ -11216,7 +11434,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Planar Binding",
@@ -11259,7 +11478,8 @@
         "higher_level": "When you cast this spell using a spell slot of a higher level, the duration increases to 10 days with a 6th-level slot, to 30 days with a 7th-level slot, to 180 days with an 8th-level slot, and to a year and a day with a 9th-level spell slot.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Plane Shift",
@@ -11298,7 +11518,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Plant Growth",
@@ -11338,7 +11559,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Poison Spray",
@@ -11412,7 +11634,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Polymorph",
@@ -11456,7 +11679,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Power Word Kill",
@@ -11523,7 +11747,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Power Word Stun",
@@ -11589,7 +11814,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Prayer of Healing",
@@ -11661,7 +11887,8 @@
         "higher_level": "When you cast this spell using a spell slot of 3rd level or higher, the healing increases by 1d8 for each slot level above 2nd.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Prestidigitation",
@@ -11703,7 +11930,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Prismatic Spray",
@@ -11739,7 +11967,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Prismatic Wall",
@@ -11778,7 +12007,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Private Sanctum",
@@ -11818,7 +12048,8 @@
         "higher_level": "When you cast this spell using a spell slot of 5th level or higher, you can increase the size of the cube by 100 feet for each slot level beyond 4th. Thus you could protect a cube that can be up to 200 feet on one side by using a spell slot of 5th level.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Produce Flame",
@@ -11857,7 +12088,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Programmed Illusion",
@@ -11894,7 +12126,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Project Image",
@@ -11935,7 +12168,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Protection from Energy",
@@ -11979,7 +12213,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Protection from Evil and Good",
@@ -12022,7 +12257,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Protection from Poison",
@@ -12064,7 +12300,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Purify Food and Drink",
@@ -12102,7 +12339,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Raise Dead",
@@ -12140,7 +12378,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Ray of Enfeeblement",
@@ -12180,7 +12419,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Ray of Frost",
@@ -12252,7 +12492,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Ray of Sickness",
@@ -12288,7 +12529,8 @@
         "higher_level": "When you cast this spell using a spell slot of 2nd level or higher, the damage increases by 1d8 for each slot level above 1st.",
         "document__slug": "o5e",
         "document__title": "Open5e OGL",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Regenerate",
@@ -12349,7 +12591,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Reincarnate",
@@ -12385,7 +12628,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Remove Curse",
@@ -12423,7 +12667,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Resilient Sphere",
@@ -12463,7 +12708,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Resistance",
@@ -12524,7 +12770,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Resurrection",
@@ -12561,7 +12808,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Reverse Gravity",
@@ -12603,7 +12851,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Revivify",
@@ -12640,7 +12889,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Rope Trick",
@@ -12680,7 +12930,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Sacred Flame",
@@ -12751,7 +13002,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Sanctuary",
@@ -12792,7 +13044,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Scorching Ray",
@@ -12858,7 +13111,8 @@
         "higher_level": "When you cast this spell using a 3 or higher level spell slot, you generate an additional radius for each level of higher spell slot 2.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Scrying",
@@ -12903,7 +13157,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Secret Chest",
@@ -12939,7 +13194,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "See Invisibility",
@@ -12981,7 +13237,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Seeming",
@@ -13023,7 +13280,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Sending",
@@ -13066,7 +13324,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Sequester",
@@ -13102,7 +13361,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Shapechange",
@@ -13143,7 +13403,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Shatter",
@@ -13232,7 +13493,8 @@
         "higher_level": "When you cast this spell using a spell slot of 3rd level or higher, the damage increases by 1d8 for each slot level above 2nd.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Shield",
@@ -13286,7 +13548,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Shield of Faith",
@@ -13349,7 +13612,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Shillelagh",
@@ -13389,7 +13653,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Shocking Grasp",
@@ -13461,7 +13726,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Silence",
@@ -13504,7 +13770,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Silent Image",
@@ -13546,7 +13813,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Simulacrum",
@@ -13582,7 +13850,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Sleep",
@@ -13652,7 +13921,8 @@
         "higher_level": "When you cast this spell using a spell slot of 2nd level or higher, roll an additional 2d8 for each slot level above 1st.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Sleet Storm",
@@ -13722,7 +13992,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Slow",
@@ -13764,7 +14035,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Spare the Dying",
@@ -13799,7 +14071,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Speak with Animals",
@@ -13843,7 +14116,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Speak with Dead",
@@ -13884,7 +14158,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Speak with Plants",
@@ -13925,7 +14200,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Spider Climb",
@@ -13968,7 +14244,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Spike Growth",
@@ -14034,7 +14311,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Spirit Guardians",
@@ -14074,7 +14352,8 @@
         "higher_level": "When you cast this spell using a spell slot of 4th level or higher, the damage increases by 1d8 for each slot level above 3rd.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Spiritual Weapon",
@@ -14113,7 +14392,8 @@
         "higher_level": "When you cast this spell using a spell slot of 3rd level or higher, the damage increases by 1d8 for every two slot levels above the 2nd.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Stinking Cloud",
@@ -14157,7 +14437,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Stone Shape",
@@ -14195,7 +14476,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Stoneskin",
@@ -14240,7 +14522,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Storm of Vengeance",
@@ -14279,7 +14562,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Suggestion",
@@ -14340,7 +14624,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Sunbeam",
@@ -14382,7 +14667,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Sunburst",
@@ -14457,7 +14743,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Symbol",
@@ -14495,7 +14782,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Telekinesis",
@@ -14536,7 +14824,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Telepathic Bond",
@@ -14576,7 +14865,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Teleport",
@@ -14612,7 +14902,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Teleportation Circle",
@@ -14653,7 +14944,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Thaumaturgy",
@@ -14691,7 +14983,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Thunderwave",
@@ -14779,7 +15072,8 @@
         "higher_level": "When you cast this spell using a spell slot of 2nd level or higher, the damage increases by 1d8 for each slot level above 1st.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Time Stop",
@@ -14814,7 +15108,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Tiny Hut",
@@ -14856,7 +15151,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Tongues",
@@ -14899,7 +15195,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Transport via Plants",
@@ -14938,7 +15235,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Tree Stride",
@@ -14980,7 +15278,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "True Polymorph",
@@ -15022,7 +15321,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "True Resurrection",
@@ -15059,7 +15359,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "True Seeing",
@@ -15103,7 +15404,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "True Strike",
@@ -15162,7 +15464,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Unseen Servant",
@@ -15205,7 +15508,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Vampiric Touch",
@@ -15245,7 +15549,8 @@
         "higher_level": "When you cast this spell using a spell slot of 4th level or higher, the damage increases by 1d6 for each slot level above 3rd.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Vicious Mockery",
@@ -15315,7 +15620,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Wall of Fire",
@@ -15359,7 +15665,8 @@
         "higher_level": "When you cast this spell using a level spell slot 5 or more, the damage of the spell increases by 1d8 for each level of higher spell slot to 4.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Wall of Force",
@@ -15399,7 +15706,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Wall of Ice",
@@ -15439,7 +15747,8 @@
         "higher_level": "When you cast this spell using a spell slot of 7th level or higher, the damage the wall deals when it appears increases by 2d6, and the damage from passing through the sheet of frigid air increases by 1d6, for each slot level above 6th.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Wall of Stone",
@@ -15481,7 +15790,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Wall of Thorns",
@@ -15521,7 +15831,8 @@
         "higher_level": "When you cast this spell using a spell slot of 7th level or higher, both types of damage increase by 1d8 for each slot level above 6th.",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Warding Bond",
@@ -15561,7 +15872,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Water Breathing",
@@ -15605,7 +15917,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Water Walk",
@@ -15649,7 +15962,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Web",
@@ -15691,7 +16005,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Weird",
@@ -15730,7 +16045,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Wind Walk",
@@ -15770,7 +16086,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Wind Wall",
@@ -15812,7 +16129,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": true
     },
     {
         "name": "Wish",
@@ -15847,7 +16165,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Word of Recall",
@@ -15881,7 +16200,8 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     },
     {
         "name": "Zone of Truth",
@@ -15922,6 +16242,7 @@
         "higher_level": "",
         "document__slug": "wotc-srd",
         "document__title": "Systems Reference Document",
-        "document__license_url": "http://open5e.com/legal"
+        "document__license_url": "http://open5e.com/legal",
+        "concentration": false
     }
 ]
