@@ -21,7 +21,7 @@ function processCompendiumListing(data) {
                 .addClass('compendium-category')
                 .append(
                     $('<div class="title noselect"></div>').append(
-                        $('<span></span>').text(firstUpper(endpoint))
+                        $('<span></span>').text(firstUpper(cond(endpoint=='magicitems','Magic Items',endpoint)))
                     )
                 )
                 .append('<div class="items"></div>')
@@ -31,6 +31,8 @@ function processCompendiumListing(data) {
             $(dummy_area).children('#compendium-category-'+endpoint).children('.items').append(generate_creature(item));
         } else if (endpoint == 'spells') {
             $(dummy_area).children('#compendium-category-'+endpoint).children('.items').append(generate_spell(item));
+        } else if (endpoint == 'magicitems') {
+            $(dummy_area).children('#compendium-category-'+endpoint).children('.items').append(generate_magicitem(item));
         }
     }
 

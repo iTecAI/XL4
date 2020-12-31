@@ -301,3 +301,16 @@ function generate_spell(spell) {
     .append($('<div class="spell-desc"></div>').html(converter.makeHtml(spell.desc)));
     return main;
 }
+
+function generate_magicitem(item) {
+    var main = $('<div class="small-box-shadow generated-item spell"></div>');
+    var converter = new showdown.Converter({tables: true, strikethrough: true});
+    main.append(
+        $('<div class="name"></div>').text(item.name)
+    )
+    .append(
+        $('<div class="name-subtitle"></div>').text(item.type+', '+item.rarity+cond(item.requires_attunement=='','',' ('+item.requires_attunement+')'))
+    )
+    .append($('<div class="item-desc"></div>').html(converter.makeHtml(item.desc)));
+    return main;
+}
