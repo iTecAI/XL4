@@ -51,6 +51,7 @@ function root_refresh(data) {
         window.localStorage.setItem('fingerprint',data.new_fp);
         fingerprint = data.new_fp;
     }
+    $('#noconn').removeClass('active');
     $('#login-btn').toggle(data.uid==null);
     $('#head-menu-btn').toggle(data.uid!=null);
 }
@@ -98,7 +99,10 @@ $(document).ready(function(){
         fingerprint = window.localStorage.getItem('fingerprint');
     }
     window.setInterval(function(){
-        post('/server/keepalive/',root_refresh);
+        post('/server/keepalive/',root_refresh).fail(function(result){
+            console.log(result);
+            $('#noconn').addClass('active');
+        });
     },refresh_interval);
 
     $('#login-btn').on('click',function(){

@@ -463,3 +463,27 @@ body {
     left: 25%;
     transform: translate(-50%,-50%);
 }
+
+#noconn {
+    position: absolute;
+    bottom: -100px;
+    left: 50%;
+    transform: translate(-50%,0px);
+    display: inline-block;
+    height: fit-content;
+    width: fit-content;
+    padding: 5px;
+    padding-left: 15px;
+    padding-right: 15px;
+    font-size: 15px;
+    border-radius: 15px;
+    background-color: rgb(243, 19, 19);
+    color: white;
+    font-family: Roboto;
+    font-weight: 500;
+    transition: bottom 0.2s;
+    z-index: 10000;
+}
+#noconn.active {
+    bottom: 10px;
+}
