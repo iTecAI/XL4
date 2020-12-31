@@ -208,6 +208,14 @@ class Server:
             updates['user'] = u.check_update()
             updates['characters'] = any([self.get('characters',i).check_update() for i in u.characters])
         return updates, uid
+    def check_connection(self,_id):
+        if _id in self.connections.keys():
+            return True
+        with open(os.path.join(*CONFIG['session_lock'].split('/')),'r') as f:
+            if _id in json.load(f)['connections'].keys():
+                self.connections[_id] = Connection(json.load(f)['connections'][_id])
+                return True
+        return False
     def add_object(self,obj,store=True):
         for i in OE_MAP.keys():
             if type(obj) == OE_MAP[i]:

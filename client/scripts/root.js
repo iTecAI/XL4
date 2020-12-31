@@ -26,6 +26,26 @@ function post(path,callback,parameters,body,showFailMessage) {
         });
     }
 }
+function get(path,callback,parameters,showFailMessage) {
+    if (showFailMessage) {
+        return $.get({
+            url:path+$.param(parameters),
+            success:callback,
+            beforeSend:function(xhr){xhr.setRequestHeader('FP', fingerprint)}
+        }).fail(function(result){
+            bootbox.alert({
+                title: "Error: "+result.statusText,
+                message: result.responseJSON.result
+            });
+        });
+    } else {
+        return $.get({
+            url:path+$.param(parameters),
+            success:callback,
+            beforeSend:function(xhr){xhr.setRequestHeader('FP', fingerprint)}
+        });
+    }
+}
 function root_refresh(data) {
     if (data.new_fp) {
         window.localStorage.setItem('fingerprint',data.new_fp);
@@ -47,11 +67,32 @@ function buf2hex(buffer) { // buffer is an ArrayBuffer
 
 $(document).ready(function(){
     $('#head-menu-btn').toggle(false);
+    $('#settings-window').slideToggle(0,false);
     $('#head-menu-btn').on('click',function(){
-        console.log('click');
         activate('#side-bar');
         activate('#content-modal');
         activate('#head-menu-btn');
+        $('#settings-window').slideUp(0);
+    });
+    $('#side-bar').on('click',function(){
+        if (!$('#side-bar').hasClass('active')) {
+            activate('#side-bar');
+            activate('#content-modal');
+            activate('#head-menu-btn');
+            $('#settings-window').slideUp(0);
+        }
+    });
+    $('#content-modal').on('click',function(){
+        activate('#side-bar',false);
+        activate('#content-modal',false);
+        activate('#head-menu-btn',false);
+        $('#settings-window').slideUp(0);
+    });
+    $('#user-settings-btn').on('click',function(){
+        get('/user/',function(data){
+            $('#settings-window input[data-option=display_name]').val(data.options.display_name);
+        });
+        $('#settings-window').slideToggle(200);
     });
     if (window.localStorage.getItem('fingerprint')!=null) {
         fingerprint = window.localStorage.getItem('fingerprint');
@@ -96,5 +137,11 @@ $(document).ready(function(){
     $('#logout-btn').on('click',function(){
         $('#head-menu-btn').trigger('click');
         post('/server/logout/',console.log);
+    });
+
+    $('#settings-window input').on('change',function(){
+        if (!$(this).val() == '') {
+            post('/user/settings/'+$(this).attr('data-option'),function(){},{},{value:$(this).val()},true);
+        }
     });
 });

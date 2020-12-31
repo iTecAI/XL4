@@ -47,6 +47,9 @@ async def signup(user: UserLoginModel, response: Response, fp: Optional[str] = H
     if len(fp) != 43:
         response.status_code = status.HTTP_400_BAD_REQUEST
         return {'result':f'Invalid fingerprint. Must be of length 43, recieved fingerprint "{fp}" with length {str(len(fp))}'}
+    if not server.check_connection(fp):
+        response.status_code = status.HTTP_403_FORBIDDEN
+        return {'result':'Unknown session fingerprint'}
     with open(os.path.join(*CONFIG['session_lock'].split('/')),'r') as f:
         lock = json.load(f)
     if user.username in lock['user_map'].keys():
@@ -74,6 +77,9 @@ async def login(user: UserLoginModel, response: Response, fp: Optional[str] = He
     if len(fp) != 43:
         response.status_code = status.HTTP_400_BAD_REQUEST
         return {'result':f'Invalid fingerprint. Must be of length 43, recieved fingerprint "{fp}" with length {str(len(fp))}'}
+    if not server.check_connection(fp):
+        response.status_code = status.HTTP_403_FORBIDDEN
+        return {'result':'Unknown session fingerprint'}
     
     with open(os.path.join(*CONFIG['session_lock'].split('/')),'r') as f:
         lock = json.load(f)
@@ -102,6 +108,9 @@ async def logout(response: Response, fp: Optional[str] = Header(None)):
     if len(fp) != 43:
         response.status_code = status.HTTP_400_BAD_REQUEST
         return {'result':f'Invalid fingerprint. Must be of length 43, recieved fingerprint "{fp}" with length {str(len(fp))}'}
+    if not server.check_connection(fp):
+        response.status_code = status.HTTP_403_FORBIDDEN
+        return {'result':'Unknown session fingerprint'}
     server.connections[fp].user = None
     updates, uid = server.update_connection(fp)
     logger.debug(f'Client @ {fp} has logged out.')
