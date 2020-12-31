@@ -9,7 +9,9 @@ while current != None:
     print(current)
     current = dat['next']
     for i in dat['results']:
-        monsters.append(NPC.from_open5e(i).to_dict())
+        d = NPC.from_open5e(i).to_dict()
+        d['slug'] = i['slug']
+        monsters.append(d)
 
 with open(os.path.join('api','static','monsters.json'),'w') as f:
     json.dump(monsters,f,indent=4)

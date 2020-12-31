@@ -1,0 +1,229 @@
+#content-type-sidebar {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    display: inline-block;
+    width: 10vw;
+    height: 100%;
+    background-color: var(--primary-dark);
+    color: var(--primary-text);
+    font-family: Roboto;
+}
+.content-type {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    height: 5vh;
+    background-color: var(--primary-dark);
+    color: var(--primary-text);
+    font-size: 2vh;
+    margin-top: -7px;
+    transition: background-color 0.2s, color 0.2s;
+}
+.content-type:first-child {
+    margin-top: 0px;
+}
+.content-type:hover, .content-type.type-selected {
+    background-color: var(--primary-darker);
+    color: var(--secondary);
+}
+.content-type.type-selected:hover {
+    background-color: var(--primary-darker2);
+    color: var(--secondary-light);
+}
+.content-type span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    display: inline-block;
+    width: fit-content;
+}
+
+#compendium-search {
+    position: absolute;
+    top: 10%;
+    left: 10vw;
+    display: inline-block;
+    height: 80%;
+    width: 70vw;
+    border: none;
+    border-radius: 10px;
+    background-color: var(--primary-light);
+    color: var(--primary-text);
+    font-family: Roboto;
+    padding-left: 10px;
+    -webkit-box-shadow: inset 0px 0px 4px 0px rgba(0,0,0,0.3);
+    -moz-box-shadow: inset 0px 0px 4px 0px rgba(0,0,0,0.3);
+    box-shadow: inset 0px 0px 4px 0px rgba(0,0,0,0.3);
+    z-index: 99;
+}
+#compendium-search::placeholder {
+    color: var(--primary-text);
+    opacity: 0.8;
+}
+#comp-search-placeholder {
+    position: absolute;
+    display: inline-block;
+    top: 50%;
+    right: calc(90vw + 10px);
+    transform: translate(0,-50%);
+    color: var(--primary-text);
+}
+
+#compendium-area {
+    position: absolute;
+    top: 0px;
+    left: 10vw;
+    display: inline-block;
+    width: calc(100% - 10vw);
+    height: 100%;
+    overflow: auto;
+}
+#no-content-image {
+    position: absolute;
+    top: 50%;
+    left: calc(50% + 5vw);
+    transform: translate(-50%,-50%);
+}
+
+.compendium-category {
+    position: relative;
+    margin-top: 0px;
+    display: inline-block;
+    width: 100%;
+    height: fit-content;
+}
+.compendium-category .title {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    height: 5vh;
+    background-color: var(--primary-dark);
+}
+.compendium-category .title span {
+    color: var(--primary-text);
+    font-family: Roboto;
+    display: inline-block;
+    width: fit-content;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    font-size: 2vh;
+}
+.compendium-category .items {
+    padding: 20px;
+    padding-top: 15px;
+}
+
+.compendium-category .items .generated-item {
+    position: relative;
+    padding: 15px;
+    border-radius: 10px;
+    margin: 5px;
+    display: inline-block;
+    width: calc(100% - 10px);
+    box-sizing: border-box;
+    height: fit-content;
+}
+
+/* CREATURES */
+.creature .basic-info {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    height: fit-content;
+}
+.creature .name {
+    font-family: serif;
+    color: var(--dnd-text);
+    font-weight: 400;
+    font-size: 20pt;
+}
+.creature .name-subtitle {
+    font-family: Roboto;
+    font-style: italic;
+    font-size: 10pt;
+    margin-top: -5px;
+}
+.creature .cr {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translate(0,-50%);
+    font-size: 20pt;
+    color: var(--dnd-text);
+    font-family: serif;
+    font-style: normal;
+}
+.creature .cr-title {
+    font-size: 10pt;
+}
+.creature .cr-val {
+    display: inline-block;
+    width: 40px;
+}
+.creature .monster-separator {
+    position: relative;
+    display: inline-block;
+    width: 40%;
+    height: 2px;
+    background-image: linear-gradient(90deg, rgba(172,17,17,1) 56%, rgba(0,212,255,0) 100%);
+}
+.creature .smallstat-title {
+    margin-right: 5px;
+    font-family: Roboto;
+    font-weight: 600;
+    color: var(--dnd-small-text);
+}
+.ability-table {
+    display: block;
+    width: 30%;
+    position: relative;
+}
+.ability-table > *, .ability-table tr {
+    position: relative;
+    width: 100%;
+    display: inline-block;
+}
+.ability-table th, .ability-table td {
+    width: calc(100% / 6);
+    display: inline-block;
+    position: relative;
+    text-align: center;
+}
+.creature .trait {
+    position: relative;
+    margin-bottom: 15px;
+}
+.creature .trait .trait-title {
+    font-weight: 700;
+    font-style: italic;
+}
+.creature .actions-title {
+    position: relative;
+    display: block;
+    width: 100%;
+    border-bottom: 2px solid var(--dnd-text);
+    color: var(--dnd-text);
+    font-family: Roboto;
+    font-size: 16pt;
+}
+.creature .trait .action-automated {
+    padding-left: 25px;
+}
+
+#compendium-area::-webkit-scrollbar {
+  width: 10px;
+}
+#compendium-area::-webkit-scrollbar-track {
+  background: var(--primary);
+}
+#compendium-area::-webkit-scrollbar-thumb {
+  background: var(--primary-darker);
+  transition: background-color 0.2s;
+}
+#compendium-area::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-darker2);
+}

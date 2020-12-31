@@ -10,6 +10,7 @@ logger = logging.getLogger('uvicorn.error')
 # Endpoints
 from endpoints.server import router as server_router
 from endpoints.user import router as user_router
+from endpoints.compendium import router as comp_router
 
 app = FastAPI()
 
@@ -24,6 +25,11 @@ app.include_router(
     user_router,
     prefix='/user',
     tags=['user']
+)
+app.include_router(
+    comp_router,
+    prefix='/compendium',
+    tags=['compendium']
 )
 
 @app.get('/', include_in_schema=False)

@@ -79,6 +79,7 @@ body {
     border: none;
     color: var(--primary-text);
     transition: color 0.2s, background-color 0.2s, width 0.2s;
+    z-index: 100;
 }
 #head-menu-btn.active {
     width: 400px;
@@ -249,7 +250,7 @@ body {
     top: 5vh;
     left: 0px;
     display: inline-block;
-    width: 100vw;
+    width: calc(100vw - 5vh);
     height: 95vh;
     z-index: 100;
 }

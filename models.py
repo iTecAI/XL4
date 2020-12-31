@@ -7,3 +7,6 @@ class UserLoginModel(BaseModel):
 
 class UserSettingModel(BaseModel):
     value: str
+
+class CategoriesModel(BaseModel):
+    cats: list

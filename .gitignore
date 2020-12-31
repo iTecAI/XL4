@@ -132,3 +132,4 @@ database/
 jsconfig.json
 session.lock
 sensitive.*
+test.json

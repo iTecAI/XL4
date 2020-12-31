@@ -19,11 +19,15 @@
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+        <script src="https://unpkg.com/showdown/dist/showdown.min.js"></script>
 
         <!-- Local Files -->
         <script src="scripts/sensitive.js"></script> <!-- Must be added after clone. Contains non-open-source code for password derivation etc -->
         <script src="scripts/root.js"></script>
+        <script src="scripts/generators.js"></script>
+        <script src="scripts/compendium.js"></script>
         <link rel="stylesheet" href="style/root.css">
+        <link rel="stylesheet" href="style/compendium.css">
 
     </head>
     <body>
@@ -35,6 +39,8 @@
             <div id='site-logo'>
                 <img src='assets/logo.png'>
             </div>
+            <input id='compendium-search' placeholder="Search">
+            <i class="material-icons" id='comp-search-placeholder'>search</i>
         </div>
         <div id='side-bar' class='noselect noscroll'>
             <button id='logout-btn'>Log Out</button>
@@ -74,7 +80,21 @@
         <div id='content-area'>
             <div id='content-modal'></div>
             <div id='content-box' class='noscroll'>
-
+                <div id='content-type-sidebar' class='noselect noscroll'>
+                    <div class='content-type type-selected' data-type='monsters'><span>Monsters</span></div>
+                    <div class='content-type' data-type='spells'><span>Spells</span></div>
+                    <div class='content-type' data-type='magicitems'><span>Magic Items</span></div>
+                    <div class='content-type' data-type='armor'><span>Armor</span></div>
+                    <div class='content-type' data-type='weapons'><span>Weapons</span></div>
+                    <div class='content-type' data-type='equipment'><span>Equipment</span></div>
+                    <div class='content-type' data-type='sections'><span>Sections</span></div>
+                    <div class='content-type' data-type='classes'><span>Classes</span></div>
+                    <div class='content-type' data-type='races'><span>Races</span></div>
+                </div>
+                <div id='compendium-area'>
+                    
+                </div>
+                <img src="assets/logo_large.png" id='no-content-image'>
             </div>
         </div>
         <div id='noconn' class='noselect small-box-shadow'>
