@@ -3,6 +3,9 @@ from fastapi import FastAPI, Response, status
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import *
 import sys, uvicorn
+import logging
+
+logger = logging.getLogger('uvicorn.error')
 
 # Endpoints
 from endpoints.server import router as server_router
@@ -10,6 +13,7 @@ from endpoints.server import router as server_router
 app = FastAPI()
 
 # Routers
+logger.info('Setting routers.')
 app.include_router(
     server_router,
     prefix='/server',
@@ -21,6 +25,7 @@ async def get_compendium():
     return FileResponse(os.path.join('client','index.html'))
 
 
+logger.info('Loading static files.')
 files = list(os.walk('client'))
 
 slashtype = '/'
@@ -60,7 +65,5 @@ async def api_root(response: Response):
         'runtime':CONFIG['runtime']
     }
 
-
-
 if __name__ == "__main__":
-    uvicorn.run('main:app',host=CONFIG['runtime']['ip'],port=CONFIG['runtime']['port'],log_level='info',access_log=False)
+    uvicorn.run('main:app',host=CONFIG['runtime']['ip'],port=CONFIG['runtime']['port'],log_level='debug',access_log=False)

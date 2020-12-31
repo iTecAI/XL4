@@ -85,7 +85,7 @@ class User(BaseObject):
         self.connection = dct['connection']
         self.id = error(dct,'id',fingerprint())
         self.options = error(dct,'options',{
-            'display_name':'Player'
+            'display_name':dct['username'].split('@')[0]
         })
         self.characters = error(dct,'characters',[])
         self.campaigns = error(dct,'campaigns',{

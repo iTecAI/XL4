@@ -51,6 +51,7 @@ $(document).ready(function(){
         console.log('click');
         activate('#side-bar');
         activate('#content-modal');
+        activate('#head-menu-btn');
     });
     if (window.localStorage.getItem('fingerprint')!=null) {
         fingerprint = window.localStorage.getItem('fingerprint');

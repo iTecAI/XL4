@@ -77,29 +77,22 @@ body {
     width: 5vh;
     background-color: var(--primary);
     border: none;
+    color: var(--primary-text);
+    transition: color 0.2s, background-color 0.2s, width 0.2s;
 }
-#head-menu-btn img:first-child {
+#head-menu-btn.active {
+    width: 400px;
+}
+#head-menu-btn:hover {
+    background-color: var(--primary-dark);
+    color: var(--secondary);
+}
+#head-menu-btn i {
+    font-size: 3.7vh;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
-    width: 70%;
-    height: 70%;
-    opacity: 1;
-    transition: opacity 0.2s;
-    z-index: 1;
-}
-#head-menu-btn img:last-child {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    width: 70%;
-    height: 70%;
-    z-index: 0;
-}
-#head-menu-btn:hover img:first-child {
-    opacity: 0;
 }
 
 #side-bar {
