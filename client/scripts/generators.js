@@ -303,7 +303,7 @@ function generate_spell(spell) {
 }
 
 function generate_magicitem(item) {
-    var main = $('<div class="small-box-shadow generated-item spell"></div>');
+    var main = $('<div class="small-box-shadow generated-item magicitem"></div>');
     var converter = new showdown.Converter({tables: true, strikethrough: true});
     main.append(
         $('<div class="name"></div>').text(item.name)
@@ -312,5 +312,82 @@ function generate_magicitem(item) {
         $('<div class="name-subtitle"></div>').text(item.type+', '+item.rarity+cond(item.requires_attunement=='','',' ('+item.requires_attunement+')'))
     )
     .append($('<div class="item-desc"></div>').html(converter.makeHtml(item.desc)));
+    return main;
+}
+
+function generate_armor(armor) {
+    var main = $('<div class="small-box-shadow generated-item armor"></div>');
+    var converter = new showdown.Converter({tables: true, strikethrough: true});
+    main.append(
+        $('<div class="name"></div>').text(armor.name+' - AC '+armor.ac)
+    )
+    .append(
+        $('<div class="name-subtitle"></div>').text(firstUpper(armor.type)+' - '+armor.cost+'gp - '+armor.weight+' lb.')
+    )
+    .append(
+        $('<div class="min-str"></div>')
+            .append($('<span class="smallstat-title">Strength Requirement:</span>'))
+            .append($('<span class="smallstat-value"></span>').text(cond(armor.min_str==0,'-',armor.min_str)))
+    ).append(
+        $('<div class="stealth-dis"></div>')
+            .append($('<span class="smallstat-title">Stealth Disadvantage:</span>'))
+            .append($('<span class="smallstat-value"></span>').text(cond(armor.stealth_dis,'Yes','No')))
+    );
+    return main;
+}
+
+function generate_weapon(weapon) {
+    var main = $('<div class="small-box-shadow generated-item weapon"></div>');
+    var converter = new showdown.Converter({tables: true, strikethrough: true});
+    main.append(
+        $('<div class="name"></div>').text(weapon.name)
+    )
+    .append(
+        $('<div class="name-subtitle"></div>').text(firstUpper(weapon.group)+' '+firstUpper(weapon.type)+' Weapon')
+    )
+    .append(
+        $('<div class="name-subtitle"></div>').text(weapon.cost+'gp - '+weapon.weight+'lb')
+    ).append(
+        $('<div class="weapon-damage"></div>')
+            .append($('<span class="smallstat-title">Damage:</span>'))
+            .append($('<span class="smallstat-value"></span>').text(weapon.damage.dice+' '+weapon.damage.type+' damage'))
+    );
+
+    for (var p=0;p<weapon.properties.length;p++) {
+        if (Object.keys(weapon.properties[p]).includes('range')) {
+            main.append($('<span class="weapon-property"></span>').html('<b>'+firstUpper(weapon.properties[p].name)+': </b>'+weapon.properties[p].range+' ft.'));
+        } else if (Object.keys(weapon.properties[p]).includes('value')) {
+            main.append($('<span class="weapon-property"></span>').html('<b>'+firstUpper(weapon.properties[p].name)+': </b>'+weapon.properties[p].value));
+        } else {
+            main.append($('<span class="weapon-property"></span>').html('<b>'+firstUpper(weapon.properties[p].name)+'</b>'));
+        }
+    }
+
+    return main;
+}
+
+function generate_equipment(equip) {
+    var main = $('<div class="small-box-shadow generated-item equipment"></div>');
+    var converter = new showdown.Converter({tables: true, strikethrough: true});
+    main.append(
+        $('<div class="name"></div>').text(equip.name)
+    )
+    .append(
+        $('<div class="name-subtitle"></div>').text(firstUpper(equip.type)+' - '+equip.cost+'gp - '+equip.weight+' lb.')
+    );
+    return main;
+}
+
+function generate_section(sect) {
+    var main = $('<div class="small-box-shadow generated-item section"></div>');
+    var converter = new showdown.Converter({tables: true, strikethrough: true});
+    main.append(
+        $('<div class="name"></div>').text(sect.name)
+    )
+    .append(
+        $('<div class="name-subtitle"></div>').text(firstUpper(sect.parent))
+    ).append(
+        $('<div class="desc"></div>').html(converter.makeHtml(sect.desc))
+    );
     return main;
 }

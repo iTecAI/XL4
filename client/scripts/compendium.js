@@ -5,9 +5,6 @@ function processCompendiumListing(data) {
         $('#compendium-area').html('');
         return;
     }
-    if (data.length > 60) {
-        data = data.slice(0,59);
-    }
     $('#no-content-image').hide();
     dummy_area = $('<div></div>');
 
@@ -33,6 +30,14 @@ function processCompendiumListing(data) {
             $(dummy_area).children('#compendium-category-'+endpoint).children('.items').append(generate_spell(item));
         } else if (endpoint == 'magicitems') {
             $(dummy_area).children('#compendium-category-'+endpoint).children('.items').append(generate_magicitem(item));
+        } else if (endpoint == 'armor') {
+            $(dummy_area).children('#compendium-category-'+endpoint).children('.items').append(generate_armor(item));
+        } else if (endpoint == 'weapons') {
+            $(dummy_area).children('#compendium-category-'+endpoint).children('.items').append(generate_weapon(item));
+        } else if (endpoint == 'equipment') {
+            $(dummy_area).children('#compendium-category-'+endpoint).children('.items').append(generate_equipment(item));
+        } else if (endpoint == 'sections') {
+            $(dummy_area).children('#compendium-category-'+endpoint).children('.items').append(generate_section(item));
         }
     }
 
