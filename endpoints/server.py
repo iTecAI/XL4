@@ -41,18 +41,10 @@ async def keepalive(response: Response, fp: Optional[str] = Header(None)):
 
 @router.post('/signup/')
 async def signup(user: UserLoginModel, response: Response, fp: Optional[str] = Header(None)):
-    if fp == 'null' or fp == None:
-        response.status_code = status.HTTP_403_FORBIDDEN
-        return {'result':'Must have a session fingerprint to access API.'}
-    if len(fp) != 43:
-        response.status_code = status.HTTP_400_BAD_REQUEST
-        return {'result':f'Invalid fingerprint. Must be of length 43, recieved fingerprint "{fp}" with length {str(len(fp))}'}
-    if not server.check_connection(fp):
-        response.status_code = status.HTTP_403_FORBIDDEN
-        return {'result':'Unknown session fingerprint'}
-    with open(os.path.join(*CONFIG['session_lock'].split('/')),'r') as f:
-        lock = json.load(f)
-    if user.username in lock['user_map'].keys():
+    response, res = fingerprint_validate(fp,response)
+    if res != 0:
+        return res
+    if user.username in list_usermap():
         response.status_code = status.HTTP_409_CONFLICT
         return {'result':'User already exists. Please login.'}
     obj = server.add_object(User({
@@ -71,21 +63,12 @@ async def signup(user: UserLoginModel, response: Response, fp: Optional[str] = H
 
 @router.post('/login/')
 async def login(user: UserLoginModel, response: Response, fp: Optional[str] = Header(None)):
-    if fp == 'null' or fp == None:
-        response.status_code = status.HTTP_403_FORBIDDEN
-        return {'result':'Must have a session fingerprint to access API.'}
-    if len(fp) != 43:
-        response.status_code = status.HTTP_400_BAD_REQUEST
-        return {'result':f'Invalid fingerprint. Must be of length 43, recieved fingerprint "{fp}" with length {str(len(fp))}'}
-    if not server.check_connection(fp):
-        response.status_code = status.HTTP_403_FORBIDDEN
-        return {'result':'Unknown session fingerprint'}
-    
-    with open(os.path.join(*CONFIG['session_lock'].split('/')),'r') as f:
-        lock = json.load(f)
-    if user.username in lock['user_map'].keys():
-        if sensitive.get_password_check_hash(server.get('users',lock['user_map'][user.username]).passhash,fp) == user.passhash:
-            server.connections[fp].user = lock['user_map'][user.username]
+    response, res = fingerprint_validate(fp,response)
+    if res != 0:
+        return res
+    if user.username in list_usermap():
+        if sensitive.get_password_check_hash(server.get('users',get_usermap(user.username)).passhash,fp) == user.passhash:
+            server.connections[fp].user = get_usermap(user.username)
             updates, uid = server.update_connection(fp)
             logger.debug(f'Client @ {fp} has logged in to user {user.username} [{uid}]')
             return {
@@ -102,15 +85,9 @@ async def login(user: UserLoginModel, response: Response, fp: Optional[str] = He
 
 @router.post('/logout/')
 async def logout(response: Response, fp: Optional[str] = Header(None)):
-    if fp == 'null' or fp == None:
-        response.status_code = status.HTTP_403_FORBIDDEN
-        return {'result':'Must have a session fingerprint to access API.'}
-    if len(fp) != 43:
-        response.status_code = status.HTTP_400_BAD_REQUEST
-        return {'result':f'Invalid fingerprint. Must be of length 43, recieved fingerprint "{fp}" with length {str(len(fp))}'}
-    if not server.check_connection(fp):
-        response.status_code = status.HTTP_403_FORBIDDEN
-        return {'result':'Unknown session fingerprint'}
+    response, res = fingerprint_validate(fp,response)
+    if res != 0:
+        return res
     server.connections[fp].user = None
     updates, uid = server.update_connection(fp)
     logger.debug(f'Client @ {fp} has logged out.')

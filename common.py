@@ -1,6 +1,7 @@
 import json, os, time
 from api import *
 import logging
+from fastapi import status
 
 logger = logging.getLogger('uvicorn.error')
 
@@ -110,6 +111,38 @@ OE_MAP = {
     'users':User
 }
 
+def store_usermap(name,_id):
+    with open(os.path.join(*CONFIG['session_lock'].split('/')),'r') as f:
+        cur_lock = json.load(f)
+    cur_lock['user_map'][name] = _id
+    with open(os.path.join(*CONFIG['session_lock'].split('/')),'w') as f:
+        json.dump(cur_lock,f)
+
+def get_usermap(name):
+    with open(os.path.join(*CONFIG['session_lock'].split('/')),'r') as f:
+        lock = json.load(f)
+    if name in lock['user_map'].keys():
+        return lock['user_map'][name]
+    return None
+
+def list_usermap():
+    with open(os.path.join(*CONFIG['session_lock'].split('/')),'r') as f:
+        lock = json.load(f)
+    return list(lock['user_map'].keys())
+
+def raw_usermap():
+    with open(os.path.join(*CONFIG['session_lock'].split('/')),'r') as f:
+        lock = json.load(f)
+    return lock['user_map']
+
+def del_usermap(name):
+    with open(os.path.join(*CONFIG['session_lock'].split('/')),'r') as f:
+        cur_lock = json.load(f)
+    if name in cur_lock['user_map'].keys():
+        del cur_lock['user_map'][name]
+    with open(os.path.join(*CONFIG['session_lock'].split('/')),'w') as f:
+        json.dump(cur_lock,f)
+
 class Server:
     def __init__(self):
         self.loaded_objects = {}
@@ -121,12 +154,7 @@ class Server:
             if self.loaded_objects[_id]['endpoint'] == endpoint:
                 self.loaded_objects[_id]['loaded_time'] = time.time()
                 if self.loaded_objects[_id]['endpoint'] == 'users':
-                    with open(os.path.join(*CONFIG['session_lock'].split('/')),'r') as f:
-                        cur_lock = json.load(f)
-                    if not self.loaded_objects[_id]['object'].username in cur_lock['user_map'].keys():
-                        cur_lock['user_map'][self.loaded_objects[_id]['object'].username] = self.loaded_objects[_id]['object'].id
-                    with open(os.path.join(*CONFIG['session_lock'].split('/')),'w') as f:
-                        json.dump(cur_lock,f)
+                    store_usermap(self.loaded_objects[_id]['object'].username,self.loaded_objects[_id]['object'].id)
                 return self.loaded_objects[_id]['object']
         if check_cache(endpoint,_id):
             self.loaded_objects[_id] = {
@@ -135,12 +163,7 @@ class Server:
                 'endpoint':endpoint
             }
             if self.loaded_objects[_id]['endpoint'] == 'users':
-                    with open(os.path.join(*CONFIG['session_lock'].split('/')),'r') as f:
-                        cur_lock = json.load(f)
-                    if not self.loaded_objects[_id]['object'].username in cur_lock['user_map'].keys():
-                        cur_lock['user_map'][self.loaded_objects[_id]['object'].username] = self.loaded_objects[_id]['object'].id
-                    with open(os.path.join(*CONFIG['session_lock'].split('/')),'w') as f:
-                        json.dump(cur_lock,f)
+                store_usermap(self.loaded_objects[_id]['object'].username,self.loaded_objects[_id]['object'].id)
             return self.loaded_objects[_id]['object']
         else:
             raise KeyError(f'Object with ID "{_id}" does not exist at endpoint "{endpoint}".')
@@ -148,12 +171,7 @@ class Server:
         if _id in self.loaded_objects.keys():
             cache(self.loaded_objects[_id]['endpoint'],self.loaded_objects[_id]['object'])
             if self.loaded_objects[_id]['endpoint'] == 'users':
-                with open(os.path.join(*CONFIG['session_lock'].split('/')),'r') as f:
-                    cur_lock = json.load(f)
-                if not self.loaded_objects[_id]['object'].username in cur_lock['user_map'].keys():
-                    cur_lock['user_map'][self.loaded_objects[_id]['object'].username] = self.loaded_objects[_id]['object'].id
-                with open(os.path.join(*CONFIG['session_lock'].split('/')),'w') as f:
-                    json.dump(cur_lock,f)
+                store_usermap(self.loaded_objects[_id]['object'].username,self.loaded_objects[_id]['object'].id)
     def check_all(self):
         for i in list(self.loaded_objects.keys()):
             if time.time() > self.loaded_objects[i]['loaded_time']+CONFIG['loaded_object_timeout']:
@@ -166,11 +184,11 @@ class Server:
                 if c in cur_lock['connections'].keys():
                     del cur_lock['connections'][c]
                 del self.connections[c]
-        for u in cur_lock['user_map'].keys():
+        for u in list_usermap():
             if not os.path.exists(os.path.join(*CONFIG['database_path'].split('/'),'users',cur_lock['user_map'][u]+'.json')):
-                del cur_lock['user_map'][u]
+                del_usermap(u)
         for f in os.listdir(os.path.join(*CONFIG['database_path'].split('/'),'users')):
-            if not f.split('.')[0] in cur_lock['user_map'].values():
+            if not f.split('.')[0] in raw_usermap().values():
                 os.remove(os.path.join(*CONFIG['database_path'].split('/'),'users',f))
 
         with open(os.path.join(*CONFIG['session_lock'].split('/')),'w') as f:
@@ -230,3 +248,15 @@ class Server:
 
 
 server = Server()
+
+def fingerprint_validate(fp,response):
+    if fp == 'null' or fp == None:
+        response.status_code = status.HTTP_403_FORBIDDEN
+        return response, {'result':'Must have a session fingerprint to access API.'}
+    if len(fp) != 43:
+        response.status_code = status.HTTP_400_BAD_REQUEST
+        return response, {'result':f'Invalid fingerprint. Must be of length 43, recieved fingerprint "{fp}" with length {str(len(fp))}'}
+    if not server.check_connection(fp):
+        response.status_code = status.HTTP_403_FORBIDDEN
+        return response, {'result':'Unknown session fingerprint'}
+    return response, 0
