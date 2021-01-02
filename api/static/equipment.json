@@ -252,7 +252,7 @@
         "cost": 0.05,
         "weight": 3.0,
         "quantity": 1,
-        "name": "Clothes, common",
+        "name": "Common Clothes",
         "type":"gear"
     },
     {
@@ -260,7 +260,7 @@
         "cost": 5.0,
         "weight": 4.0,
         "quantity": 1,
-        "name": "Clothes, costume",
+        "name": "Costume",
         "type":"gear"
     },
     {
@@ -268,7 +268,7 @@
         "cost": 15.0,
         "weight": 6.0,
         "quantity": 1,
-        "name": "Clothes, fine",
+        "name": "Fine Clothes",
         "type":"gear"
     },
     {
@@ -276,7 +276,7 @@
         "cost": 2.0,
         "weight": 4.0,
         "quantity": 1,
-        "name": "Clothes, travelers",
+        "name": "Traveler's Clothes",
         "type":"gear"
     },
     {

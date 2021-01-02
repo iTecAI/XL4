@@ -10,3 +10,7 @@ class UserSettingModel(BaseModel):
 
 class CategoriesModel(BaseModel):
     cats: list
+
+class NewCharacterModel(BaseModel):
+    ctype: str
+    url: str

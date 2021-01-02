@@ -75,3 +75,6 @@ def search_static(search,endpoint=None,exclude=['spellcasting','classes','races'
                                     'data':dat[i][:]
                                 })
     return results
+
+def copath(cpath):
+    return os.path.join(*cpath.split('/'))

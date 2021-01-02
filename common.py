@@ -8,8 +8,38 @@ logger = logging.getLogger('uvicorn.error')
 class XLCharacter(Character):
     def __init__(self, dct):
         super().__init__(dct)
-        self.id = error(dct,'id',fingerprint())
+        self.id = error(dct,'id',generate_id())
         self._update = error(dct,'_update',False)
+
+        if not 'id' in dct.keys():
+            new = []
+            for i in self.attack_info:
+                if len(search_static(i['name'],'weapons')) == 0:
+                    new.append(i)
+            self.attack_info = new[:]
+
+            new = []
+            for i in self.gear_info:
+                if len(search_static(i['name'],'equipment')) == 0:
+                    new.append(i)
+            self.gear_info = new[:]
+
+            new = []
+            for i in self.race_info:
+                if len(search_static(i['name'],'races',exclude=[])) == 0:
+                    new.append(i)
+            self.race_info = new[:]
+
+            new = []
+            for i in self.class_info:
+                s = search_static(i['name'],'classes',exclude=[])
+                if len(s) == 0:
+                    new.append(i)
+                else:
+                    if not any([str(i['subclass']).lower() == str(n['subclass']).lower() or i['subclass'] == n['subclass'] for n in s]):
+                        new.append(i)
+            self.class_info = new[:]
+        
     def update(self):
         self._update = True
     def check_update(self):
