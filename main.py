@@ -42,6 +42,10 @@ app.include_router(
 async def get_compendium():
     return FileResponse(os.path.join('client','index.html'))
 
+@app.get('/characters', include_in_schema=False)
+async def get_compendium():
+    return FileResponse(os.path.join('client','characters.html'))
+
 
 logger.info('Loading static files.')
 files = list(os.walk('client'))

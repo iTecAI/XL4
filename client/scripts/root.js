@@ -159,9 +159,9 @@ $(document).ready(function(){
         activate('#head-menu-btn');
         $('#settings-window').slideUp(0);
     });
-    $('#side-bar').on('click',function(){
+    $('#side-bar').on('click',function(event){
         if (uid == null) {return;}
-        if (!$('#side-bar').hasClass('active')) {
+        if (!$('#side-bar').hasClass('active') && $(event.target).parents('#page-links').length == 0) {
             activate('#side-bar');
             activate('#content-modal');
             activate('#head-menu-btn');
