@@ -43,8 +43,12 @@ async def get_compendium():
     return FileResponse(os.path.join('client','index.html'))
 
 @app.get('/characters', include_in_schema=False)
-async def get_compendium():
+async def get_chars_main():
     return FileResponse(os.path.join('client','characters.html'))
+
+@app.get('/character_sheet', include_in_schema=False)
+async def get_char_sheet():
+    return FileResponse(os.path.join('client','character_sheet.html'))
 
 
 logger.info('Loading static files.')

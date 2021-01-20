@@ -33,6 +33,19 @@ async def get_characters(response: Response, fp: Optional[str] = Header(None)):
         return {'result':'Must be logged in.'}
     return {i:server.get('characters',i) for i in server.get('users',server.connections[fp].user).characters}
 
+@router.get('/{sid}/')
+async def get_specific_character(sid: str, response: Response, fp: Optional[str] = Header(None)):
+    response, res = fingerprint_validate(fp,response)
+    if res != 0:
+        return res
+    if server.connections[fp].user == None:
+        response.status_code = status.HTTP_405_METHOD_NOT_ALLOWED
+        return {'result':'Must be logged in.'}
+    if not sid in server.get('users',server.connections[fp].user).characters:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return {'result':'Could not find that character.'}
+    return server.get('characters',sid).to_dict()
+
 @router.post('/new/')
 async def new_character(model: NewCharacterModel, response: Response, fp: Optional[str] = Header(None)):
     response, res = fingerprint_validate(fp,response)
@@ -78,6 +91,7 @@ async def update_character(sid: str, response: Response, fp: Optional[str] = Hea
         response.status_code = status.HTTP_405_METHOD_NOT_ALLOWED
         return {'result':'Invalid sheet type.'}
     new_obj.id = ochar.id
+    server.loaded_objects[new_obj.id]['object'] = new_obj
     server.store(new_obj.id)
     server.get('users',server.connections[fp].user).update()
     server.get('characters',new_obj.id).update()
@@ -125,4 +139,32 @@ async def duplicate_character(sid: str, response: Response, fp: Optional[str] = 
     server.store(server.connections[fp].user)
     server.get('users',server.connections[fp].user).update(endpoint='characters')
     return {'result':'Success.'}
+
+@router.post('/{sid}/modify/')
+async def duplicate_character(sid: str, model: CharacterModifyModel, response: Response, fp: Optional[str] = Header(None)):
+    response, res = fingerprint_validate(fp,response)
+    if res != 0:
+        return res
+    if server.connections[fp].user == None:
+        response.status_code = status.HTTP_405_METHOD_NOT_ALLOWED
+        return {'result':'Must be logged in.'}
+    if not sid in server.get('users',server.connections[fp].user).characters:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return {'result':'Could not find that character.'}
+    code = f'server.get("characters",sid).{model.path.split(".")[0]}'
+    for i in model.path.split('.')[1:]:
+        code += '['
+        try:
+            code += str(int(i))
+        except ValueError:
+            code += '"'+str(i)+'"'
+        code += ']'
+    code += ' = '+condition(type(model.value) == str, '"'+str(model.value)+'"', str(model.value))
+    try:
+        exec(code,globals(),locals())
+    except KeyError:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return {'result':f'Path {model.path} not found.'}
+    server.get('characters',sid).update()
+    return server.get('characters',sid).to_dict()
     

@@ -14,3 +14,7 @@ class CategoriesModel(BaseModel):
 class NewCharacterModel(BaseModel):
     ctype: str
     url: str
+
+class CharacterModifyModel(BaseModel):
+    path: str
+    value: Any

@@ -279,7 +279,7 @@ body {
     height: 100%;
     z-index: 99;
     padding: 10px;
-    overflow: scroll;
+    overflow: auto;
     box-sizing: border-box;
 }
 #login-btn {
@@ -514,7 +514,7 @@ body {
     transform: translate(-50%,-50%);
     display: inline-block;
     width: auto;
-    height: 90%;
+    height: 100%;
 }
 .card-content {
     position: absolute;
@@ -538,22 +538,50 @@ body {
 .card .buttons button {
     border: none;
     background-color: var(--gradient8);
-    transition: background-color 0.2s;
+    transition: background-color 0.2s, max-width 0.4s;
+    max-width: 40px;
     width: 40px;
     height: 40px;
     border-radius: 20px;
     position: relative;
     display: inline-block;
     margin-right: 5px;
+    overflow: hidden;
 }
 .card .buttons button i {
     position: absolute;
     top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
+    left: 8px;
+    transform: translate(0,-50%);
     font-size: 24px;
     color: black;
 }
+.card .buttons button span {
+    position: relative;
+    margin-top: 50%;
+    margin-left: 40px;
+    margin-right: 10px;
+    transform: translate(0,-50%);
+    font-size: 18px;
+    color: black;
+    font-family: Roboto;
+}
 .card .buttons button:hover {
     background-color: var(--gradient6);
+    max-width: 120px;
+    width: fit-content
+}
+
+.scroll1::-webkit-scrollbar {
+    width: 10px;
+}
+.scroll1::-webkit-scrollbar-track {
+    background: var(--primary);
+}
+.scroll1::-webkit-scrollbar-thumb {
+    background: var(--primary-darker);
+    transition: background-color 0.2s;
+}
+.scroll1::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-darker2);
 }

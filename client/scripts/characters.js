@@ -34,16 +34,16 @@ function load_char_directory() {
                 .append(
                     $('<div class="buttons"></div>')
                         .append(
-                            $('<button class="character-edit"><i class="material-icons">create</i></button>')
+                            $('<button class="character-edit"><i class="material-icons">create</i> <span>Edit</span></button>')
                         )
                         .append(
-                            $('<button class="character-copy"><i class="material-icons">content_copy</i></button>')
+                            $('<button class="character-copy"><i class="material-icons">content_copy</i> <span>Copy</span></button>')
                             .on('click',function(event) {
                                 post('/character/'+$(this).parents('.character-box').attr('data-id')+'/duplicate/',console.log,{},{},true);
                             })
                         )
                         .append(
-                            $('<button class="character-delete"><i class="material-icons">delete</i></button>')
+                            $('<button class="character-delete"><i class="material-icons">delete</i> <span>Delete</span></button>')
                             .on('click',function(event) {
                                 post('/character/'+$(this).parents('.character-box').attr('data-id')+'/delete/',console.log,{},{},true);
                             })
