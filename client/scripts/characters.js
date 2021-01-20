@@ -15,9 +15,17 @@ function load_char_directory() {
             var char_item = $('<div class="character-box card"></div>');
             char_item.attr({ id: 'cbox-' + ckeys[c], 'data-id': ckeys[c] });
             if (dat.appearance.image) {
-                $(char_item).append($('<span class="card-image"></span>').append($('<img>').attr('src', dat.appearance.image)));
+                $(char_item).append($('<span class="card-image"></span>')
+                    .on('click', function (event) {
+                        window.location = '/character_sheet?sheet=' + $(this).parents('.character-box').attr('data-id');
+                    })
+                    .append($('<img>').attr('src', dat.appearance.image)));
             } else {
-                $(char_item).append($('<span class="card-image"></span>').append($('<img>').attr('src', 'assets/logo_large.png')));
+                $(char_item).append($('<span class="card-image"></span>')
+                    .on('click', function (event) {
+                        window.location = '/character_sheet?sheet=' + $(this).parents('.character-box').attr('data-id');
+                    })
+                    .append($('<img>').attr('src', 'assets/logo_large.png')));
             }
             $(char_item)
                 .append(
@@ -35,18 +43,21 @@ function load_char_directory() {
                     $('<div class="buttons"></div>')
                         .append(
                             $('<button class="character-edit"><i class="material-icons">create</i> <span>Edit</span></button>')
+                                .on('click', function (event) {
+                                    window.location = '/character_sheet?sheet=' + $(this).parents('.character-box').attr('data-id');
+                                })
                         )
                         .append(
                             $('<button class="character-copy"><i class="material-icons">content_copy</i> <span>Copy</span></button>')
-                            .on('click',function(event) {
-                                post('/character/'+$(this).parents('.character-box').attr('data-id')+'/duplicate/',console.log,{},{},true);
-                            })
+                                .on('click', function (event) {
+                                    post('/character/' + $(this).parents('.character-box').attr('data-id') + '/duplicate/', console.log, {}, {}, true);
+                                })
                         )
                         .append(
                             $('<button class="character-delete"><i class="material-icons">delete</i> <span>Delete</span></button>')
-                            .on('click',function(event) {
-                                post('/character/'+$(this).parents('.character-box').attr('data-id')+'/delete/',console.log,{},{},true);
-                            })
+                                .on('click', function (event) {
+                                    post('/character/' + $(this).parents('.character-box').attr('data-id') + '/delete/', console.log, {}, {}, true);
+                                })
                         )
                 );
 
@@ -58,14 +69,14 @@ function load_char_directory() {
 
 $(document).ready(function () {
     load_char_directory();
-    $('#add-char').on('click',function(){
-        bootbox.prompt('Enter sheet URL.',function(result){
+    $('#add-char').on('click', function () {
+        bootbox.prompt('Enter sheet URL.', function (result) {
             if (result) {
                 if (result.includes('docs.google.com/spreadsheets')) {
-                    post('/character/new/',console.log,{},{
-                        ctype:'gsheet2.1',
-                        url:result
-                    },true);
+                    post('/character/new/', console.log, {}, {
+                        ctype: 'gsheet2.1',
+                        url: result
+                    }, true);
                 } else {
                     bootbox.alert('Invalid URL.');
                 }
