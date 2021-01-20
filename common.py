@@ -287,7 +287,7 @@ class Server:
             u = self.get('users',self.connections[fp].user)
             uid = u.id
             updates['user'] = u.check_update()
-            updates['characters']['global'] = any([self.get('characters',i).check_update() for i in u.characters]) or u.check_update(endpoint='characters')
+            updates['characters']['global'] = any([self.get('characters',i)._update for i in u.characters]) or u.check_update(endpoint='characters')
             updates['characters']['specific'] = {i:self.get('characters',i).check_update() for i in u.characters}
         return updates, uid
     def check_connection(self,_id):
