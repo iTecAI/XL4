@@ -81,9 +81,14 @@ function post(path,callback,parameters,body,showFailMessage) {
             success:callback,
             beforeSend:function(xhr){xhr.setRequestHeader('FP', fingerprint)}
         }).fail(function(result){
+            if (result.responseJSON.result) {
+                var res = result.responseJSON.result;
+            } else {
+                var res = 'No associated error description.'
+            }
             bootbox.alert({
                 title: "Error: "+result.statusText,
-                message: result.responseJSON.result
+                message: res
             });
         });
     } else {
@@ -102,9 +107,14 @@ function get(path,callback,parameters,showFailMessage) {
             success:callback,
             beforeSend:function(xhr){xhr.setRequestHeader('FP', fingerprint)}
         }).fail(function(result){
+            if (result.responseJSON.result) {
+                var res = result.responseJSON.result;
+            } else {
+                var res = 'No associated error description.'
+            }
             bootbox.alert({
                 title: "Error: "+result.statusText,
-                message: result.responseJSON.result
+                message: res
             });
         });
     } else {
@@ -114,6 +124,9 @@ function get(path,callback,parameters,showFailMessage) {
             beforeSend:function(xhr){xhr.setRequestHeader('FP', fingerprint)}
         });
     }
+}
+function pagelocal_update(data) {
+
 }
 function root_refresh(data) {
     if (data.new_fp) {
@@ -131,6 +144,7 @@ function root_refresh(data) {
         activate('#head-menu-btn',false);
         $('#settings-window').slideUp(0);
     }
+    pagelocal_update(data);
 }
 function activate(selector,set) {
     activating = true;
@@ -147,6 +161,9 @@ function firstUpper(str) {
 }
 function cond(b,t,f) {
     if (b) {return t;} else {return f;}
+}
+function titleCase(str) {
+    return str.split(' ').map(firstUpper).join(' ');
 }
 
 $(document).ready(function(){

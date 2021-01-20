@@ -22,5 +22,10 @@
     "runtime":{
         "ip":"127.0.0.1",
         "port":5000
+    },
+    "user_restrictions":{
+        "default":{
+            "max_characters":15
+        }
     }
 }

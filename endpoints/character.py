@@ -41,6 +41,9 @@ async def new_character(model: NewCharacterModel, response: Response, fp: Option
     if server.connections[fp].user == None:
         response.status_code = status.HTTP_405_METHOD_NOT_ALLOWED
         return {'result':'Must be logged in.'}
+    if CONFIG['user_restrictions'][server.get('users',server.connections[fp].user).user_type]['max_characters'] <= len(server.get('users',server.connections[fp].user).characters):
+        response.status_code = status.HTTP_403_FORBIDDEN
+        return {'result':'You have too many characters. Maximum allowed: '+str(CONFIG['user_restrictions'][server.get('users',server.connections[fp].user).user_type]['max_characters'])}
     if model.ctype == 'gsheet2.1':
         sid = uparse.urlparse(model.url).path.split('/')[3]
         obj = XLCharacter.from_gsheet(sid,copath(CONFIG['gapi']))
@@ -80,4 +83,46 @@ async def update_character(sid: str, response: Response, fp: Optional[str] = Hea
     server.get('characters',new_obj.id).update()
     return {'charid':new_obj.id,'character':new_obj.to_dict()}
 
+@router.post('/{sid}/duplicate/')
+async def duplicate_character(sid: str, response: Response, fp: Optional[str] = Header(None)):
+    response, res = fingerprint_validate(fp,response)
+    if res != 0:
+        return res
+    if server.connections[fp].user == None:
+        response.status_code = status.HTTP_405_METHOD_NOT_ALLOWED
+        return {'result':'Must be logged in.'}
+    if not sid in server.get('users',server.connections[fp].user).characters:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return {'result':'Could not find that character.'}
+    if CONFIG['user_restrictions'][server.get('users',server.connections[fp].user).user_type]['max_characters'] <= len(server.get('users',server.connections[fp].user).characters):
+        response.status_code = status.HTTP_403_FORBIDDEN
+        return {'result':'You have too many characters. Maximum allowed: '+str(CONFIG['user_restrictions'][server.get('users',server.connections[fp].user).user_type]['max_characters'])}
+    dct = server.get('characters',sid).to_dict()
+    del dct['id']
+    dct['name'] = 'Copy of '+dct['name']
+    obj = XLCharacter(dct)
+    server.add_object(obj)
+    server.get('users',server.connections[fp].user).characters.append(obj.id)
+    server.store(server.connections[fp].user)
+    server.get('users',server.connections[fp].user).update()
+    server.get('characters',obj.id).update()
+    server.get('users',server.connections[fp].user).update(endpoint='characters')
+    return {'charid':obj.id,'character':obj.to_dict()}
+
+@router.post('/{sid}/delete/')
+async def duplicate_character(sid: str, response: Response, fp: Optional[str] = Header(None)):
+    response, res = fingerprint_validate(fp,response)
+    if res != 0:
+        return res
+    if server.connections[fp].user == None:
+        response.status_code = status.HTTP_405_METHOD_NOT_ALLOWED
+        return {'result':'Must be logged in.'}
+    if not sid in server.get('users',server.connections[fp].user).characters:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return {'result':'Could not find that character.'}
+    server.delete('characters',sid)
+    server.get('users',server.connections[fp].user).characters.remove(sid)
+    server.store(server.connections[fp].user)
+    server.get('users',server.connections[fp].user).update(endpoint='characters')
+    return {'result':'Success.'}
     

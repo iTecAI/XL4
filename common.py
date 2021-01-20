@@ -103,6 +103,16 @@ def check_cache(endpoint,object):
     path.append(_id+'.json')
     return os.path.exists(os.path.join(*path))
 
+def remove_cache(endpoint,object):
+    if type(object) == str:
+        _id = object
+    else:
+        _id = object.id
+    path = [CONFIG['database_path']]
+    path.extend(endpoint.split('.'))
+    path.append(_id+'.json')
+    os.remove(os.path.join(*path))
+
 class Connection(BaseObject):
     def __init__(self,dct):
         super().__init__()
@@ -123,15 +133,19 @@ class User(BaseObject):
             'owned':[],
             'participating':[]
         })
-        self._update = error(dct,'_update',False)
+        self._update = error(dct,'_update',{
+            'self':False,
+            'characters':False
+        })
         self.passhash = dct['passhash']
         self.username = dct['username']
+        self.user_type = error(dct,'user_type','default')
 
-    def update(self):
-        self._update = True
-    def check_update(self):
-        if self._update:
-            self._update = False
+    def update(self,endpoint='self'):
+        self._update[endpoint] = True
+    def check_update(self,endpoint='self'):
+        if self._update[endpoint]:
+            self._update[endpoint] = False
             return True
         else:
             return False
@@ -197,6 +211,16 @@ class Server:
             return self.loaded_objects[_id]['object']
         else:
             raise KeyError(f'Object with ID "{_id}" does not exist at endpoint "{endpoint}".')
+    def delete(self,endpoint,_id):
+        if not endpoint in OE_MAP.keys():
+            raise KeyError(f'Endpoint {endpoint} is not linked to any object type.')
+        if check_cache(endpoint,_id):
+            remove_cache(endpoint,_id)
+            if _id in self.loaded_objects:
+                del self.loaded_objects[_id]
+        else:
+            raise KeyError(f'Object with ID "{_id}" does not exist at endpoint "{endpoint}".')
+
     def store(self,_id):
         if _id in self.loaded_objects.keys():
             cache(self.loaded_objects[_id]['endpoint'],self.loaded_objects[_id]['object'])
@@ -245,16 +269,26 @@ class Server:
                 json.dump(cur_lock,f)
         updates = {
             'user':False,
-            'characters':False,
-            'campaigns':False,
-            'maps':False
+            'characters':{
+                'global':False,
+                'specific':{}
+            },
+            'campaigns':{
+                'global':False,
+                'specific':{}
+            },
+            'maps':{
+                'global':False,
+                'specific':{}
+            }
         }
         uid = None
         if self.connections[fp].user != None:
             u = self.get('users',self.connections[fp].user)
             uid = u.id
             updates['user'] = u.check_update()
-            updates['characters'] = any([self.get('characters',i).check_update() for i in u.characters])
+            updates['characters']['global'] = any([self.get('characters',i).check_update() for i in u.characters]) or u.check_update(endpoint='characters')
+            updates['characters']['specific'] = {i:self.get('characters',i).check_update() for i in u.characters}
         return updates, uid
     def check_connection(self,_id):
         if _id in self.connections.keys():
