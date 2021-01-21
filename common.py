@@ -5,6 +5,9 @@ from fastapi import status
 
 logger = logging.getLogger('uvicorn.error')
 
+def _get_mod_from_score(score):
+    return int((score-10)/2)
+
 class XLCharacter(Character):
     def __init__(self, dct):
         super().__init__(dct)
@@ -27,8 +30,20 @@ class XLCharacter(Character):
             new = []
             for i in self.race_info:
                 if len(search_static(i['name'],'races',exclude=[])) == 0:
-                    new.append(i)
+                    new.append({
+                        'ability_score_increase': i['scores'],
+                        'armor_class': i['armor'],
+                        'attacks': i['attacks'],
+                        'bonus_hp': i['hp_bonus'],
+                        'bonus_weapon_armor_profs': i['weapon_armor_profs'],
+                        'features_profs': i['other_proficiencies'],
+                        'languages': i['languages'],
+                        'race_name': i['name'],
+                        'resist_vuln_immune': i['resist_immune_vuln'],
+                        'speed': i['speed']
+                    })
             self.race_info = new[:]
+            
 
             new = []
             for i in self.class_info:
@@ -37,7 +52,20 @@ class XLCharacter(Character):
                     new.append(i)
                 else:
                     if not any([str(i['subclass']).lower() == str(n['subclass']).lower() or i['subclass'] == n['subclass'] for n in s]):
-                        new.append(i)
+                        new.append({
+                            'additional_proficiencies': i['multiclass_profs'],
+                            'armor_class': i['alt_ac'],
+                            'bonus_hp_per_level': i['bonus_hp'],
+                            'class_name': i['name'],
+                            'first_level_proficiencies': i['first_level_profs'],
+                            'hit_die': i['hit_die'],
+                            'init': i['init_bonus'],
+                            'saves_skills': i['saves_skills'],
+                            'speed_increase': i['speed_increase'],
+                            'spellcasting_ability': i['spell_ability'],
+                            'spellcasting_type': i['spell_type'],
+                            'subclass': i['subclass']
+                        })
             self.class_info = new[:]
         
     def update(self):
@@ -48,6 +76,57 @@ class XLCharacter(Character):
             return True
         else:
             return False
+    def get_class(self, name, subclass):
+        try:
+            return super().get_class(name, subclass=subclass)
+        except KeyError:
+            info = search_static('',endpoint='classes',exclude=[])
+            for i in info:
+                if i['class_name'].lower() == name.lower():
+                    if str(subclass).lower() == str(i['subclass']).lower():
+                        return i
+            raise KeyError(f'Class {name} with subclass {subclass} not found.')
+    def get_attack(self, name):
+        try:
+            return super().get_attack(name)
+        except KeyError:
+            info = search_static('',endpoint='weapons',exclude=[])
+            for i in info:
+                if i['name'].lower() == name.lower():
+                    return i
+            raise KeyError(f'Attack {name} not found.')
+    def get_gear(self, name):
+        try:
+            return super().get_gear(name)
+        except KeyError:
+            info = search_static('',endpoint='equipment',exclude=[])
+            for i in info:
+                if i['name'].lower() == name.lower():
+                    return i
+            raise KeyError(f'Gear {name} not found.')
+    def get_race(self, name):
+        try:
+            return super().get_race(name)
+        except KeyError:
+            info = search_static('',endpoint='races',exclude=[])
+            for i in info:
+                if i['race_name'].lower() == name.lower():
+                    return i
+            raise KeyError(f'Race {name} not found.')
+    def initiative(self):
+        return sum([
+            super().initiative(),
+            condition(self.check_feat('alert'),5,0),
+            sum([condition(self.get_class(i['class'],subclass=i['subclass'])['init']==None,0,self.get_class(i['class'],subclass=i['subclass'])['init']) for i in self.level['classes']]),
+            condition(self.check_trait('jack of all trades'),int(self.proficiency_bonus/2),0)
+        ])
+    def get_init_bonus(self):
+        return sum([
+            _get_mod_from_score(self.abilities['dexterity']['score_base']+sum(self.abilities['dexterity']['score_mod'])+self.abilities['dexterity']['score_manual_mod']),
+            condition(self.check_feat('alert'),5,0),
+            sum([condition(self.get_class(i['class'],subclass=i['subclass'])['init']==None,0,self.get_class(i['class'],subclass=i['subclass'])['init']) for i in self.level['classes']]),
+            condition(self.check_trait('jack of all trades'),int(self.proficiency_bonus/2),0)
+        ])
 
 with open('config.json','r') as f:
     CONFIG = json.load(f)

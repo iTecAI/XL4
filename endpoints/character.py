@@ -44,7 +44,12 @@ async def get_specific_character(sid: str, response: Response, fp: Optional[str]
     if not sid in server.get('users',server.connections[fp].user).characters:
         response.status_code = status.HTTP_404_NOT_FOUND
         return {'result':'Could not find that character.'}
-    return server.get('characters',sid).to_dict()
+    return {
+        'character':server.get('characters',sid).to_dict(),
+        'dynamic':{
+            'initiative':server.get('characters',sid).get_init_bonus()
+        }
+    }
 
 @router.post('/new/')
 async def new_character(model: NewCharacterModel, response: Response, fp: Optional[str] = Header(None)):
@@ -152,13 +157,24 @@ async def modify_character(sid: str, model: CharacterModifyModel, response: Resp
         response.status_code = status.HTTP_404_NOT_FOUND
         return {'result':'Could not find that character.'}
     code = f'server.get("characters",sid).{model.path.split(".")[0]}'
+    prev = model.path.split('.')[0]
     for i in model.path.split('.')[1:]:
-        code += '['
-        try:
-            code += str(int(i))
-        except ValueError:
-            code += '"'+str(i)+'"'
-        code += ']'
+        if i in ['manual_mod','mod','min','max','base','temporary'] and prev in ['armor_class','hit_points','walk','fly','swim','climb','burrow']:
+            code += '.'
+            item = True
+        else:
+            code += '['
+            item = False
+        prev = i
+        if item:
+            code += i
+        else:
+            try:
+                code += str(int(i))
+            except ValueError:
+                code += '"'+str(i)+'"'
+        if not item:
+            code += ']'
     code += ' = '+condition(type(model.value) == str, '"'+str(model.value)+'"', str(model.value))
     try:
         exec(code,globals(),locals())
@@ -167,6 +183,7 @@ async def modify_character(sid: str, model: CharacterModifyModel, response: Resp
         return {'result':f'Path {model.path} not found.'}
     server.get('characters',sid).reprocess()
     server.get('characters',sid).update()
+    server.store(sid)
     return server.get('characters',sid).to_dict()
 
 @router.post('/{sid}/batch_modify/')
@@ -185,13 +202,24 @@ async def batch_modify_character(sid: str, model: CharacterBatchModifyModel, res
         val = model.items[path]
 
         code = f'server.get("characters",sid).{path.split(".")[0]}'
+        prev = path.split('.')[0]
         for i in path.split('.')[1:]:
-            code += '['
-            try:
-                code += str(int(i))
-            except ValueError:
-                code += '"'+str(i)+'"'
-            code += ']'
+            if i in ['manual_mod','mod','min','max','base','temporary'] and prev in ['armor_class','hit_points','walk','fly','swim','climb','burrow']:
+                code += '.'
+                item = True
+            else:
+                code += '['
+                item = False
+            prev = i
+            if item:
+                code += i
+            else:
+                try:
+                    code += str(int(i))
+                except ValueError:
+                    code += '"'+str(i)+'"'
+            if not item:
+                code += ']'
         code += ' = '+condition(type(val) == str, '"'+str(val)+'"', str(val))
         try:
             exec(code,globals(),locals())
@@ -199,4 +227,5 @@ async def batch_modify_character(sid: str, model: CharacterBatchModifyModel, res
             pass
     server.get('characters',sid).reprocess()
     server.get('characters',sid).update()
+    server.store(sid)
     return server.get('characters',sid).to_dict()    

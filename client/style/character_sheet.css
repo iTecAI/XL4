@@ -237,3 +237,72 @@
 .panel .content .button[data-style=wide1]:hover {
     background-color: var(--gradient6);
 }
+
+/* Output Styling */
+.panel .content .output {
+    padding: 5px;
+    font-family: Roboto;
+    position: relative;
+    display: inline-block;
+    width: 98%;
+    vertical-align: top;
+    margin-left: 1%;
+    overflow: hidden;
+}
+.panel .content .output[data-style=internal-label] {
+    border: 2px solid var(--gradient6);
+    border-radius: 5px;
+    padding: 15px;
+    padding-top: 5px;
+    padding-bottom: 20px;
+}
+.panel .content .output[data-style=internal-label] .label {
+    position: absolute;
+    font-size: 10px;
+    color: var(--gradient8);
+    left: 0px;
+    bottom: 0px;
+    display: inline-block;
+    width: 100%;
+    padding: 3px;
+    background-color: var(--primary-dark);
+    text-align: center;
+}
+.panel .content .output[data-style=internal-label] .edit-btn {
+    position: absolute;
+    top: 1px;
+    right: 1px;
+    font-size: 14px;
+    color: var(--gradient0);
+}
+.panel .content .output[data-style=internal-label] .edit-btn i {
+    font-size: 14px;
+}
+.panel .content .output[data-style=internal-label] .output-mod {
+    position: absolute;
+    width: 100%;
+    height: fit-content;
+    font-size: 10px;
+    color: var(--gradient8);
+    background-color: var(--primary-dark);
+    left: 0px;
+    bottom: 3px;
+    padding-left: 5px;
+}
+.panel .content .output[data-style=internal-label] .output-mod input {
+    width: 50%;
+    height: 90%;
+    position: relative;
+    padding: 1px;
+}
+.panel .content .output[data-style=internal-label] .output-mod input.seamless {
+    border: none;
+    background-color: var(--primary-dark);
+    color: var(--gradient8);
+    transition: background-color 0.2s;
+    text-align: center;
+    border-radius: 3px;
+}
+.panel .content .output[data-style=internal-label] .output-mod input.seamless:focus {
+    background-color: var(--primary);
+}

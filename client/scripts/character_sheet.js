@@ -1,5 +1,6 @@
 var sid = null;
 var current_data = {};
+var current_dynamic_data = {};
 
 var races = [];
 var classes = [];
@@ -19,6 +20,22 @@ function load_update_directs(data) {
             $(this).children('.input').val(current);
             if ($(this).children('.input').attr('type') == 'checkbox') {
                 $(this).children('.input').prop('checked',current);
+            }
+        }
+    });
+    $('.panel .content .update.contained').each(function (i, e) {
+        var path = $(this).attr('data-path').split('.');
+        var current = data;
+        for (var p = 0; p < path.length; p++) {
+            current = current[path[p]];
+            if (current == undefined) {
+                break;
+            }
+        }
+        if (current != undefined) {
+            $(this).val(current);
+            if ($(this).attr('type') == 'checkbox') {
+                $(this).prop('checked',current);
             }
         }
     });
@@ -56,6 +73,37 @@ function setup_direct_event_listeners() {
             });
         }
     });
+    $('.panel .content .contained.direct').off('change');
+    $('.panel .content .contained.direct').on('change', function (event) {
+        if ($(event.target).val().length > 0 || $(event.target).hasClass('allowedEmpty') || $(event.target).attr('type') == 'checkbox') {
+            if (isNaN($(event.target).val())) {
+                var val = $(event.target).val();
+            } else {
+                var val = Number($(event.target).val());
+            }
+            if ($(event.target).attr('data-type') == 'number') {
+                if (isNaN(val)) {
+                    return;
+                }
+                val = Number(val);
+                if ($(event.target).attr('data-min') != undefined && val < Number($(event.target).attr('data-min'))) {
+                    $(event.target).val($(event.target).attr('data-min'));
+                    return;
+                }
+                if ($(event.target).attr('data-max') != undefined && val > Number($(event.target).attr('data-max'))) {
+                    $(event.target).val($(event.target).attr('data-max'));
+                    return;
+                }
+            }
+            if ($(event.target).attr('type') == 'checkbox') {
+                val = $(event.target).prop('checked');
+            }
+            post('/character/' + sid + '/modify/', console.log, {}, {
+                path: $(event.target).attr('data-path'),
+                value: val
+            });
+        }
+    });
 }
 
 function manual_event_listeners() {
@@ -66,46 +114,28 @@ function manual_event_listeners() {
             value:current_data.level.classes
         },true);
     });
+    $('.edit-btn').off('click').on('click',function(event){
+        $(event.delegateTarget).parent('.output').children('.output-mod').fadeToggle(200);
+    });
 }
 
-function load_character(data) {
+function load_character(_data) {
+    data = _data.character;
+    dynamic = _data.dynamic;
     console.log(data);
     current_data = data;
+    current_dynamic_data = dynamic;
 
     // Concatenate set races and homebrew races
     var races_internal = JSON.parse(JSON.stringify(races));
     for (var r = 0; r < data.race_info.length; r++) {
         var item = data.race_info[r];
-        races_internal.push({
-            ability_score_increase: item.scores,
-            armor_class: item.armor,
-            attacks: item.attacks,
-            bonus_hp: item.hp_bonus,
-            bonus_weapon_armor_profs: item.weapon_armor_profs,
-            features_profs: item.other_proficiencies,
-            languages: item.languages,
-            race_name: item.name,
-            resist_vuln_immune: item.resist_immune_vuln,
-            speed: item.speed
-        });
+        races_internal.push(item);
     }
     var classes_internal = JSON.parse(JSON.stringify(classes));
     for (var c = 0; c < data.class_info.length; c++) {
         var item = data.class_info[c];
-        classes_internal.push({
-            additional_proficiencies: item.multiclass_profs,
-            armor_class: item.alt_ac,
-            bonus_hp_per_level: item.bonus_hp,
-            class_name: item.name,
-            first_level_proficiencies: item.first_level_profs,
-            hit_die: item.hit_die,
-            init: item.init_bonus,
-            saves_skills: item.saves_skills,
-            speed_increase: item.speed_increase,
-            spellcasting_ability: item.spell_ability,
-            spellcasting_type: item.spell_type,
-            subclass: item.subclass
-        });
+        classes_internal.push(item);
     }
     $('title').text(data.name);
     $('#panel-definition .title span').text(data.name);
@@ -190,6 +220,21 @@ function load_character(data) {
         $('#level-xp-input .main-label').text('XP / Level');
     }
 
+    // Hit dice display
+    var hd_keys = Object.keys(data.hit_dice_current);
+    var dummy_hd = $('<div></div>');
+    for (var h=0;h<hd_keys.length;h++) {
+        dummy_hd.append($('<input spellcheck="false" class="input update direct contained" data-type="number" data-min="0" style="width: 30%;text-align:center;padding-top:1px;padding-bottom:1px"></input>').attr('data-path','hit_dice_current.'+hd_keys[h]+'.current').attr('data-max',data.hit_dice_current[hd_keys[h]].max));
+        dummy_hd.append(' ');
+        dummy_hd.append($("<span class='label noselect' style='width: 65%;font-weight:bold;padding-top:1px;padding-bottom:1px;margin-top:0px;margin-bottom:0px'></span>").text('/ '+data.hit_dice_current[hd_keys[h]].max+'d'+hd_keys[h].split('_')[1]));
+    }
+    dummy_hd.append($("<span class='main-label'>Hit Dice</span>"));
+    $('#hit-dice').html(dummy_hd.html());
+
+    // AC and INIT
+    $('#ac-output .value').text(data.armor_class.base + data.armor_class.mod.reduce(function(t,i){return t+i;},0) + data.armor_class.manual_mod);
+    $('#init-output .value').text(cond(dynamic.initiative>0,'+','')+dynamic.initiative);
+
     load_update_directs(data);
     setup_direct_event_listeners();
     manual_event_listeners();
@@ -220,5 +265,5 @@ $(document).ready(function () {
             }
         }
     }, {}, { cats: ['races', 'classes'] });
-
+    $('.output-mod').fadeOut(0);
 });
