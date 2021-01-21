@@ -175,12 +175,20 @@ function load_character(data) {
     }
     $('#class-selector').replaceWith(dummy_classlist);
 
+    // Level/XP Input
     if (data.level.level == 20) {
         var nxp = '-';
     } else {
         var nxp = LEVELXP[data.level.level];
     }
     $('#level-label').text('/ '+nxp+' XP - Level '+data.level.level);
+    if (data.level.classes.map(function(v,i,a){return v.level;}).reduce(function(t,c){return t+c;}) != data.level.level) {
+        $('#level-xp-input').toggleClass('invalidated',true);
+        $('#level-xp-input .main-label').text('XP / Level - LEVEL MUST EQUAL TOTAL CLASS LEVELS.');
+    } else {
+        $('#level-xp-input').toggleClass('invalidated',false);
+        $('#level-xp-input .main-label').text('XP / Level');
+    }
 
     load_update_directs(data);
     setup_direct_event_listeners();

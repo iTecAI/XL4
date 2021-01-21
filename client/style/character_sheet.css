@@ -106,7 +106,14 @@
     padding-left: 3px;
     padding-right: 3px;
     padding-top: -2px;
-    transition: color 0.2s;
+    transition: color 0.2s, font-weight 0.2s;
+}
+.panel .content .input[data-style=sub-name].invalidated {
+    border-color: red;
+}
+.panel .content .input[data-style=sub-name].invalidated .label {
+    color: red;
+    font-weight: bold;
 }
 .panel .content .input[data-style=sub-name] .input:focus {
     border-color: var(--secondary-dark);
@@ -145,6 +152,7 @@
     margin-bottom: 15px;
     display: inline-block;
     margin-left: 1%;
+    transition: border-color 0.2s;
 }
 .panel .content .input[data-outline=yes] .main-label {
     font-size: 14px;
@@ -156,7 +164,14 @@
     padding-left: 3px;
     padding-right: 3px;
     padding-top: -2px;
-    transition: color 0.2s;
+    transition: color 0.2s, font-weight 0.2s;
+}
+.panel .content .input[data-outline=yes].invalidated {
+    border-color: red;
+}
+.panel .content .input[data-outline=yes].invalidated .main-label {
+    color: red;
+    font-weight: bold;
 }
 
 .panel .content .input.checkbox[data-style=check1] {
