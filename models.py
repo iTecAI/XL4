@@ -18,3 +18,6 @@ class NewCharacterModel(BaseModel):
 class CharacterModifyModel(BaseModel):
     path: str
     value: Any
+
+class CharacterBatchModifyModel(BaseModel):
+    items: dict

@@ -141,7 +141,7 @@ async def duplicate_character(sid: str, response: Response, fp: Optional[str] = 
     return {'result':'Success.'}
 
 @router.post('/{sid}/modify/')
-async def duplicate_character(sid: str, model: CharacterModifyModel, response: Response, fp: Optional[str] = Header(None)):
+async def modify_character(sid: str, model: CharacterModifyModel, response: Response, fp: Optional[str] = Header(None)):
     response, res = fingerprint_validate(fp,response)
     if res != 0:
         return res
@@ -165,6 +165,38 @@ async def duplicate_character(sid: str, model: CharacterModifyModel, response: R
     except KeyError:
         response.status_code = status.HTTP_404_NOT_FOUND
         return {'result':f'Path {model.path} not found.'}
+    server.get('characters',sid).reprocess()
     server.get('characters',sid).update()
     return server.get('characters',sid).to_dict()
+
+@router.post('/{sid}/batch_modify/')
+async def batch_modify_character(sid: str, model: CharacterBatchModifyModel, response: Response, fp: Optional[str] = Header(None)):
+    response, res = fingerprint_validate(fp,response)
+    if res != 0:
+        return res
+    if server.connections[fp].user == None:
+        response.status_code = status.HTTP_405_METHOD_NOT_ALLOWED
+        return {'result':'Must be logged in.'}
+    if not sid in server.get('users',server.connections[fp].user).characters:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return {'result':'Could not find that character.'}
     
+    for path in model.items.keys():
+        val = model.items[path]
+
+        code = f'server.get("characters",sid).{path.split(".")[0]}'
+        for i in path.split('.')[1:]:
+            code += '['
+            try:
+                code += str(int(i))
+            except ValueError:
+                code += '"'+str(i)+'"'
+            code += ']'
+        code += ' = '+condition(type(val) == str, '"'+str(val)+'"', str(val))
+        try:
+            exec(code,globals(),locals())
+        except KeyError:
+            pass
+    server.get('characters',sid).reprocess()
+    server.get('characters',sid).update()
+    return server.get('characters',sid).to_dict()    
