@@ -29,7 +29,8 @@ class XLCharacter(Character):
 
             new = []
             for i in self.race_info:
-                if len(search_static(i['name'],'races',exclude=[])) == 0:
+                print(i)
+                if len(search_static(i['name'],'races',exclude=[])) == 0 or not any([x['race_name'].lower() == i['name'].lower() for x in search_static(i['name'],'races',exclude=[])]):
                     new.append({
                         'ability_score_increase': i['scores'],
                         'armor_class': i['armor'],

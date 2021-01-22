@@ -80,7 +80,7 @@ function load_update_directs(data) {
             }
         }
         if ($(this).hasClass('convert-mod')) {
-            total = cond(get_mod_from_score(total) > 0, '+', '') + get_mod_from_score(total);
+            total = cond(get_mod_from_score(total) >= 0, '+', '') + get_mod_from_score(total);
         }
         $(this).text(total);
 
@@ -354,7 +354,7 @@ function load_character(_data) {
     $('#hit-dice').html(dummy_hd.html());
 
     // AC and INIT
-    $('#init-output .value').text(cond(dynamic.initiative > 0, '+', '') + dynamic.initiative);
+    $('#init-output .value').text(cond(dynamic.initiative >= 0, '+', '') + dynamic.initiative);
 
     // Resist/Vuln/Immune
     var dummy_rvi = $('<div></div>');
@@ -412,7 +412,7 @@ function load_character(_data) {
             data.abilities[$(this).attr('data-save')].score_manual_mod,
             data.abilities[$(this).attr('data-save')].score_mod.reduce(function (t, i) { return t + i; },0)
         ].reduce(function (t, i) { return t + i; },0)) + cond(data.abilities[$(this).attr('data-save')].save_proficient,data.proficiency_bonus,0);
-        $(this).children('.save-value').text(cond(s_val>0,'+','')+s_val);
+        $(this).children('.save-value').text(cond(s_val>=0,'+','')+s_val);
     });
 
     load_update_directs(data);
