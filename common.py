@@ -53,18 +53,18 @@ class XLCharacter(Character):
                 else:
                     if not any([str(i['subclass']).lower() == str(n['subclass']).lower() or i['subclass'] == n['subclass'] for n in s]):
                         new.append({
-                            'additional_proficiencies': i['multiclass_profs'],
-                            'armor_class': i['alt_ac'],
-                            'bonus_hp_per_level': i['bonus_hp'],
-                            'class_name': i['name'],
-                            'first_level_proficiencies': i['first_level_profs'],
-                            'hit_die': i['hit_die'],
-                            'init': i['init_bonus'],
-                            'saves_skills': i['saves_skills'],
-                            'speed_increase': i['speed_increase'],
-                            'spellcasting_ability': i['spell_ability'],
-                            'spellcasting_type': i['spell_type'],
-                            'subclass': i['subclass']
+                            'additional_proficiencies': error(i,'multiclass_profs',None),
+                            'armor_class': error(i,'alt_ac',None),
+                            'bonus_hp_per_level': error(i,'bonus_hp',None),
+                            'class_name': error(i,'name',None),
+                            'first_level_proficiencies': error(i,'first_level_profs',None),
+                            'hit_die': error(i,'hit_die',None),
+                            'init': error(i,'init_bonus',None),
+                            'saves_skills': error(i,'saves_skills',None),
+                            'speed_increase': error(i,'speed_increase',None),
+                            'spellcasting_ability': error(i,'spell_ability',None),
+                            'spellcasting_type': error(i,'spell_type',None),
+                            'subclass': error(i,'subclass',None)
                         })
             self.class_info = new[:]
         
@@ -76,20 +76,21 @@ class XLCharacter(Character):
             return True
         else:
             return False
-    def get_class(self, name, subclass):
-        try:
-            return super().get_class(name, subclass=subclass)
-        except KeyError:
-            info = search_static('',endpoint='classes',exclude=[])
-            for i in info:
-                if i['class_name'].lower() == name.lower():
-                    if str(subclass).lower() == str(i['subclass']).lower():
-                        return i
-            raise KeyError(f'Class {name} with subclass {subclass} not found.')
+    def get_class(self, name, subclass=None):
+        for i in self.class_info:
+            if i['class_name'].lower() == name.lower():
+                if str(subclass).lower() == str(i['subclass']).lower():
+                    return i
+        info = search_static('',endpoint='classes',exclude=[])
+        for i in info:
+            if i['class_name'].lower() == name.lower():
+                if str(subclass).lower() == str(i['subclass']).lower():
+                    return i
+        raise KeyError(f'Class {name} with subclass {subclass} not found.')
     def get_attack(self, name):
         try:
             return super().get_attack(name)
-        except KeyError:
+        except ValueError:
             info = search_static('',endpoint='weapons',exclude=[])
             for i in info:
                 if i['name'].lower() == name.lower():
@@ -98,21 +99,21 @@ class XLCharacter(Character):
     def get_gear(self, name):
         try:
             return super().get_gear(name)
-        except KeyError:
+        except ValueError:
             info = search_static('',endpoint='equipment',exclude=[])
             for i in info:
                 if i['name'].lower() == name.lower():
                     return i
             raise KeyError(f'Gear {name} not found.')
     def get_race(self, name):
-        try:
-            return super().get_race(name)
-        except KeyError:
-            info = search_static('',endpoint='races',exclude=[])
-            for i in info:
-                if i['race_name'].lower() == name.lower():
-                    return i
-            raise KeyError(f'Race {name} not found.')
+        for i in self.race_info:
+            if i['race_name'].lower() == name.lower():
+                return i
+        info = search_static('',endpoint='races',exclude=[])
+        for i in info:
+            if i['race_name'].lower() == name.lower():
+                return i
+        raise KeyError(f'Race {name} not found.')
     def initiative(self):
         return sum([
             super().initiative(),
