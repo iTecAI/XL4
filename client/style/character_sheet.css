@@ -295,7 +295,7 @@
     position: relative;
     padding: 1px;
 }
-.panel .content .output[data-style=internal-label] .output-mod input.seamless {
+.panel .content input.seamless {
     border: none;
     background-color: var(--primary-dark);
     color: var(--gradient8);
@@ -303,6 +303,17 @@
     text-align: center;
     border-radius: 3px;
 }
-.panel .content .output[data-style=internal-label] .output-mod input.seamless:focus {
+.panel .content input.seamless:focus {
     background-color: var(--primary);
+}
+.panel .content input.seamless-light {
+    border: none;
+    background-color: var(--gradient8);
+    color: var(--gradient0);
+    transition: background-color 0.2s;
+    text-align: center;
+    border-radius: 3px;
+}
+.panel .content input.seamless-light:focus {
+    background-color: var(--gradient7);
 }

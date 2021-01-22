@@ -39,6 +39,34 @@ function load_update_directs(data) {
             }
         }
     });
+    $('.panel .content .output .value.update').each(function (i, e) {
+        var total = 0;
+        var items = $(this).attr('data-path').split('+');
+        for (var i=0;i<items.length;i++) {
+            var options_sp = items[i].split('~');
+            var path = options_sp[0].split('.');
+            var current = data;
+            for (var p = 0; p < path.length; p++) {
+                current = current[path[p]];
+                if (current == undefined) {
+                    break;
+                }
+            }
+
+            if (options_sp.length > 1) {
+                var options = options_sp[1].split(',');
+                if (options.includes('reduce')) {
+                    current = current.reduce(function(t,i){return t+i;},0);
+                }
+            }
+
+            if (current != undefined) {
+                total += current;
+            }
+        }
+        $(this).text(total);
+        
+    });
 }
 
 function setup_direct_event_listeners() {
@@ -232,7 +260,6 @@ function load_character(_data) {
     $('#hit-dice').html(dummy_hd.html());
 
     // AC and INIT
-    $('#ac-output .value').text(data.armor_class.base + data.armor_class.mod.reduce(function(t,i){return t+i;},0) + data.armor_class.manual_mod);
     $('#init-output .value').text(cond(dynamic.initiative>0,'+','')+dynamic.initiative);
 
     load_update_directs(data);
