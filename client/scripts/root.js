@@ -72,7 +72,9 @@ var CRXP = {
     30: 155000
 }
 
-// Functions
+function get_mod_from_score(score) {
+    return Math.floor(((score-10)/2));
+}
 function post(path, callback, parameters, body, showFailMessage) {
     if (showFailMessage) {
         return $.post({

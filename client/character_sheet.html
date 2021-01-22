@@ -151,7 +151,7 @@
                             </div>
                             <div class='output noselect' id='rvi-panel' data-outline="yes">
                                 <div id='rvi-scroll'>
-                                    
+
                                 </div>
                                 <span class='main-label'>Resist / Vuln / Immune</span>
                             </div>
@@ -160,7 +160,48 @@
                     <div class='panel' id='panel-scores-saves'>
                         <div class='title noselect'><span>Scores & Saves</span></div>
                         <div class='content'>
-                            
+                            <div class='output noselect score-output' data-style='internal-label' id='score-str'>
+                                <span class='value direct update convert-mod' data-path='abilities.strength.score_base+abilities.strength.score_manual_mod+abilities.strength.score_mod~reduce'></span>
+                                <span class='value direct update raw-score' data-path='abilities.strength.score_base+abilities.strength.score_manual_mod+abilities.strength.score_mod~reduce'></span>
+                                <span class='label noselect'>STR</span>
+                                <span class='edit-btn noselect'><i class='material-icons'>settings</i></span>
+                                <span class='output-mod noselect'>MOD: <input class='seamless contained direct update' data-path='abilities.strength.score_manual_mod'> BASE: <input class='seamless contained direct update' data-path='abilities.strength.score_base'></span>
+                            </div>
+                            <div class='output noselect score-output' data-style='internal-label' id='score-dex'>
+                                <span class='value direct update convert-mod' data-path='abilities.dexterity.score_base+abilities.dexterity.score_manual_mod+abilities.dexterity.score_mod~reduce'></span>
+                                <span class='value direct update raw-score' data-path='abilities.dexterity.score_base+abilities.dexterity.score_manual_mod+abilities.dexterity.score_mod~reduce'></span>
+                                <span class='label noselect'>DEX</span>
+                                <span class='edit-btn noselect'><i class='material-icons'>settings</i></span>
+                                <span class='output-mod noselect'>MOD: <input class='seamless contained direct update' data-path='abilities.dexterity.score_manual_mod'> BASE: <input class='seamless contained direct update' data-path='abilities.dexterity.score_base'></span>
+                            </div>
+                            <div class='output noselect score-output' data-style='internal-label' id='score-con'>
+                                <span class='value direct update convert-mod' data-path='abilities.constitution.score_base+abilities.constitution.score_manual_mod+abilities.constitution.score_mod~reduce'></span>
+                                <span class='value direct update raw-score' data-path='abilities.constitution.score_base+abilities.constitution.score_manual_mod+abilities.constitution.score_mod~reduce'></span>
+                                <span class='label noselect'>CON</span>
+                                <span class='edit-btn noselect'><i class='material-icons'>settings</i></span>
+                                <span class='output-mod noselect'>MOD: <input class='seamless contained direct update' data-path='abilities.constitution.score_manual_mod'> BASE: <input class='seamless contained direct update' data-path='abilities.constitution.score_base'></span>
+                            </div>
+                            <div class='output noselect score-output' data-style='internal-label' id='score-int'>
+                                <span class='value direct update convert-mod' data-path='abilities.intelligence.score_base+abilities.intelligence.score_manual_mod+abilities.intelligence.score_mod~reduce'></span>
+                                <span class='value direct update raw-score' data-path='abilities.intelligence.score_base+abilities.intelligence.score_manual_mod+abilities.intelligence.score_mod~reduce'></span>
+                                <span class='label noselect'>INT</span>
+                                <span class='edit-btn noselect'><i class='material-icons'>settings</i></span>
+                                <span class='output-mod noselect'>MOD: <input class='seamless contained direct update' data-path='abilities.intelligence.score_manual_mod'> BASE: <input class='seamless contained direct update' data-path='abilities.intelligence.score_base'></span>
+                            </div>
+                            <div class='output noselect score-output' data-style='internal-label' id='score-wis'>
+                                <span class='value direct update convert-mod' data-path='abilities.wisdom.score_base+abilities.wisdom.score_manual_mod+abilities.wisdom.score_mod~reduce'></span>
+                                <span class='value direct update raw-score' data-path='abilities.wisdom.score_base+abilities.wisdom.score_manual_mod+abilities.wisdom.score_mod~reduce'></span>
+                                <span class='label noselect'>WIS</span>
+                                <span class='edit-btn noselect'><i class='material-icons'>settings</i></span>
+                                <span class='output-mod noselect'>MOD: <input class='seamless contained direct update' data-path='abilities.wisdom.score_manual_mod'> BASE: <input class='seamless contained direct update' data-path='abilities.wisdom.score_base'></span>
+                            </div>
+                            <div class='output noselect score-output' data-style='internal-label' id='score-cha'>
+                                <span class='value direct update convert-mod' data-path='abilities.charisma.score_base+abilities.charisma.score_manual_mod+abilities.charisma.score_mod~reduce'></span>
+                                <span class='value direct update raw-score' data-path='abilities.charisma.score_base+abilities.charisma.score_manual_mod+abilities.charisma.score_mod~reduce'></span>
+                                <span class='label noselect'>CHA</span>
+                                <span class='edit-btn noselect'><i class='material-icons'>settings</i></span>
+                                <span class='output-mod noselect'>MOD: <input class='seamless contained direct update' data-path='abilities.charisma.score_manual_mod'> BASE: <input class='seamless contained direct update' data-path='abilities.charisma.score_base'></span>
+                            </div>
                         </div>
                     </div>
                     <div class='panel' id='panel-proficiencies'>

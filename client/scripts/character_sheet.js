@@ -79,6 +79,9 @@ function load_update_directs(data) {
                 total += current;
             }
         }
+        if ($(this).hasClass('convert-mod')) {
+            total = cond(get_mod_from_score(total)>0,'+','')+get_mod_from_score(total);
+        }
         $(this).text(total);
 
     });

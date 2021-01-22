@@ -74,6 +74,27 @@
     left: 10px;
     transform: translate(0,-50%);
 }
+.panel > .content {
+    position: relative;
+}
+
+.panel .content .output.score-output {
+    display: inline-block;
+    position: relative;
+    font-size: 32px; 
+    width: calc((100% / 6) - 11px); 
+    margin-bottom: 5px; 
+    text-align: center; 
+    height: 90px;
+}
+.panel .content .output.score-output .raw-score {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translate(-50%,0px);
+    font-size: 15px;
+    font-weight: bold;
+}
 
 /* Input styling */
 .panel .content .input {
