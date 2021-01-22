@@ -372,11 +372,78 @@ function load_character(_data) {
     load_update_directs(data);
     setup_direct_event_listeners();
     manual_event_listeners();
+    update_blocks();
 }
 
 function pagelocal_update(data) {
     if (data.updates.characters.specific[sid]) {
         get('/character/' + sid, load_character);
+    }
+}
+
+function update_blocks() {
+    if ($(window).width() >= 1300) {
+        var columns = [
+            [
+                'definition',
+                'proficiencies',
+                'equipped',
+                'spellcasting',
+                'appearance'
+            ],
+            [
+                'defense',
+                'speeds',
+                'languages',
+                'inventory',
+                'custom-info'
+            ],
+            [
+                'scores-saves',
+                'attacks',
+                'traits',
+                'background'
+            ]
+        ];
+        var step = 0.33;
+    } else if ($(window).width() < 1300 && $(window).width() >= 900) {
+        var columns = [
+            [
+                'definition',
+                'scores-saves',
+                'speeds',
+                'equipped',
+                'traits',
+                'inventory',
+                'appearance'
+            ],
+            [
+                'defense',
+                'proficiencies',
+                'attacks',
+                'languages',
+                'spellcasting',
+                'background',
+                'custom-info'
+            ]
+        ];
+        var step = 0.49;
+    } else {
+        $('.panel').css({position:'relative',top:'unset',left:'unset'});
+        return;
+    }
+    var cx = 10;
+    for (var c=0;c<columns.length;c++) {
+        var start = 10;
+        for (var p=0;p<columns[c].length;p++) {
+            $('#panel-'+columns[c][p]).css({
+                position: 'absolute',
+                top:start+'px',
+                left:cx+'px'
+            });
+            start += $('#panel-'+columns[c][p]).height()+5;
+        }
+        cx += step*$('#content-box').width()+5;
     }
 }
 
@@ -400,4 +467,5 @@ $(document).ready(function () {
         }
     }, {}, { cats: ['races', 'classes'] });
     $('.output-mod').fadeOut(0);
+    $(window).on('resize',update_blocks);
 });
