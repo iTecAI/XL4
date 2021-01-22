@@ -144,7 +144,7 @@
 .panel .content .input[data-style=label-right] .input:focus {
     background-color: var(--gradient7);
 }
-.panel .content .input[data-outline=yes] {
+.panel .content .input[data-outline=yes], .panel .content .output[data-outline=yes] {
     border-radius: 5px;
     padding: 6px;
     border: 2px solid var(--gradient6);
@@ -153,8 +153,9 @@
     display: inline-block;
     margin-left: 1%;
     transition: border-color 0.2s;
+    overflow: visible;
 }
-.panel .content .input[data-outline=yes] .main-label {
+.panel .content .input[data-outline=yes] .main-label, .panel .content .output[data-outline=yes] .main-label {
     font-size: 14px;
     color: var(--gradient5);
     position: absolute;
@@ -316,4 +317,23 @@
 }
 .panel .content input.seamless-light:focus {
     background-color: var(--gradient7);
+}
+
+/* Radio Buttons */
+.radio-block .radio-button {
+    margin-right: 0.5%;
+    background-color: var(--gradient7);
+    border: none;
+    border-radius: 5px;
+    font-family: Roboto;
+    color: black;
+    transition: background-color 0.2s, color 0.2s;
+    font-weight: bold;
+}
+.radio-block .radio-button:hover {
+    background-color: var(--gradient6);
+}
+.radio-block .radio-button.selected {
+    background-color: var(--secondary-dark);
+    color: var(--gradient8);
 }
