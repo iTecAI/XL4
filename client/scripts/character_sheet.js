@@ -80,10 +80,23 @@ function load_update_directs(data) {
             }
         }
         if ($(this).hasClass('convert-mod')) {
-            total = cond(get_mod_from_score(total)>0,'+','')+get_mod_from_score(total);
+            total = cond(get_mod_from_score(total) > 0, '+', '') + get_mod_from_score(total);
         }
         $(this).text(total);
 
+    });
+    $('.proficiency-button').not('.skill').each(function (i, e) {
+        var path = $(this).attr('data-path').split('.');
+        var current = data;
+        for (var p = 0; p < path.length; p++) {
+            current = current[path[p]];
+            if (current == undefined) {
+                break;
+            }
+        }
+        if (current != undefined) {
+            $(this).toggleClass('selected', current);
+        }
     });
 }
 
@@ -182,15 +195,15 @@ function manual_event_listeners() {
                     new_arr.push(current_data[value][d]);
                 }
             }
-            new_arr.push({type:dtype,flags:[]});
+            new_arr.push({ type: dtype, flags: [] });
             current_data[value] = new_arr;
-            post('/character/'+sid+'/modify/',console.log,{},{
-                path:value,
-                'value':current_data[value]
-            },true);
+            post('/character/' + sid + '/modify/', console.log, {}, {
+                path: value,
+                'value': current_data[value]
+            }, true);
         } else {
-            var _rvi = ['resistances','vulnerabilities','immunities'];
-            for (var v=0; v<_rvi.length; v++) {
+            var _rvi = ['resistances', 'vulnerabilities', 'immunities'];
+            for (var v = 0; v < _rvi.length; v++) {
                 var val = _rvi[v];
                 var new_arr = []
                 for (var d = 0; d < current_data[val].length; d++) {
@@ -200,14 +213,31 @@ function manual_event_listeners() {
                 }
                 current_data[val] = new_arr;
             }
-            post('/character/'+sid+'/batch_modify/',console.log,{},{
-                items:{
-                    resistances:current_data.resistances,
-                    vulnerabilities:current_data.vulnerabilities,
-                    immunities:current_data.immunities
+            post('/character/' + sid + '/batch_modify/', console.log, {}, {
+                items: {
+                    resistances: current_data.resistances,
+                    vulnerabilities: current_data.vulnerabilities,
+                    immunities: current_data.immunities
                 }
-            },true);
+            }, true);
         }
+    });
+    $('.proficiency-button').off('click').on('click', function (event) {
+        if (!$(event.delegateTarget).hasClass('skill')) {
+            $(event.delegateTarget).toggleClass('selected');
+            post('/character/' + sid + '/modify/', console.log, {}, {
+                path: $(event.delegateTarget).attr('data-path'),
+                value: $(event.delegateTarget).hasClass('selected')
+            }, true);
+        }
+    });
+    $('.save-adv').off('change').on('change', function (event) {
+        var val = get_radio(event.delegateTarget);
+        if (val == 'adv') { val = 1; } else if (val == 'dis') { val = -1; } else { val = 0 }
+        post('/character/' + sid + '/modify/', console.log, {}, {
+            path: 'abilities.' + $(event.delegateTarget).parents('.saving-throw-item').attr('data-save') + '.save_advantage',
+            value: val
+        }, true);
     });
 }
 
@@ -369,6 +399,22 @@ function load_character(_data) {
         set_radio('.rvi-block[data-damage-type=' + data.vulnerabilities[r].type + '] .radio-block', 'vulnerabilities');
     }
 
+    // Saves panel
+    $('.saving-throw-item').each(function (i, e) {
+        var _mapping = {
+            '-1': 'dis',
+            '0': null,
+            '1': 'adv'
+        };
+        set_radio($(this).children('.radio-block'), _mapping[data.abilities[$(this).attr('data-save')].save_advantage.toString()]);
+        var s_val = get_mod_from_score([
+            data.abilities[$(this).attr('data-save')].score_base,
+            data.abilities[$(this).attr('data-save')].score_manual_mod,
+            data.abilities[$(this).attr('data-save')].score_mod.reduce(function (t, i) { return t + i; },0)
+        ].reduce(function (t, i) { return t + i; },0)) + cond(data.abilities[$(this).attr('data-save')].save_proficient,data.proficiency_bonus,0);
+        $(this).children('.save-value').text(cond(s_val>0,'+','')+s_val);
+    });
+
     load_update_directs(data);
     setup_direct_event_listeners();
     manual_event_listeners();
@@ -429,21 +475,21 @@ function update_blocks() {
         ];
         var step = 0.49;
     } else {
-        $('.panel').css({position:'relative',top:'unset',left:'unset'});
+        $('.panel').css({ position: 'relative', top: 'unset', left: 'unset' });
         return;
     }
     var cx = 10;
-    for (var c=0;c<columns.length;c++) {
+    for (var c = 0; c < columns.length; c++) {
         var start = 10;
-        for (var p=0;p<columns[c].length;p++) {
-            $('#panel-'+columns[c][p]).css({
+        for (var p = 0; p < columns[c].length; p++) {
+            $('#panel-' + columns[c][p]).css({
                 position: 'absolute',
-                top:start+'px',
-                left:cx+'px'
+                top: start + 'px',
+                left: cx + 'px'
             });
-            start += $('#panel-'+columns[c][p]).height()+5;
+            start += $('#panel-' + columns[c][p]).height() + 5;
         }
-        cx += step*$('#content-box').width()+5;
+        cx += step * $('#content-box').width() + 5;
     }
 }
 
@@ -467,5 +513,5 @@ $(document).ready(function () {
         }
     }, {}, { cats: ['races', 'classes'] });
     $('.output-mod').fadeOut(0);
-    $(window).on('resize',update_blocks);
+    $(window).on('resize', update_blocks);
 });
