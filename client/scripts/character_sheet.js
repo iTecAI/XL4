@@ -6,6 +6,12 @@ var races = [];
 var classes = [];
 var macyInst = null;
 
+function check_trait(trait) {
+    return current_data.traits.map(function (v, i, a) {
+        return v.toLowerCase();
+    }).includes(trait.toLowerCase());
+}
+
 function set_radio(selector, val) {
     if (val == null) {
         $(selector).children('.radio-button').removeClass('selected');
@@ -55,7 +61,11 @@ function load_update_directs(data) {
         }
     });
     $('.panel .content .output .value.update').each(function (i, e) {
-        var total = 0;
+        if ($(this).hasClass('concat')) {
+            var total = '';
+        } else {
+            var total = 0;
+        }
         var items = $(this).attr('data-path').split('+');
         for (var i = 0; i < items.length; i++) {
             var options_sp = items[i].split('~');
@@ -72,6 +82,9 @@ function load_update_directs(data) {
                 var options = options_sp[1].split(',');
                 if (options.includes('reduce')) {
                     current = current.reduce(function (t, i) { return t + i; }, 0);
+                }
+                if (options.includes('mod_format')) {
+                    current = cond(current >= 0, '+', '') + current;
                 }
             }
 
@@ -96,6 +109,20 @@ function load_update_directs(data) {
         }
         if (current != undefined) {
             $(this).toggleClass('selected', current);
+        }
+    });
+    $('.proficiency-button.skill').each(function (i, e) {
+        var path = $(this).attr('data-path').split('.');
+        var current = data;
+        for (var p = 0; p < path.length; p++) {
+            current = current[path[p]];
+            if (current == undefined) {
+                break;
+            }
+        }
+        if (current != undefined) {
+            $(this).toggleClass('selected', current.proficient);
+            $(this).toggleClass('expert', current.expert);
         }
     });
 }
@@ -222,7 +249,7 @@ function manual_event_listeners() {
             }, true);
         }
     });
-    $('.proficiency-button').off('click').on('click', function (event) {
+    $('.proficiency-button').not('.skill').off('click').on('click', function (event) {
         if (!$(event.delegateTarget).hasClass('skill')) {
             $(event.delegateTarget).toggleClass('selected');
             post('/character/' + sid + '/modify/', console.log, {}, {
@@ -236,6 +263,49 @@ function manual_event_listeners() {
         if (val == 'adv') { val = 1; } else if (val == 'dis') { val = -1; } else { val = 0 }
         post('/character/' + sid + '/modify/', console.log, {}, {
             path: 'abilities.' + $(event.delegateTarget).parents('.saving-throw-item').attr('data-save') + '.save_advantage',
+            value: val
+        }, true);
+    });
+    $('.proficiency-button.skill').off('click').on('click', function (event) {
+        if (!$(event.delegateTarget).hasClass('selected')) {
+            $(event.delegateTarget).addClass('selected');
+
+            items = {};
+            items[$(event.delegateTarget).attr('data-path')+'.proficient'] = true;
+            items[$(event.delegateTarget).attr('data-path')+'.expert'] = false;
+
+            post('/character/' + sid + '/batch_modify/', console.log, {}, {
+                items:items
+            }, true);
+        } else if ($(event.delegateTarget).hasClass('selected') && !$(event.delegateTarget).hasClass('expert')) {
+            $(event.delegateTarget).addClass('expert');
+            $(event.delegateTarget).addClass('selected');
+            
+            items = {};
+            items[$(event.delegateTarget).attr('data-path')+'.proficient'] = true;
+            items[$(event.delegateTarget).attr('data-path')+'.expert'] = true;
+
+            post('/character/' + sid + '/batch_modify/', console.log, {}, {
+                items:items
+            }, true);
+        } else {
+            $(event.delegateTarget).removeClass('selected').removeClass('expert');
+
+            items = {};
+            items[$(event.delegateTarget).attr('data-path')+'.proficient'] = false;
+            items[$(event.delegateTarget).attr('data-path')+'.expert'] = false;
+
+            post('/character/' + sid + '/batch_modify/', console.log, {}, {
+                items:items
+            }, true);
+        }
+        
+    });
+    $('.skill-adv').off('change').on('change', function (event) {
+        var val = get_radio(event.delegateTarget);
+        if (val == 'adv') { val = 1; } else if (val == 'dis') { val = -1; } else { val = 0 }
+        post('/character/' + sid + '/modify/', console.log, {}, {
+            path: 'skills.' + $(event.delegateTarget).parents('.skill-item').attr('data-skill') + '.advantage',
             value: val
         }, true);
     });
@@ -410,9 +480,102 @@ function load_character(_data) {
         var s_val = get_mod_from_score([
             data.abilities[$(this).attr('data-save')].score_base,
             data.abilities[$(this).attr('data-save')].score_manual_mod,
-            data.abilities[$(this).attr('data-save')].score_mod.reduce(function (t, i) { return t + i; },0)
-        ].reduce(function (t, i) { return t + i; },0)) + cond(data.abilities[$(this).attr('data-save')].save_proficient,data.proficiency_bonus,0);
-        $(this).children('.save-value').text(cond(s_val>=0,'+','')+s_val);
+            data.abilities[$(this).attr('data-save')].score_mod.reduce(function (t, i) { return t + i; }, 0)
+        ].reduce(function (t, i) { return t + i; }, 0)) + cond(data.abilities[$(this).attr('data-save')].save_proficient, data.proficiency_bonus, 0);
+        $(this).children('.save-value').text(cond(s_val >= 0, '+', '') + s_val);
+    });
+
+    // Proficiencies
+    // -- Passive Perception
+    $('#passive-perception .value span').text(
+        10 + get_mod_from_score(cond(
+            data.skills.perception.override,
+            data.skills.perception.value,
+            data.abilities[data.skills.perception.ability].score_base
+            + data.abilities[data.skills.perception.ability].score_manual_mod
+            + data.abilities[data.skills.perception.ability].score_mod.reduce(function (t, i) { return t + i; }, 0)
+        )) + cond(data.skills.perception.advantage==1, 5, 0) + cond(data.skills.perception.advantage==-1, -5, 0) + cond(
+            data.skills.perception.proficient,
+            data.proficiency_bonus,
+            0
+        ) + cond(
+            data.skills.perception.expert,
+            data.proficiency_bonus,
+            0
+        ) + cond(
+            check_trait('feat: alert'), 5, 0
+        )
+    );
+
+    // -- Skills
+    var dummy_skills_box = $('<div></div>');
+    var skill_keys = Object.keys(data.skills);
+    for (var s = 0; s < skill_keys.length; s++) {
+        var skillmod = get_mod_from_score(cond(
+            data.skills[skill_keys[s]].override,
+            data.skills[skill_keys[s]].value,
+            data.abilities[data.skills[skill_keys[s]].ability].score_base
+            + data.abilities[data.skills[skill_keys[s]].ability].score_manual_mod
+            + data.abilities[data.skills[skill_keys[s]].ability].score_mod.reduce(function (t, i) { return t + i; }, 0)
+        )) + cond(
+            data.skills[skill_keys[s]].proficient,
+            data.proficiency_bonus,
+            0
+        ) + cond(
+            data.skills[skill_keys[s]].expert,
+            data.proficiency_bonus,
+            0
+        );
+        skillmod = cond(skillmod >= 0, '+', '')+skillmod;
+        var item = $('<div></div>')
+            .addClass('skill-item')
+            .attr('data-skill', skill_keys[s])
+            .append(
+                $('<span></span>')
+                    .addClass('proficiency-button')
+                    .addClass('skill')
+                    .attr('data-path', 'skills.' + skill_keys[s])
+                    .append($('<span></span>'))
+            )
+            .append($('<span></span>').addClass('skill-value').text(skillmod))
+            .append($('<span></span>').addClass('skill-title').text(titleCase(skill_keys[s])))
+            .append(
+                $('<div></div>')
+                    .addClass('radio-block')
+                    .addClass('skill-adv')
+                    .append(
+                        $('<button></button>')
+                            .addClass('radio-button')
+                            .attr('data-value', 'adv')
+                            .text('Advantage')
+                    )
+                    .append(
+                        $('<button></button>')
+                            .addClass('radio-button')
+                            .attr('data-value', 'dis')
+                            .text('Disadvantage')
+                    )
+
+            );
+        dummy_skills_box.append(item);
+    }
+    $('#skill-box').html(dummy_skills_box.html());
+    $('.skill-adv').each(function(i,e) {
+        set_radio(this,{'-1':'dis','0':null,'1':'adv'}[data.skills[$(this).parents('.skill-item').attr('data-skill')].advantage.toString()]);
+    });
+
+    // -- Proficiencies
+    var pkeys = Object.keys(data.proficiencies);
+    for (var p=0; p<pkeys.length; p++) {
+        $('#prof-'+pkeys[p]+' .prof-value').val(data.proficiencies[pkeys[p]].join(', '));
+    }
+    $('.prof-value').each(function(i,e){
+        $(this).off('change').on('change',function(event){
+            post('/character/'+sid+'/modify/',console.log,{},{
+                path: 'proficiencies.'+$(this).parents('#item-proficiencies > div').not('.hsep').attr('id').split('prof-')[1],
+                value: $(this).val().split(', ')
+            });
+        });
     });
 
     load_update_directs(data);
