@@ -4,7 +4,30 @@ var current_dynamic_data = {};
 
 var races = [];
 var classes = [];
+var attacks = [];
+var equipment = [];
+var armor = [];
 var macyInst = null;
+
+function gp_convert(gp) {
+    var pp = (gp-(gp%10))/10;
+    var _gp = ((gp%10)-(gp%1));
+    var sp = (((gp*10)%10)-((gp*10)%1));
+    var cp = Number((((gp*100)%10)-((gp*10)%1)).toFixed());
+    var cp = cond(cp==10,0,cp);
+    return {
+        pp:pp,
+        gp:_gp,
+        sp:sp,
+        cp:cp
+    };
+}
+function gp_smartconvert(gp) {
+    var raw = gp_convert(gp);
+    return [cond(raw.pp>0,raw.pp+' pp',null),cond(raw.gp>0,raw.gp+' gp',null),cond(raw.sp>0,raw.sp+' sp',null),cond(raw.cp>0,raw.cp+' cp',null)].filter(function(el){
+        return el != null;
+    }).join(', ');
+}
 
 function check_trait(trait) {
     return current_data.traits.map(function (v, i, a) {
@@ -675,9 +698,16 @@ $(document).ready(function () {
                 races.push(data[i].data);
             } else if (data[i].endpoint == 'classes') {
                 classes.push(data[i].data);
+            } else if (data[i].endpoint == 'weapons') {
+                attacks.push(data[i].data);
+            } else if (data[i].endpoint == 'armor') {
+                armor.push(data[i].data);
+            } else {
+                equipment.push(data[i].data);
             }
+            
         }
-    }, {}, { cats: ['races', 'classes'] });
+    }, {}, { cats: ['races', 'classes', 'weapons', 'equipment', 'armor'] });
     $('.output-mod').fadeOut(0);
     $(window).on('resize', update_blocks);
 });
