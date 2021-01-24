@@ -188,7 +188,7 @@
         ]
     },
     {
-        "name": "Light-crossbow",
+        "name": "Light Crossbow",
         "slug": "light-crossbow",
         "group": "simple",
         "type": "ranged",
@@ -634,7 +634,7 @@
         ]
     },
     {
-        "name": "Hand-crossbow",
+        "name": "Hand Crossbow",
         "slug": "hand-crossbow",
         "group": "martial",
         "type": "ranged",
@@ -658,7 +658,7 @@
         ]
     },
     {
-        "name": "Heavy-crossbow",
+        "name": "Heavy Crossbow",
         "slug": "heavy-crossbow",
         "group": "martial",
         "type": "ranged",

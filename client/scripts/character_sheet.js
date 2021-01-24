@@ -10,21 +10,21 @@ var armor = [];
 var macyInst = null;
 
 function gp_convert(gp) {
-    var pp = (gp-(gp%10))/10;
-    var _gp = ((gp%10)-(gp%1));
-    var sp = (((gp*10)%10)-((gp*10)%1));
-    var cp = Number((((gp*100)%10)-((gp*10)%1)).toFixed());
-    var cp = cond(cp==10,0,cp);
+    var pp = (gp - (gp % 10)) / 10;
+    var _gp = ((gp % 10) - (gp % 1));
+    var sp = (((gp * 10) % 10) - ((gp * 10) % 1));
+    var cp = Number((((gp * 100) % 10) - ((gp * 10) % 1)).toFixed());
+    var cp = cond(cp == 10, 0, cp);
     return {
-        pp:pp,
-        gp:_gp,
-        sp:sp,
-        cp:cp
+        pp: pp,
+        gp: _gp,
+        sp: sp,
+        cp: cp
     };
 }
 function gp_smartconvert(gp) {
     var raw = gp_convert(gp);
-    return [cond(raw.pp>0,raw.pp+' pp',null),cond(raw.gp>0,raw.gp+' gp',null),cond(raw.sp>0,raw.sp+' sp',null),cond(raw.cp>0,raw.cp+' cp',null)].filter(function(el){
+    return [cond(raw.pp > 0, raw.pp + ' pp', null), cond(raw.gp > 0, raw.gp + ' gp', null), cond(raw.sp > 0, raw.sp + ' sp', null), cond(raw.cp > 0, raw.cp + ' cp', null)].filter(function (el) {
         return el != null;
     }).join(', ');
 }
@@ -297,35 +297,35 @@ function manual_event_listeners() {
             $(event.delegateTarget).addClass('selected');
 
             items = {};
-            items[$(event.delegateTarget).attr('data-path')+'.proficient'] = true;
-            items[$(event.delegateTarget).attr('data-path')+'.expert'] = false;
+            items[$(event.delegateTarget).attr('data-path') + '.proficient'] = true;
+            items[$(event.delegateTarget).attr('data-path') + '.expert'] = false;
 
             post('/character/' + sid + '/batch_modify/', console.log, {}, {
-                items:items
+                items: items
             }, true);
         } else if ($(event.delegateTarget).hasClass('selected') && !$(event.delegateTarget).hasClass('expert')) {
             $(event.delegateTarget).addClass('expert');
             $(event.delegateTarget).addClass('selected');
-            
+
             items = {};
-            items[$(event.delegateTarget).attr('data-path')+'.proficient'] = true;
-            items[$(event.delegateTarget).attr('data-path')+'.expert'] = true;
+            items[$(event.delegateTarget).attr('data-path') + '.proficient'] = true;
+            items[$(event.delegateTarget).attr('data-path') + '.expert'] = true;
 
             post('/character/' + sid + '/batch_modify/', console.log, {}, {
-                items:items
+                items: items
             }, true);
         } else {
             $(event.delegateTarget).removeClass('selected').removeClass('expert');
 
             items = {};
-            items[$(event.delegateTarget).attr('data-path')+'.proficient'] = false;
-            items[$(event.delegateTarget).attr('data-path')+'.expert'] = false;
+            items[$(event.delegateTarget).attr('data-path') + '.proficient'] = false;
+            items[$(event.delegateTarget).attr('data-path') + '.expert'] = false;
 
             post('/character/' + sid + '/batch_modify/', console.log, {}, {
-                items:items
+                items: items
             }, true);
         }
-        
+
     });
     $('.skill-adv').off('change').on('change', function (event) {
         var val = get_radio(event.delegateTarget);
@@ -354,6 +354,70 @@ function load_character(_data) {
     for (var c = 0; c < data.class_info.length; c++) {
         var item = data.class_info[c];
         classes_internal.push(item);
+    }
+    var attacks_internal = JSON.parse(JSON.stringify(attacks));
+    for (var c = 0; c < data.attack_info.length; c++) {
+        var item = data.attack_info[c];
+        var proc_item = {
+            name: item.name,
+            slug: item.name.toLowerCase().replace(/ /g,'-'),
+            type: item.range_class.toLowerCase(),
+            group: item.proficiency_category.toLowerCase(),
+            cost: 0,
+            weight: 0
+        };
+        proc_item.damage = [{ dice: item.damage, type: item.type }];
+        if (item.bonus_damage && item.bonus_type) {
+            proc_item.damage.push({ dice: item.bonus_damage, type: item.bonus_type });
+        }
+        if (item.properties == null) {
+            proc_item.properties = [];
+            attacks_internal.push(proc_item);
+            continue;
+        }
+        if (item.proficiency_category.toLowerCase() == 'simple' || item.proficiency_category.toLowerCase() == 'martial') {
+            proc_item.properties = [];
+            var prop_items = item.properties.toLowerCase().split(', ');
+            for (var p = 0; p < prop_items.length; p++) {
+                try {
+                    if (prop_items[p].includes(' (')) {
+                        var _temp = {
+                            name:prop_items[p].split(' (')[0],
+                        };
+                        try {
+                            _temp[prop_items[p].split(' (')[1].split(' ')[0]] = prop_items[p].split(' (')[1].split(' ')[1].replace(')','');
+                        } catch {
+                            _temp['value'] = prop_items[p].split(' (')[1].replace(')','');
+                        }
+                        proc_item.properties.push(_temp);
+                    } else {
+                        proc_item.properties.push({
+                            name:prop_items[p]
+                        });
+                    }
+                } catch {
+                    
+                }
+            }
+        } else {
+            proc_item.properties = [{name:item.properties}];
+        }
+        attacks_internal.push(proc_item);
+    }
+    var gear_internal = JSON.parse(JSON.stringify(armor));
+    for (var c = 0; c < data.gear_info.length; c++) {
+        var item = data.gear_info[c];
+        var proc_item = {
+            ac:cond(item.category.toLowerCase().includes('armor'),cond(item.ac_bonus==null,null,10+item.ac_bonus+cond(item.enchantment_bonus==null,0,item.enchantment_bonus)),item.ac_bonus),
+            cost:0,
+            min_str:item.required_str,
+            name:item.name,
+            slug:item.name.toLowerCase().replace(/ /g,'-'),
+            stealth_dis:cond(item.stealth_mod==null,'',item.stealth_mod).toLowerCase()=='disadvantage',
+            type:item.category.toLowerCase().replace(' armor',''),
+            weight:0
+        };
+        gear_internal.push(proc_item);
     }
     $('title').text(data.name);
     $('#panel-definition .title span').text(data.name);
@@ -520,7 +584,7 @@ function load_character(_data) {
             data.abilities[data.skills.perception.ability].score_base
             + data.abilities[data.skills.perception.ability].score_manual_mod
             + data.abilities[data.skills.perception.ability].score_mod.reduce(function (t, i) { return t + i; }, 0)
-        )) + cond(data.skills.perception.advantage==1, 5, 0) + cond(data.skills.perception.advantage==-1, -5, 0) + cond(
+        )) + cond(data.skills.perception.advantage == 1, 5, 0) + cond(data.skills.perception.advantage == -1, -5, 0) + cond(
             data.skills.perception.proficient,
             data.proficiency_bonus,
             0
@@ -552,7 +616,7 @@ function load_character(_data) {
             data.proficiency_bonus,
             0
         );
-        skillmod = cond(skillmod >= 0, '+', '')+skillmod;
+        skillmod = cond(skillmod >= 0, '+', '') + skillmod;
         var item = $('<div></div>')
             .addClass('skill-item')
             .attr('data-skill', skill_keys[s])
@@ -586,19 +650,19 @@ function load_character(_data) {
         dummy_skills_box.append(item);
     }
     $('#skill-box').html(dummy_skills_box.html());
-    $('.skill-adv').each(function(i,e) {
-        set_radio(this,{'-1':'dis','0':null,'1':'adv'}[data.skills[$(this).parents('.skill-item').attr('data-skill')].advantage.toString()]);
+    $('.skill-adv').each(function (i, e) {
+        set_radio(this, { '-1': 'dis', '0': null, '1': 'adv' }[data.skills[$(this).parents('.skill-item').attr('data-skill')].advantage.toString()]);
     });
 
     // -- Proficiencies
     var pkeys = Object.keys(data.proficiencies);
-    for (var p=0; p<pkeys.length; p++) {
-        $('#prof-'+pkeys[p]+' .prof-value').val(data.proficiencies[pkeys[p]].join(', '));
+    for (var p = 0; p < pkeys.length; p++) {
+        $('#prof-' + pkeys[p] + ' .prof-value').val(data.proficiencies[pkeys[p]].join(', '));
     }
-    $('.prof-value').each(function(i,e){
-        $(this).off('change').on('change',function(event){
-            post('/character/'+sid+'/modify/',console.log,{},{
-                path: 'proficiencies.'+$(this).parents('#item-proficiencies > div').not('.hsep').attr('id').split('prof-')[1],
+    $('.prof-value').each(function (i, e) {
+        $(this).off('change').on('change', function (event) {
+            post('/character/' + sid + '/modify/', console.log, {}, {
+                path: 'proficiencies.' + $(this).parents('#item-proficiencies > div').not('.hsep').attr('id').split('prof-')[1],
                 value: $(this).val().split(', ')
             });
         });
@@ -705,7 +769,7 @@ $(document).ready(function () {
             } else {
                 equipment.push(data[i].data);
             }
-            
+
         }
     }, {}, { cats: ['races', 'classes', 'weapons', 'equipment', 'armor'] });
     $('.output-mod').fadeOut(0);
