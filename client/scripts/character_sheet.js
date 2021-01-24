@@ -90,6 +90,9 @@ function load_update_directs(data) {
 
             if (current != undefined) {
                 total += current;
+            } else {
+                $(this).text('-');
+                return;
             }
         }
         if ($(this).hasClass('convert-mod')) {

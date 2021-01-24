@@ -508,3 +508,10 @@ input.input.seamless-light.prof-value {
     margin-left: 0.5%;
     margin-right: 5.5%;
 }
+
+div.speed-block.output[data-style=internal-label] {
+    font-size: 32px; 
+    width: calc(20% - 15px); 
+    margin-bottom: 5px; 
+    text-align: center
+}
