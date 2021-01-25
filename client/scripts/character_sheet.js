@@ -360,11 +360,13 @@ function load_character(_data) {
         var item = data.attack_info[c];
         var proc_item = {
             name: item.name,
-            slug: item.name.toLowerCase().replace(/ /g,'-'),
+            slug: item.name.toLowerCase().replace(/ /g, '-'),
             type: item.range_class.toLowerCase(),
             group: item.proficiency_category.toLowerCase(),
             cost: 0,
-            weight: 0
+            weight: 0,
+            apply_mod: item.apply_mod == 1,
+            enchant_bonus: cond(item.enchant_bonus == null, 0, item.enchant_bonus)
         };
         proc_item.damage = [{ dice: item.damage, type: item.type }];
         if (item.bonus_damage && item.bonus_type) {
@@ -382,25 +384,25 @@ function load_character(_data) {
                 try {
                     if (prop_items[p].includes(' (')) {
                         var _temp = {
-                            name:prop_items[p].split(' (')[0],
+                            name: prop_items[p].split(' (')[0],
                         };
                         try {
-                            _temp[prop_items[p].split(' (')[1].split(' ')[0]] = prop_items[p].split(' (')[1].split(' ')[1].replace(')','');
+                            _temp[prop_items[p].split(' (')[1].split(' ')[0]] = prop_items[p].split(' (')[1].split(' ')[1].replace(')', '');
                         } catch {
-                            _temp['value'] = prop_items[p].split(' (')[1].replace(')','');
+                            _temp['value'] = prop_items[p].split(' (')[1].replace(')', '');
                         }
                         proc_item.properties.push(_temp);
                     } else {
                         proc_item.properties.push({
-                            name:prop_items[p]
+                            name: prop_items[p]
                         });
                     }
                 } catch {
-                    
+
                 }
             }
         } else {
-            proc_item.properties = [{name:item.properties}];
+            proc_item.properties = [{ name: item.properties }];
         }
         attacks_internal.push(proc_item);
     }
@@ -408,14 +410,14 @@ function load_character(_data) {
     for (var c = 0; c < data.gear_info.length; c++) {
         var item = data.gear_info[c];
         var proc_item = {
-            ac:cond(item.category.toLowerCase().includes('armor'),cond(item.ac_bonus==null,null,10+item.ac_bonus+cond(item.enchantment_bonus==null,0,item.enchantment_bonus)),item.ac_bonus),
-            cost:0,
-            min_str:item.required_str,
-            name:item.name,
-            slug:item.name.toLowerCase().replace(/ /g,'-'),
-            stealth_dis:cond(item.stealth_mod==null,'',item.stealth_mod).toLowerCase()=='disadvantage',
-            type:item.category.toLowerCase().replace(' armor',''),
-            weight:0
+            ac: cond(item.category.toLowerCase().includes('armor'), cond(item.ac_bonus == null, null, 10 + item.ac_bonus + cond(item.enchantment_bonus == null, 0, item.enchantment_bonus)), item.ac_bonus),
+            cost: 0,
+            min_str: item.required_str,
+            name: item.name,
+            slug: item.name.toLowerCase().replace(/ /g, '-'),
+            stealth_dis: cond(item.stealth_mod == null, '', item.stealth_mod).toLowerCase() == 'disadvantage',
+            type: item.category.toLowerCase().replace(' armor', ''),
+            weight: 0
         };
         gear_internal.push(proc_item);
     }
@@ -667,6 +669,155 @@ function load_character(_data) {
             });
         });
     });
+
+    // Attacks
+    var dummy_attacks = $('<tbody></tbody>');
+    data.attacks.map(function (v, i) {
+        for (var a = 0; a < attacks_internal.length; a++) {
+            if (attacks_internal[a].name.toLowerCase() == v.toLowerCase()) {
+                var abmod = cond(attacks_internal[a].type == 'ranged' || (attacks_internal[a].properties.some(function (t) { return t.name == 'finesse' }) && (
+                    (data.abilities.dexterity.score_base + data.abilities.dexterity.score_manual_mod + data.abilities.dexterity.score_mod.reduce(function (t, i) { return t + i; }, 0))
+                    >=
+                    (data.abilities.strength.score_base + data.abilities.strength.score_manual_mod + data.abilities.strength.score_mod.reduce(function (t, i) { return t + i; }, 0))
+                )),
+                    get_mod_from_score(data.abilities.dexterity.score_base + data.abilities.dexterity.score_manual_mod + data.abilities.dexterity.score_mod.reduce(function (t, i) { return t + i; }, 0)),
+                    get_mod_from_score(data.abilities.strength.score_base + data.abilities.strength.score_manual_mod + data.abilities.strength.score_mod.reduce(function (t, i) { return t + i; }, 0))
+                )
+                var bonus = abmod + cond(
+                    data.proficiencies.weapon.includes(attacks_internal[a].group.toLowerCase()) ||
+                    data.proficiencies.weapon.includes(attacks_internal[a].name.toLowerCase()) ||
+                    data.proficiencies.weapon.includes(attacks_internal[a].name),
+                    data.proficiency_bonus, 0
+                ) + attacks_internal[a].enchant_bonus;
+                if (Array.isArray(attacks_internal[a].damage)) {
+                    if (attacks_internal[a].damage.length == 1) {
+                        var dmgstr = attacks_internal[a].damage[0].dice +
+                            cond(
+                                attacks_internal[a].apply_mod,
+                                cond(
+                                    abmod >= 0,
+                                    '+',
+                                    ''
+                                ) + abmod,
+                                ''
+                            ) + ' ' + attacks_internal[a].damage[0].type.replace('^', ' (magical)') + ' damage';
+                    } else {
+                        var dmgstr = attacks_internal[a].damage[0].dice +
+                            cond(
+                                attacks_internal[a].apply_mod,
+                                cond(
+                                    abmod >= 0,
+                                    '+',
+                                    ''
+                                ) + abmod,
+                                ''
+                            ) + ' ' + attacks_internal[a].damage[0].type.replace('^', ' (magical)') + ' damage plus ' +
+                            attacks_internal[a].damage[1].dice + ' ' + attacks_internal[a].damage[1].type.replace('^', ' (magical)');
+                    }
+                } else {
+                    var dmgstr = attacks_internal[a].damage.dice +
+                        cond(
+                            attacks_internal[a].apply_mod,
+                            cond(
+                                abmod >= 0,
+                                '+',
+                                ''
+                            ) + abmod,
+                            ''
+                        ) + ' ' + attacks_internal[a].damage.type.replace('^', ' (magical)') + ' damage';
+                }
+                var propstrs = [];
+                for (var p = 0; p < attacks_internal[a].properties.length; p++) {
+                    if (Object.keys(attacks_internal[a].properties[p]).length == 1 && attacks_internal[a].properties[p].name != undefined) {
+                        propstrs.push('<b>' + attacks_internal[a].properties[p].name + '</b>');
+                    } else if (Object.keys(attacks_internal[a].properties[p]).length == 2 && attacks_internal[a].properties[p].name != undefined && attacks_internal[a].properties[p].value != undefined) {
+                        propstrs.push('<b>' + attacks_internal[a].properties[p].name + ': </b>' + attacks_internal[a].properties[p].value);
+                    }
+                }
+                dummy_attacks.append(
+                    $('<tr></tr>')
+                        .append(
+                            $('<td class="atk-title"></td>').append(
+                                $('<select></select>')
+                                    .append(
+                                        $('<option></option>').attr('value', '').text('')
+                                    )
+                                    .append(attacks_internal.sort(function (n, o) {
+                                        var x = n.name.toLowerCase();
+                                        var y = o.name.toLowerCase();
+                                        if (x < y) { return -1; }
+                                        if (x > y) { return 1; }
+                                        return 0;
+                                    }).map(function (v) {
+                                        return $('<option></option>').attr('value', v.name).text(v.name);
+                                    }))
+                                    .val(v).on('change', function (event) {
+                                        if ($(this).val() == '') {
+                                            data.attacks[Number($(event.delegateTarget).parents('tr').attr('data-index'))] = undefined;
+                                        } else {
+                                            data.attacks[Number($(event.delegateTarget).parents('tr').attr('data-index'))] = $(this).val();
+                                        }
+                                        post('character/' + sid + '/modify', console.log(), {}, {
+                                            path: 'attacks',
+                                            value: data.attacks
+                                        }, true);
+                                    })
+                            )
+                        )
+                        .append(
+                            $('<td class="atk-bonus"></td>').text(cond(bonus >= 0, '+', '') + bonus)
+                        )
+                        .append(
+                            $('<td class="atk-desc"></td>').html(
+                                dmgstr + '<br>' + propstrs.join('<br>')
+                            )
+                        )
+                        .attr('data-index', i)
+                );
+                break;
+            }
+        }
+    });
+
+    dummy_attacks.append(
+        $('<tr class="new-atk"></tr>')
+            .append(
+                $('<td class="atk-title"></td>').append(
+                    $('<select></select>')
+                        .append(
+                            $('<option></option>').attr('value', '').text('New Attack')
+                        )
+                        .append(attacks_internal.sort(function (n, o) {
+                            var x = n.name.toLowerCase();
+                            var y = o.name.toLowerCase();
+                            if (x < y) { return -1; }
+                            if (x > y) { return 1; }
+                            return 0;
+                        }).map(function (v) {
+                            return $('<option></option>').attr('value', v.name).text(v.name);
+                        }))
+                        .val('').on('change', function (event) {
+                            if ($(this).val() != '') {
+                                data.attacks.push($(this).val());
+                                post('character/' + sid + '/modify', console.log(), {}, {
+                                    path: 'attacks',
+                                    value: data.attacks
+                                }, true);
+                            }
+                        })
+                )
+            )
+            .append(
+                $('<td class="atk-bonus"></td>').text('')
+            )
+            .append(
+                $('<td class="atk-desc"></td>').text('New Attack')
+            )
+            .attr('data-index', i)
+    );
+
+    $('#attacks-table tbody').remove();
+    $('#attacks-table').append(dummy_attacks);
 
     load_update_directs(data);
     setup_direct_event_listeners();

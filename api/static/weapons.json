@@ -14,7 +14,9 @@
             {
                 "name": "light"
             }
-        ]
+        ],
+        "enchant_bonus":0,
+        "apply_mod":true
     },
     {
         "name": "Dagger",
@@ -38,7 +40,9 @@
                 "name": "thrown",
                 "range": "20/60"
             }
-        ]
+        ],
+        "enchant_bonus":0,
+        "apply_mod":true
     },
     {
         "name": "Greatclub",
@@ -55,7 +59,9 @@
             {
                 "name": "two-handed"
             }
-        ]
+        ],
+        "enchant_bonus":0,
+        "apply_mod":true
     },
     {
         "name": "Handaxe",
@@ -76,7 +82,9 @@
                 "name": "thrown",
                 "range": "20/60"
             }
-        ]
+        ],
+        "enchant_bonus":0,
+        "apply_mod":true
     },
     {
         "name": "Javelin",
@@ -94,7 +102,9 @@
                 "name": "thrown",
                 "range": "30/120"
             }
-        ]
+        ],
+        "enchant_bonus":0,
+        "apply_mod":true
     },
     {
         "name": "Light-hammer",
@@ -115,7 +125,9 @@
                 "name": "thrown",
                 "range": "20/60"
             }
-        ]
+        ],
+        "enchant_bonus":0,
+        "apply_mod":true
     },
     {
         "name": "Mace",
@@ -128,7 +140,9 @@
             "type": "bludgeoning"
         },
         "weight": 4,
-        "properties": []
+        "properties": [],
+        "enchant_bonus":0,
+        "apply_mod":true
     },
     {
         "name": "Quarterstaff",
@@ -146,7 +160,9 @@
                 "name": "versatile",
                 "value": "1d8"
             }
-        ]
+        ],
+        "enchant_bonus":0,
+        "apply_mod":true
     },
     {
         "name": "Sickle",
@@ -163,7 +179,9 @@
             {
                 "name": "light"
             }
-        ]
+        ],
+        "enchant_bonus":0,
+        "apply_mod":true
     },
     {
         "name": "Spear",
@@ -185,7 +203,9 @@
                 "name": "versatile",
                 "value": "1d8"
             }
-        ]
+        ],
+        "enchant_bonus":0,
+        "apply_mod":true
     },
     {
         "name": "Light Crossbow",
@@ -209,7 +229,9 @@
             {
                 "name": "two-handed"
             }
-        ]
+        ],
+        "enchant_bonus":0,
+        "apply_mod":true
     },
     {
         "name": "Dart",
@@ -230,7 +252,9 @@
                 "name": "thrown",
                 "range": "20/60"
             }
-        ]
+        ],
+        "enchant_bonus":0,
+        "apply_mod":true
     },
     {
         "name": "Shortbow",
@@ -251,7 +275,9 @@
             {
                 "name": "two-handed"
             }
-        ]
+        ],
+        "enchant_bonus":0,
+        "apply_mod":true
     },
     {
         "name": "Sling",
@@ -269,7 +295,9 @@
                 "name": "ammunition",
                 "range": "30/120"
             }
-        ]
+        ],
+        "enchant_bonus":0,
+        "apply_mod":true
     },
     {
         "name": "Battleaxe",
@@ -287,7 +315,9 @@
                 "name": "versatile",
                 "value": "1d10"
             }
-        ]
+        ],
+        "enchant_bonus":0,
+        "apply_mod":true
     },
     {
         "name": "Flail",
@@ -300,7 +330,9 @@
             "type": "bludgeoning"
         },
         "weight": 2,
-        "properties": []
+        "properties": [],
+        "enchant_bonus":0,
+        "apply_mod":true
     },
     {
         "name": "Glaive",
@@ -323,7 +355,9 @@
             {
                 "name": "two-handed"
             }
-        ]
+        ],
+        "enchant_bonus":0,
+        "apply_mod":true
     },
     {
         "name": "Greataxe",
@@ -343,7 +377,9 @@
             {
                 "name": "two-handed"
             }
-        ]
+        ],
+        "enchant_bonus":0,
+        "apply_mod":true
     },
     {
         "name": "Greatsword",
@@ -363,7 +399,9 @@
             {
                 "name": "two-handed"
             }
-        ]
+        ],
+        "enchant_bonus":0,
+        "apply_mod":true
     },
     {
         "name": "Halberd",
@@ -386,7 +424,9 @@
             {
                 "name": "two-handed"
             }
-        ]
+        ],
+        "enchant_bonus":0,
+        "apply_mod":true
     },
     {
         "name": "Lance",
@@ -406,7 +446,9 @@
             {
                 "name": "special"
             }
-        ]
+        ],
+        "enchant_bonus":0,
+        "apply_mod":true
     },
     {
         "name": "Longsword",
@@ -424,7 +466,9 @@
                 "name": "versatile",
                 "value": "1d10"
             }
-        ]
+        ],
+        "enchant_bonus":0,
+        "apply_mod":true
     },
     {
         "name": "Maul",
@@ -444,7 +488,9 @@
             {
                 "name": "two-handed"
             }
-        ]
+        ],
+        "enchant_bonus":0,
+        "apply_mod":true
     },
     {
         "name": "Morningstar",
@@ -457,7 +503,9 @@
             "type": "piercing"
         },
         "weight": 4,
-        "properties": []
+        "properties": [],
+        "enchant_bonus":0,
+        "apply_mod":true
     },
     {
         "name": "Pike",
@@ -480,7 +528,9 @@
             {
                 "name": "two-handed"
             }
-        ]
+        ],
+        "enchant_bonus":0,
+        "apply_mod":true
     },
     {
         "name": "Rapier",
@@ -497,7 +547,9 @@
             {
                 "name": "finesse"
             }
-        ]
+        ],
+        "enchant_bonus":0,
+        "apply_mod":true
     },
     {
         "name": "Scimitar",
@@ -517,7 +569,9 @@
             {
                 "name": "light"
             }
-        ]
+        ],
+        "enchant_bonus":0,
+        "apply_mod":true
     },
     {
         "name": "Shortsword",
@@ -537,7 +591,9 @@
             {
                 "name": "light"
             }
-        ]
+        ],
+        "enchant_bonus":0,
+        "apply_mod":true
     },
     {
         "name": "Trident",
@@ -559,7 +615,9 @@
                 "name": "versatile",
                 "value": "1d8"
             }
-        ]
+        ],
+        "enchant_bonus":0,
+        "apply_mod":true
     },
     {
         "name": "War-pick",
@@ -572,7 +630,9 @@
             "type": "piercing"
         },
         "weight": 2,
-        "properties": []
+        "properties": [],
+        "enchant_bonus":0,
+        "apply_mod":true
     },
     {
         "name": "Warhammer",
@@ -590,7 +650,9 @@
                 "name": "versatile",
                 "value": "1d10"
             }
-        ]
+        ],
+        "enchant_bonus":0,
+        "apply_mod":true
     },
     {
         "name": "Whip",
@@ -610,7 +672,9 @@
             {
                 "name": "reach"
             }
-        ]
+        ],
+        "enchant_bonus":0,
+        "apply_mod":true
     },
     {
         "name": "Blowgun",
@@ -631,7 +695,9 @@
             {
                 "name": "loading"
             }
-        ]
+        ],
+        "enchant_bonus":0,
+        "apply_mod":true
     },
     {
         "name": "Hand Crossbow",
@@ -655,7 +721,9 @@
             {
                 "name": "loading"
             }
-        ]
+        ],
+        "enchant_bonus":0,
+        "apply_mod":true
     },
     {
         "name": "Heavy Crossbow",
@@ -682,7 +750,9 @@
             {
                 "name": "two-handed"
             }
-        ]
+        ],
+        "enchant_bonus":0,
+        "apply_mod":true
     },
     {
         "name": "Longbow",
@@ -706,7 +776,9 @@
             {
                 "name": "two-handed"
             }
-        ]
+        ],
+        "enchant_bonus":0,
+        "apply_mod":true
     },
     {
         "name": "Net",
@@ -727,6 +799,8 @@
                 "name": "thrown",
                 "range": "5/15"
             }
-        ]
+        ],
+        "enchant_bonus":0,
+        "apply_mod":true
     }
 ]

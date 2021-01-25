@@ -17,13 +17,13 @@ class XLCharacter(Character):
         if not 'id' in dct.keys():
             new = []
             for i in self.attack_info:
-                if len(search_static(i['name'],'weapons')) == 0:
+                if not any([x['name'].lower() == i['name'].lower() for x in search_static(i['name'],'weapons',exclude=[])]):
                     new.append(i)
             self.attack_info = new[:]
 
             new = []
             for i in self.gear_info:
-                if len(search_static(i['name'],'equipment')) == 0:
+                if not any([x['name'].lower() == i['name'].lower() for x in search_static(i['name'],'equipment',exclude=[])]):
                     new.append(i)
             self.gear_info = new[:]
 

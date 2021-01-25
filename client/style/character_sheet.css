@@ -515,3 +515,47 @@ div.speed-block.output[data-style=internal-label] {
     margin-bottom: 5px; 
     text-align: center
 }
+
+/* Attacks Table */
+#attacks-table {
+    border-radius: 5px;
+    margin: 15px;
+    display: inline-block;
+    position: relative;
+    width: calc(100% - 30px);
+    box-sizing: border-box;
+    overflow: hidden;
+    border: 2px solid var(--gradient6);
+}
+#attacks-table thead tr {
+    background-color: var(--gradient6);
+}
+#attacks-table td, #attacks-table th {
+    padding: 4px;
+    vertical-align: text-top;
+    display: inline-block;
+}
+#attacks-table tbody tr:nth-child(even) {
+    background-color: var(--gradient7);
+}
+#attacks-table select {
+    border: none;
+    border-radius: 5px;
+    background-color: rgba(0,0,0,0);
+    transition: background-color 0.2s;
+}
+#attacks-table select:focus {
+    background-color: rgba(0,0,0,0.1);
+}
+#attacks-table td:nth-child(1), #attacks-table th:nth-child(1) {
+    width: 40%;
+}
+#attacks-table td:nth-child(1) select {
+    width: 95%;
+}
+#attacks-table td:nth-child(2), #attacks-table th:nth-child(2) {
+    width: 10%;
+}
+#attacks-table td:nth-child(3), #attacks-table th:nth-child(3) {
+    width: 50%;
+}
