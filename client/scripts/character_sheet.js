@@ -948,13 +948,13 @@ function update_blocks() {
             [
                 'definition',
                 'proficiencies',
-                'equipped',
                 'spellcasting',
                 'appearance'
             ],
             [
                 'defense',
                 'speeds',
+                'equipped',
                 'languages',
                 'inventory',
                 'custom-info'
