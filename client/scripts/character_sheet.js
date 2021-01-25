@@ -7,6 +7,7 @@ var classes = [];
 var attacks = [];
 var equipment = [];
 var armor = [];
+var magicitems = [];
 var macyInst = null;
 
 function gp_convert(gp) {
@@ -757,7 +758,7 @@ function load_character(_data) {
                                         } else {
                                             data.attacks[Number($(event.delegateTarget).parents('tr').attr('data-index'))] = $(this).val();
                                         }
-                                        post('character/' + sid + '/modify', console.log(), {}, {
+                                        post('/character/' + sid + '/modify', console.log(), {}, {
                                             path: 'attacks',
                                             value: data.attacks
                                         }, true);
@@ -799,7 +800,7 @@ function load_character(_data) {
                         .val('').on('change', function (event) {
                             if ($(this).val() != '') {
                                 data.attacks.push($(this).val());
-                                post('character/' + sid + '/modify', console.log(), {}, {
+                                post('/character/' + sid + '/modify', console.log(), {}, {
                                     path: 'attacks',
                                     value: data.attacks
                                 }, true);
@@ -818,6 +819,116 @@ function load_character(_data) {
 
     $('#attacks-table tbody').remove();
     $('#attacks-table').append(dummy_attacks);
+
+    // Equipped Items
+    var dummy_equipped = $('<div></div>');
+    for (var e = 0; e < data.equipped.length; e++) {
+        dummy_equipped
+            .append(
+                $('<input class="input contained direct update seamless-light allowedEmpty" list="equipped-list-' + e + '" data-index="' + e + '">')
+                    .attr('data-path', 'equipped.' + e)
+                    .val(data.equipped[e])
+                    .css({
+                        'text-align': 'left',
+                        'border': '2px solid var(--gradient6)',
+                        'margin-bottom': '2px'
+                    })
+                    .on('mouseenter', function (event) {
+                        $('#panel-equipped .content .generated-item').remove();
+                        if (magicitems.some(function (val) {
+                            return val.name.toLowerCase() == $(event.delegateTarget).val().toLowerCase();
+                        })) {
+                            for (var m = 0; m < magicitems.length; m++) {
+                                if (magicitems[m].name.toLowerCase() == $(event.delegateTarget).val().toLowerCase()) {
+                                    $('#panel-equipped .content').append(
+                                        generate_magicitem(magicitems[m])
+                                            .css({
+                                                position: 'absolute',
+                                                top: '0px',
+                                                left: 'calc(100% + 10px)'
+                                            })
+                                            .append(
+                                                $('<i class="material-icons noselect">close</i>')
+                                                    .css({
+                                                        position: 'absolute',
+                                                        top: '5px',
+                                                        right: '5px'
+                                                    })
+                                                    .on('click', function (event) {
+                                                        $(this).parents('.generated-item').remove();
+                                                    })
+                                            )
+                                    );
+                                    break;
+                                }
+                            }
+                        }
+                        if (armor.some(function (val) {
+                            return val.name.toLowerCase() == $(event.delegateTarget).val().toLowerCase();
+                        })) {
+                            for (var m = 0; m < armor.length; m++) {
+                                if (armor[m].name.toLowerCase() == $(event.delegateTarget).val().toLowerCase()) {
+                                    $('#panel-equipped .content').append(
+                                        generate_armor(armor[m])
+                                            .css({
+                                                position: 'absolute',
+                                                top: '0px',
+                                                left: 'calc(100% + 10px)'
+                                            })
+                                            .append(
+                                                $('<i class="material-icons noselect">close</i>')
+                                                    .css({
+                                                        position: 'absolute',
+                                                        top: '5px',
+                                                        right: '5px'
+                                                    })
+                                                    .on('click', function (event) {
+                                                        $(this).parents('.generated-item').remove();
+                                                    })
+                                            )
+                                    );
+                                    break;
+                                }
+                            }
+                        }
+                    })
+            )
+            .append(
+                $('<datalist></datalist>')
+                    .attr('id', 'equipped-list-' + e)
+                    .append(data.inventory.main.items.map(function (item) {
+                        return $('<option>').attr('value', item.name);
+                    }))
+            );
+    }
+    dummy_equipped
+        .append(
+            $('<input class="input seamless-light" list="equipped-list-newitem">')
+                .val('')
+                .css({
+                    'text-align': 'left',
+                    'border': '2px solid var(--gradient7)',
+                    'margin-bottom': '2px'
+                })
+                .on('change', function (event) {
+                    if ($(this).val().length > 0) {
+                        data.equipped.push($(this).val());
+                        post('/character/'+sid+'/modify/',console.log,{},{
+                            path:'equipped',
+                            value:data.equipped
+                        });
+                    }
+                })
+        )
+        .append(
+            $('<datalist></datalist>')
+                .attr('id', 'equipped-list-newitem')
+                .append(data.inventory.main.items.map(function (item) {
+                    return $('<option>').attr('value', item.name);
+                }))
+        );
+    $('#equipped-items div').remove();
+    $('#equipped-items').append(dummy_equipped);
 
     load_update_directs(data);
     setup_direct_event_listeners();
@@ -917,12 +1028,14 @@ $(document).ready(function () {
                 attacks.push(data[i].data);
             } else if (data[i].endpoint == 'armor') {
                 armor.push(data[i].data);
+            } else if (data[i].endpoint == 'magicitems') {
+                magicitems.push(data[i].data);
             } else {
                 equipment.push(data[i].data);
             }
 
         }
-    }, {}, { cats: ['races', 'classes', 'weapons', 'equipment', 'armor'] });
+    }, {}, { cats: ['races', 'classes', 'weapons', 'equipment', 'armor', 'magicitems'] });
     $('.output-mod').fadeOut(0);
     $(window).on('resize', update_blocks);
 });

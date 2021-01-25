@@ -112,12 +112,12 @@
     transform: translate(-50%,-50%);
     font-size: 2vh;
 }
-.compendium-category .items {
+.items {
     padding: 20px;
     padding-top: 15px;
 }
 
-.compendium-category .items .generated-item {
+.generated-item {
     position: relative;
     padding: 15px;
     border-radius: 10px;
@@ -126,6 +126,7 @@
     width: calc(100% - 10px);
     box-sizing: border-box;
     height: fit-content;
+    background-color: var(--gradient8);
     transition: background-color 0.2s;
 }
 
