@@ -35,6 +35,8 @@ var CASTERS = ['bard', 'cleric', 'druid', 'paladin', 'ranger', 'sorcerer', 'warl
 
 var ABILITIES = ['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma'];
 
+var LANGUAGES = ['common','dwarvish','elvish','giant','gnomish','goblin','halfling','orc','abyssal','celestial','draconic','deep speech','infernal','primordial','sylvan','undercommon','druidic','thieves\' cant'];
+
 var CRXP = {
     0: 0,
     0.125: 25,

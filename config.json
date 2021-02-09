@@ -12,7 +12,7 @@
             ]
         }
     ],
-    "session_lock":"session.lock",
+    "session_lock":"lock.json",
     "connection_timeout":15,
     "loaded_object_timeout":60,
     "lock_defaults":{

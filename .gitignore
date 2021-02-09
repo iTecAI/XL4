@@ -130,6 +130,6 @@ dmypy.json
 local/
 database/
 jsconfig.json
-session.lock
+lock.json
 sensitive.*
 test.json
