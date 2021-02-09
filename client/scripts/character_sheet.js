@@ -542,340 +542,7 @@ function load_traits(data) {
     $('#traits-items').append(dummy_traits);
 }
 
-
-function load_character(_data) {
-    var data = _data.character;
-    dynamic = _data.dynamic;
-    console.log(data);
-    current_data = data;
-    current_dynamic_data = dynamic;
-
-    // Concatenate set races and homebrew races
-    var races_internal = JSON.parse(JSON.stringify(races));
-    for (var r = 0; r < data.race_info.length; r++) {
-        var item = data.race_info[r];
-        races_internal.push(item);
-    }
-    var classes_internal = JSON.parse(JSON.stringify(classes));
-    for (var c = 0; c < data.class_info.length; c++) {
-        var item = data.class_info[c];
-        classes_internal.push(item);
-    }
-    var attacks_internal = JSON.parse(JSON.stringify(attacks));
-    for (var c = 0; c < data.attack_info.length; c++) {
-        var item = data.attack_info[c];
-        var proc_item = {
-            name: item.name,
-            slug: item.name.toLowerCase().replace(/ /g, '-'),
-            type: item.range_class.toLowerCase(),
-            group: item.proficiency_category.toLowerCase(),
-            cost: 0,
-            weight: 0,
-            apply_mod: item.apply_mod == 1,
-            enchant_bonus: cond(item.enchant_bonus == null, 0, item.enchant_bonus)
-        };
-        proc_item.damage = [{ dice: item.damage, type: item.type }];
-        if (item.bonus_damage && item.bonus_type) {
-            proc_item.damage.push({ dice: item.bonus_damage, type: item.bonus_type });
-        }
-        if (item.properties == null) {
-            proc_item.properties = [];
-            attacks_internal.push(proc_item);
-            continue;
-        }
-        if (item.proficiency_category.toLowerCase() == 'simple' || item.proficiency_category.toLowerCase() == 'martial') {
-            proc_item.properties = [];
-            var prop_items = item.properties.toLowerCase().split(', ');
-            for (var p = 0; p < prop_items.length; p++) {
-                try {
-                    if (prop_items[p].includes(' (')) {
-                        var _temp = {
-                            name: prop_items[p].split(' (')[0],
-                        };
-                        try {
-                            _temp[prop_items[p].split(' (')[1].split(' ')[0]] = prop_items[p].split(' (')[1].split(' ')[1].replace(')', '');
-                        } catch {
-                            _temp['value'] = prop_items[p].split(' (')[1].replace(')', '');
-                        }
-                        proc_item.properties.push(_temp);
-                    } else {
-                        proc_item.properties.push({
-                            name: prop_items[p]
-                        });
-                    }
-                } catch {
-
-                }
-            }
-        } else {
-            proc_item.properties = [{ name: item.properties }];
-        }
-        attacks_internal.push(proc_item);
-    }
-    var gear_internal = JSON.parse(JSON.stringify(armor));
-    for (var c = 0; c < data.gear_info.length; c++) {
-        var item = data.gear_info[c];
-        var proc_item = {
-            ac: cond(item.category.toLowerCase().includes('armor'), cond(item.ac_bonus == null, null, 10 + item.ac_bonus + cond(item.enchantment_bonus == null, 0, item.enchantment_bonus)), item.ac_bonus),
-            cost: 0,
-            min_str: item.required_str,
-            name: item.name,
-            slug: item.name.toLowerCase().replace(/ /g, '-'),
-            stealth_dis: cond(item.stealth_mod == null, '', item.stealth_mod).toLowerCase() == 'disadvantage',
-            type: item.category.toLowerCase().replace(' armor', ''),
-            weight: 0
-        };
-        gear_internal.push(proc_item);
-    }
-    $('title').text(data.name);
-    $('#panel-definition .title span').text(data.name);
-
-    // Load races dropdown
-    var dummy_options = $('<select></select>');
-    var race_names = races_internal.map(function (v, i, a) { return v.race_name; }).sort();
-    for (var r = 0; r < race_names.length; r++) {
-        dummy_options.append($('<option></option>').attr('value', titleCase(race_names[r])).text(titleCase(race_names[r])));
-    }
-    $('#select-races').html(dummy_options.html());
-
-    // Load class options
-    var class_map = {}
-    var class_names = classes_internal.map(function (v, i, a) {
-        if (v.subclass == null) {
-            if (!Object.keys(class_map).includes(v.class_name.toLowerCase())) {
-                class_map[v.class_name.toLowerCase()] = [];
-            }
-            return v.class_name;
-        } else {
-            if (!Object.keys(class_map).includes(v.class_name.toLowerCase())) {
-                class_map[v.class_name.toLowerCase()] = [];
-            }
-            class_map[v.class_name.toLowerCase()].push(v.subclass);
-        }
-    }).sort();
-    var dummy_classlist = $('<div class="section" id="class-selector"></div>');
-    for (var c = 0; c < data.level.classes.length; c++) {
-        var class_select = $('<div class="input direct update" data-style="sub-name"></div>')
-            .attr('data-path', 'level.classes.' + c + '.class')
-            .append(
-                $('<select class="input"></select>')
-            )
-            .append(
-                $('<span class="label noselect">Class</span>')
-            )
-            .css('width', '40%');
-        for (var cn = 0; cn < class_names.length; cn++) {
-            if (class_names[cn]) {
-                $(class_select).children('select.input').append($('<option></option>').attr('value', class_names[cn].toLowerCase()).text(class_names[cn]));
-            }
-        }
-        var subclass_select = $('<div class="input direct update" data-style="sub-name"></div>')
-            .attr('data-path', 'level.classes.' + c + '.subclass')
-            .append(
-                $('<select class="input"></select>')
-            )
-            .append(
-                $('<span class="label noselect">Subclass</span>')
-            )
-            .css('width', '40%');
-        $(subclass_select).children('select.input').append($('<option></option>').attr('value', null).text(''));
-        for (var cn = 0; cn < class_map[data.level.classes[c].class].length; cn++) {
-            $(subclass_select).children('select.input').append($('<option></option>').attr('value', class_map[data.level.classes[c].class][cn].toLowerCase()).text(class_map[data.level.classes[c].class][cn]));
-        }
-        var level_inp = $('<div class="input direct update" data-style="sub-name"></div>')
-            .attr('data-path', 'level.classes.' + c + '.level')
-            .append(
-                $('<input class="input"></input>')
-            )
-            .append(
-                $('<span class="label noselect">Level</span>')
-            )
-            .css('width', '16%');
-        dummy_classlist.append(class_select).append(subclass_select).append(level_inp);
-    }
-    $('#class-selector').replaceWith(dummy_classlist);
-
-    // Level/XP Input
-    if (data.level.level == 20) {
-        var nxp = '-';
-    } else {
-        var nxp = LEVELXP[data.level.level];
-    }
-    $('#level-label').text('/ ' + nxp + ' XP - Level ' + data.level.level);
-    if (data.level.classes.map(function (v, i, a) { return v.level; }).reduce(function (t, c) { return t + c; }) != data.level.level) {
-        $('#level-xp-input').toggleClass('invalidated', true);
-        $('#level-xp-input .main-label').text('XP / Level - LEVEL MUST EQUAL TOTAL CLASS LEVELS.');
-    } else {
-        $('#level-xp-input').toggleClass('invalidated', false);
-        $('#level-xp-input .main-label').text('XP / Level');
-    }
-
-    // Hit dice display
-    var hd_keys = Object.keys(data.hit_dice_current);
-    var dummy_hd = $('<div></div>');
-    for (var h = 0; h < hd_keys.length; h++) {
-        dummy_hd.append($('<input spellcheck="false" class="input update direct contained" data-type="number" data-min="0" style="width: 30%;text-align:center;padding-top:1px;padding-bottom:1px"></input>').attr('data-path', 'hit_dice_current.' + hd_keys[h] + '.current').attr('data-max', data.hit_dice_current[hd_keys[h]].max));
-        dummy_hd.append(' ');
-        dummy_hd.append($("<span class='label noselect' style='width: 65%;font-weight:bold;padding-top:1px;padding-bottom:1px;margin-top:0px;margin-bottom:0px'></span>").text('/ ' + data.hit_dice_current[hd_keys[h]].max + 'd' + hd_keys[h].split('_')[1]));
-    }
-    dummy_hd.append($("<span class='main-label'>Hit Dice</span>"));
-    $('#hit-dice').html(dummy_hd.html());
-
-    // AC and INIT
-    $('#init-output .value').text(cond(dynamic.initiative >= 0, '+', '') + dynamic.initiative);
-
-    // Resist/Vuln/Immune
-    var dummy_rvi = $('<div></div>');
-    for (var i = 0; i < DAMAGETYPES.length; i++) {
-        var rvi_block = $('<div class="rvi-block"></div>').attr('data-damage-type', DAMAGETYPES[i]);
-        rvi_block.append($('<span class="rvi-dmg"></span>').text(titleCase(DAMAGETYPES[i])).css({
-            width: '25%',
-            display: 'inline-block',
-            'text-align': 'center',
-            'font-weight': 'bold'
-        }));
-        rvi_block.append(
-            $('<div class="rvi-radio radio-block"></div>')
-                .append($('<button class="radio-button"></button>').attr('data-value', 'resistances').text('Resistance').css({
-                    width: '32%',
-                    display: 'inline-block'
-                }))
-                .append($('<button class="radio-button"></button>').attr('data-value', 'immunities').text('Immunity').css({
-                    width: '32%',
-                    display: 'inline-block'
-                }))
-                .append($('<button class="radio-button"></button>').attr('data-value', 'vulnerabilities').text('Vulnerability').css({
-                    width: '32%',
-                    display: 'inline-block'
-                }))
-                .css({
-                    display: 'inline-block',
-                    width: '75%',
-                    'margin-bottom': '5px'
-                })
-        );
-        rvi_block.appendTo(dummy_rvi);
-    }
-    $('#rvi-scroll').html(dummy_rvi.html());
-    for (var r = 0; r < data.resistances.length; r++) {
-        set_radio('.rvi-block[data-damage-type=' + data.resistances[r].type + '] .radio-block', 'resistances');
-    }
-    for (var r = 0; r < data.immunities.length; r++) {
-        set_radio('.rvi-block[data-damage-type=' + data.immunities[r].type + '] .radio-block', 'immunities');
-    }
-    for (var r = 0; r < data.vulnerabilities.length; r++) {
-        set_radio('.rvi-block[data-damage-type=' + data.vulnerabilities[r].type + '] .radio-block', 'vulnerabilities');
-    }
-
-    // Saves panel
-    $('.saving-throw-item').each(function (i, e) {
-        var _mapping = {
-            '-1': 'dis',
-            '0': null,
-            '1': 'adv'
-        };
-        set_radio($(this).children('.radio-block'), _mapping[data.abilities[$(this).attr('data-save')].save_advantage.toString()]);
-        var s_val = get_mod_from_score([
-            data.abilities[$(this).attr('data-save')].score_base,
-            data.abilities[$(this).attr('data-save')].score_manual_mod,
-            data.abilities[$(this).attr('data-save')].score_mod.reduce(function (t, i) { return t + i; }, 0)
-        ].reduce(function (t, i) { return t + i; }, 0)) + cond(data.abilities[$(this).attr('data-save')].save_proficient, data.proficiency_bonus, 0);
-        $(this).children('.save-value').text(cond(s_val >= 0, '+', '') + s_val);
-    });
-
-    // Proficiencies
-    // -- Passive Perception
-    $('#passive-perception .value span').text(
-        10 + get_mod_from_score(cond(
-            data.skills.perception.override,
-            data.skills.perception.value,
-            data.abilities[data.skills.perception.ability].score_base
-            + data.abilities[data.skills.perception.ability].score_manual_mod
-            + data.abilities[data.skills.perception.ability].score_mod.reduce(function (t, i) { return t + i; }, 0)
-        )) + cond(data.skills.perception.advantage == 1, 5, 0) + cond(data.skills.perception.advantage == -1, -5, 0) + cond(
-            data.skills.perception.proficient,
-            data.proficiency_bonus,
-            0
-        ) + cond(
-            data.skills.perception.expert,
-            data.proficiency_bonus,
-            0
-        ) + cond(
-            check_trait('feat: alert'), 5, 0
-        )
-    );
-
-    // -- Skills
-    var dummy_skills_box = $('<div></div>');
-    var skill_keys = Object.keys(data.skills);
-    for (var s = 0; s < skill_keys.length; s++) {
-        var skillmod = get_mod_from_score(cond(
-            data.skills[skill_keys[s]].override,
-            data.skills[skill_keys[s]].value,
-            data.abilities[data.skills[skill_keys[s]].ability].score_base
-            + data.abilities[data.skills[skill_keys[s]].ability].score_manual_mod
-            + data.abilities[data.skills[skill_keys[s]].ability].score_mod.reduce(function (t, i) { return t + i; }, 0)
-        )) + cond(
-            data.skills[skill_keys[s]].proficient,
-            data.proficiency_bonus,
-            0
-        ) + cond(
-            data.skills[skill_keys[s]].expert,
-            data.proficiency_bonus,
-            0
-        );
-        skillmod = cond(skillmod >= 0, '+', '') + skillmod;
-        var item = $('<div></div>')
-            .addClass('skill-item')
-            .attr('data-skill', skill_keys[s])
-            .append(
-                $('<span></span>')
-                    .addClass('proficiency-button')
-                    .addClass('skill')
-                    .attr('data-path', 'skills.' + skill_keys[s])
-                    .append($('<span></span>'))
-            )
-            .append($('<span></span>').addClass('skill-value').text(skillmod))
-            .append($('<span></span>').addClass('skill-title').text(titleCase(skill_keys[s])))
-            .append(
-                $('<div></div>')
-                    .addClass('radio-block')
-                    .addClass('skill-adv')
-                    .append(
-                        $('<button></button>')
-                            .addClass('radio-button')
-                            .attr('data-value', 'adv')
-                            .text('Advantage')
-                    )
-                    .append(
-                        $('<button></button>')
-                            .addClass('radio-button')
-                            .attr('data-value', 'dis')
-                            .text('Disadvantage')
-                    )
-
-            );
-        dummy_skills_box.append(item);
-    }
-    $('#skill-box').html(dummy_skills_box.html());
-    $('.skill-adv').each(function (i, e) {
-        set_radio(this, { '-1': 'dis', '0': null, '1': 'adv' }[data.skills[$(this).parents('.skill-item').attr('data-skill')].advantage.toString()]);
-    });
-
-    // -- Proficiencies
-    var pkeys = Object.keys(data.proficiencies);
-    for (var p = 0; p < pkeys.length; p++) {
-        $('#prof-' + pkeys[p] + ' .prof-value').val(data.proficiencies[pkeys[p]].join(', '));
-    }
-    $('.prof-value').each(function (i, e) {
-        $(this).off('change').on('change', function (event) {
-            post('/character/' + sid + '/modify/', console.log, {}, {
-                path: 'proficiencies.' + $(this).parents('#item-proficiencies > div').not('.hsep').attr('id').split('prof-')[1],
-                value: $(this).val().split(', ')
-            });
-        });
-    });
-
+function load_attacks(data, attacks_internal) {
     // Attacks
     var dummy_attacks = $('<tbody></tbody>');
     data.attacks.map(function (v, i) {
@@ -1019,15 +686,389 @@ function load_character(_data) {
             .append(
                 $('<td class="atk-desc"></td>').text('New Attack')
             )
-            .attr('data-index', i)
     );
 
     $('#attacks-table tbody').remove();
     $('#attacks-table').append(dummy_attacks);
+}
+
+function load_races_classes(data,races_internal,classes_internal) {
+    // Load races dropdown
+    var dummy_options = $('<select></select>');
+    var race_names = races_internal.map(function (v, i, a) { return v.race_name; }).sort();
+    for (var r = 0; r < race_names.length; r++) {
+        dummy_options.append($('<option></option>').attr('value', titleCase(race_names[r])).text(titleCase(race_names[r])));
+    }
+    $('#select-races').html(dummy_options.html());
+
+    // Load class options
+    var class_map = {}
+    var class_names = classes_internal.map(function (v, i, a) {
+        if (v.subclass == null) {
+            if (!Object.keys(class_map).includes(v.class_name.toLowerCase())) {
+                class_map[v.class_name.toLowerCase()] = [];
+            }
+            return v.class_name;
+        } else {
+            if (!Object.keys(class_map).includes(v.class_name.toLowerCase())) {
+                class_map[v.class_name.toLowerCase()] = [];
+            }
+            class_map[v.class_name.toLowerCase()].push(v.subclass);
+        }
+    }).sort();
+    var dummy_classlist = $('<div class="section" id="class-selector"></div>');
+    for (var c = 0; c < data.level.classes.length; c++) {
+        var class_select = $('<div class="input direct update" data-style="sub-name"></div>')
+            .attr('data-path', 'level.classes.' + c + '.class')
+            .append(
+                $('<select class="input"></select>')
+            )
+            .append(
+                $('<span class="label noselect">Class</span>')
+            )
+            .css('width', '40%');
+        for (var cn = 0; cn < class_names.length; cn++) {
+            if (class_names[cn]) {
+                $(class_select).children('select.input').append($('<option></option>').attr('value', class_names[cn].toLowerCase()).text(class_names[cn]));
+            }
+        }
+        var subclass_select = $('<div class="input direct update" data-style="sub-name"></div>')
+            .attr('data-path', 'level.classes.' + c + '.subclass')
+            .append(
+                $('<select class="input"></select>')
+            )
+            .append(
+                $('<span class="label noselect">Subclass</span>')
+            )
+            .css('width', '40%');
+        $(subclass_select).children('select.input').append($('<option></option>').attr('value', null).text(''));
+        for (var cn = 0; cn < class_map[data.level.classes[c].class].length; cn++) {
+            $(subclass_select).children('select.input').append($('<option></option>').attr('value', class_map[data.level.classes[c].class][cn].toLowerCase()).text(class_map[data.level.classes[c].class][cn]));
+        }
+        var level_inp = $('<div class="input direct update" data-style="sub-name"></div>')
+            .attr('data-path', 'level.classes.' + c + '.level')
+            .append(
+                $('<input class="input"></input>')
+            )
+            .append(
+                $('<span class="label noselect">Level</span>')
+            )
+            .css('width', '16%');
+        dummy_classlist.append(class_select).append(subclass_select).append(level_inp);
+    }
+    $('#class-selector').replaceWith(dummy_classlist);
+}
+
+function load_levelxp(data) {
+    // Level/XP Input
+    if (data.level.level == 20) {
+        var nxp = '-';
+    } else {
+        var nxp = LEVELXP[data.level.level];
+    }
+    $('#level-label').text('/ ' + nxp + ' XP - Level ' + data.level.level);
+    if (data.level.classes.map(function (v, i, a) { return v.level; }).reduce(function (t, c) { return t + c; }) != data.level.level) {
+        $('#level-xp-input').toggleClass('invalidated', true);
+        $('#level-xp-input .main-label').text('XP / Level - LEVEL MUST EQUAL TOTAL CLASS LEVELS.');
+    } else {
+        $('#level-xp-input').toggleClass('invalidated', false);
+        $('#level-xp-input .main-label').text('XP / Level');
+    }
+}
+
+function load_hd_ac_init(data,dynamic) {
+    // Hit dice display
+    var hd_keys = Object.keys(data.hit_dice_current);
+    var dummy_hd = $('<div></div>');
+    for (var h = 0; h < hd_keys.length; h++) {
+        dummy_hd.append($('<input spellcheck="false" class="input update direct contained" data-type="number" data-min="0" style="width: 30%;text-align:center;padding-top:1px;padding-bottom:1px"></input>').attr('data-path', 'hit_dice_current.' + hd_keys[h] + '.current').attr('data-max', data.hit_dice_current[hd_keys[h]].max));
+        dummy_hd.append(' ');
+        dummy_hd.append($("<span class='label noselect' style='width: 65%;font-weight:bold;padding-top:1px;padding-bottom:1px;margin-top:0px;margin-bottom:0px'></span>").text('/ ' + data.hit_dice_current[hd_keys[h]].max + 'd' + hd_keys[h].split('_')[1]));
+    }
+    dummy_hd.append($("<span class='main-label'>Hit Dice</span>"));
+    $('#hit-dice').html(dummy_hd.html());
+
+    // AC and INIT
+    $('#init-output .value').text(cond(dynamic.initiative >= 0, '+', '') + dynamic.initiative);
+}
+
+function load_rvi(data) {
+    // Resist/Vuln/Immune
+    var dummy_rvi = $('<div></div>');
+    for (var i = 0; i < DAMAGETYPES.length; i++) {
+        var rvi_block = $('<div class="rvi-block"></div>').attr('data-damage-type', DAMAGETYPES[i]);
+        rvi_block.append($('<span class="rvi-dmg"></span>').text(titleCase(DAMAGETYPES[i])).css({
+            width: '25%',
+            display: 'inline-block',
+            'text-align': 'center',
+            'font-weight': 'bold'
+        }));
+        rvi_block.append(
+            $('<div class="rvi-radio radio-block"></div>')
+                .append($('<button class="radio-button"></button>').attr('data-value', 'resistances').text('Resistance').css({
+                    width: '32%',
+                    display: 'inline-block'
+                }))
+                .append($('<button class="radio-button"></button>').attr('data-value', 'immunities').text('Immunity').css({
+                    width: '32%',
+                    display: 'inline-block'
+                }))
+                .append($('<button class="radio-button"></button>').attr('data-value', 'vulnerabilities').text('Vulnerability').css({
+                    width: '32%',
+                    display: 'inline-block'
+                }))
+                .css({
+                    display: 'inline-block',
+                    width: '75%',
+                    'margin-bottom': '5px'
+                })
+        );
+        rvi_block.appendTo(dummy_rvi);
+    }
+    $('#rvi-scroll').html(dummy_rvi.html());
+    for (var r = 0; r < data.resistances.length; r++) {
+        set_radio('.rvi-block[data-damage-type=' + data.resistances[r].type + '] .radio-block', 'resistances');
+    }
+    for (var r = 0; r < data.immunities.length; r++) {
+        set_radio('.rvi-block[data-damage-type=' + data.immunities[r].type + '] .radio-block', 'immunities');
+    }
+    for (var r = 0; r < data.vulnerabilities.length; r++) {
+        set_radio('.rvi-block[data-damage-type=' + data.vulnerabilities[r].type + '] .radio-block', 'vulnerabilities');
+    }
+}
+
+function load_saves(data) {
+    // Saves panel
+    $('.saving-throw-item').each(function (i, e) {
+        var _mapping = {
+            '-1': 'dis',
+            '0': null,
+            '1': 'adv'
+        };
+        set_radio($(this).children('.radio-block'), _mapping[data.abilities[$(this).attr('data-save')].save_advantage.toString()]);
+        var s_val = get_mod_from_score([
+            data.abilities[$(this).attr('data-save')].score_base,
+            data.abilities[$(this).attr('data-save')].score_manual_mod,
+            data.abilities[$(this).attr('data-save')].score_mod.reduce(function (t, i) { return t + i; }, 0)
+        ].reduce(function (t, i) { return t + i; }, 0)) + cond(data.abilities[$(this).attr('data-save')].save_proficient, data.proficiency_bonus, 0);
+        $(this).children('.save-value').text(cond(s_val >= 0, '+', '') + s_val);
+    });
+}
+
+function load_all_proficiencies(data) {
+    // Proficiencies
+    // -- Passive Perception
+    $('#passive-perception .value span').text(
+        10 + get_mod_from_score(cond(
+            data.skills.perception.override,
+            data.skills.perception.value,
+            data.abilities[data.skills.perception.ability].score_base
+            + data.abilities[data.skills.perception.ability].score_manual_mod
+            + data.abilities[data.skills.perception.ability].score_mod.reduce(function (t, i) { return t + i; }, 0)
+        )) + cond(data.skills.perception.advantage == 1, 5, 0) + cond(data.skills.perception.advantage == -1, -5, 0) + cond(
+            data.skills.perception.proficient,
+            data.proficiency_bonus,
+            0
+        ) + cond(
+            data.skills.perception.expert,
+            data.proficiency_bonus,
+            0
+        ) + cond(
+            check_trait('feat: alert'), 5, 0
+        )
+    );
+
+    // -- Skills
+    var dummy_skills_box = $('<div></div>');
+    var skill_keys = Object.keys(data.skills);
+    for (var s = 0; s < skill_keys.length; s++) {
+        var skillmod = get_mod_from_score(cond(
+            data.skills[skill_keys[s]].override,
+            data.skills[skill_keys[s]].value,
+            data.abilities[data.skills[skill_keys[s]].ability].score_base
+            + data.abilities[data.skills[skill_keys[s]].ability].score_manual_mod
+            + data.abilities[data.skills[skill_keys[s]].ability].score_mod.reduce(function (t, i) { return t + i; }, 0)
+        )) + cond(
+            data.skills[skill_keys[s]].proficient,
+            data.proficiency_bonus,
+            0
+        ) + cond(
+            data.skills[skill_keys[s]].expert,
+            data.proficiency_bonus,
+            0
+        );
+        skillmod = cond(skillmod >= 0, '+', '') + skillmod;
+        var item = $('<div></div>')
+            .addClass('skill-item')
+            .attr('data-skill', skill_keys[s])
+            .append(
+                $('<span></span>')
+                    .addClass('proficiency-button')
+                    .addClass('skill')
+                    .attr('data-path', 'skills.' + skill_keys[s])
+                    .append($('<span></span>'))
+            )
+            .append($('<span></span>').addClass('skill-value').text(skillmod))
+            .append($('<span></span>').addClass('skill-title').text(titleCase(skill_keys[s])))
+            .append(
+                $('<div></div>')
+                    .addClass('radio-block')
+                    .addClass('skill-adv')
+                    .append(
+                        $('<button></button>')
+                            .addClass('radio-button')
+                            .attr('data-value', 'adv')
+                            .text('Advantage')
+                    )
+                    .append(
+                        $('<button></button>')
+                            .addClass('radio-button')
+                            .attr('data-value', 'dis')
+                            .text('Disadvantage')
+                    )
+
+            );
+        dummy_skills_box.append(item);
+    }
+    $('#skill-box').html(dummy_skills_box.html());
+    $('.skill-adv').each(function (i, e) {
+        set_radio(this, { '-1': 'dis', '0': null, '1': 'adv' }[data.skills[$(this).parents('.skill-item').attr('data-skill')].advantage.toString()]);
+    });
+
+    // -- Proficiencies
+    var pkeys = Object.keys(data.proficiencies);
+    for (var p = 0; p < pkeys.length; p++) {
+        $('#prof-' + pkeys[p] + ' .prof-value').val(data.proficiencies[pkeys[p]].join(', '));
+    }
+    $('.prof-value').each(function (i, e) {
+        $(this).off('change').on('change', function (event) {
+            post('/character/' + sid + '/modify/', console.log, {}, {
+                path: 'proficiencies.' + $(this).parents('#item-proficiencies > div').not('.hsep').attr('id').split('prof-')[1],
+                value: $(this).val().split(', ')
+            });
+        });
+    });
+}
+
+function load_internals(data) {
+    // Concatenate set races and homebrew races
+    var races_internal = JSON.parse(JSON.stringify(races));
+    for (var r = 0; r < data.race_info.length; r++) {
+        var item = data.race_info[r];
+        races_internal.push(item);
+    }
+    var classes_internal = JSON.parse(JSON.stringify(classes));
+    for (var c = 0; c < data.class_info.length; c++) {
+        var item = data.class_info[c];
+        classes_internal.push(item);
+    }
+    var attacks_internal = JSON.parse(JSON.stringify(attacks));
+    for (var c = 0; c < data.attack_info.length; c++) {
+        var item = data.attack_info[c];
+        var proc_item = {
+            name: item.name,
+            slug: item.name.toLowerCase().replace(/ /g, '-'),
+            type: item.range_class.toLowerCase(),
+            group: item.proficiency_category.toLowerCase(),
+            cost: 0,
+            weight: 0,
+            apply_mod: item.apply_mod == 1,
+            enchant_bonus: cond(item.enchant_bonus == null, 0, item.enchant_bonus)
+        };
+        proc_item.damage = [{ dice: item.damage, type: item.type }];
+        if (item.bonus_damage && item.bonus_type) {
+            proc_item.damage.push({ dice: item.bonus_damage, type: item.bonus_type });
+        }
+        if (item.properties == null) {
+            proc_item.properties = [];
+            attacks_internal.push(proc_item);
+            continue;
+        }
+        if (item.proficiency_category.toLowerCase() == 'simple' || item.proficiency_category.toLowerCase() == 'martial') {
+            proc_item.properties = [];
+            var prop_items = item.properties.toLowerCase().split(', ');
+            for (var p = 0; p < prop_items.length; p++) {
+                try {
+                    if (prop_items[p].includes(' (')) {
+                        var _temp = {
+                            name: prop_items[p].split(' (')[0],
+                        };
+                        try {
+                            _temp[prop_items[p].split(' (')[1].split(' ')[0]] = prop_items[p].split(' (')[1].split(' ')[1].replace(')', '');
+                        } catch {
+                            _temp['value'] = prop_items[p].split(' (')[1].replace(')', '');
+                        }
+                        proc_item.properties.push(_temp);
+                    } else {
+                        proc_item.properties.push({
+                            name: prop_items[p]
+                        });
+                    }
+                } catch {
+
+                }
+            }
+        } else {
+            proc_item.properties = [{ name: item.properties }];
+        }
+        attacks_internal.push(proc_item);
+    }
+    var gear_internal = JSON.parse(JSON.stringify(armor));
+    for (var c = 0; c < data.gear_info.length; c++) {
+        var item = data.gear_info[c];
+        var proc_item = {
+            ac: cond(item.category.toLowerCase().includes('armor'), cond(item.ac_bonus == null, null, 10 + item.ac_bonus + cond(item.enchantment_bonus == null, 0, item.enchantment_bonus)), item.ac_bonus),
+            cost: 0,
+            min_str: item.required_str,
+            name: item.name,
+            slug: item.name.toLowerCase().replace(/ /g, '-'),
+            stealth_dis: cond(item.stealth_mod == null, '', item.stealth_mod).toLowerCase() == 'disadvantage',
+            type: item.category.toLowerCase().replace(' armor', ''),
+            weight: 0
+        };
+        gear_internal.push(proc_item);
+    }
+    return {
+        races:races_internal,
+        classes:classes_internal,
+        attacks:attacks_internal,
+        gear:gear_internal
+    };
+}
+
+
+function load_character(_data) {
+    var data = _data.character;
+    var dynamic = _data.dynamic;
+    console.log(data);
+    current_data = data;
+    current_dynamic_data = dynamic;
+
+    var _int = load_internals(data);
+    var races_internal = _int.races;
+    var classes_internal = _int.classes;
+    var attacks_internal = _int.attacks;
+    var gear_internal = _int.gear;
+    
+    $('title').text(data.name);
+    $('#panel-definition .title span').text(data.name);
+
+    console.log(classes_internal);
+
+    load_races_classes(data,races_internal,classes_internal);
+    load_levelxp(data);
+    load_hd_ac_init(data,dynamic)
+    
+    load_rvi(data);
+    load_saves(data);
+    load_all_proficiencies(data)
+
+    load_attacks(data, attacks_internal);
 
     load_equipped(data);
     load_languages(data);
     load_traits(data);
+    
 
     load_update_directs(data);
     setup_direct_event_listeners();
