@@ -167,6 +167,10 @@ function cond(b, t, f) {
     if (b) { return t; } else { return f; }
 }
 function titleCase(str) {
+    if ([0,null,[]].includes(str)) {
+        var str = '';
+    }
+    var str = String(str);
     return str.split(' ').map(firstUpper).join(' ');
 }
 function parse_query_string() {

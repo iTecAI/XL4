@@ -77,6 +77,7 @@ class XLCharacter(Character):
         else:
             return False
     def get_class(self, name, subclass=None):
+        subclass = condition(subclass in [0,'0',None,'',[]],None,subclass)
         for i in self.class_info:
             if i['class_name'].lower() == name.lower():
                 if str(subclass).lower() == str(i['subclass']).lower():

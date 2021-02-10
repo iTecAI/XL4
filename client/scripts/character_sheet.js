@@ -8,7 +8,7 @@ var attacks = [];
 var equipment = [];
 var armor = [];
 var magicitems = [];
-var macyInst = null;
+var spells = [];
 
 function gp_convert(gp) {
     var pp = (gp - (gp % 10)) / 10;
@@ -342,6 +342,9 @@ function get_class(internals,_class,subclass) {
     if (subclass == undefined) {
         subclass = "§NUL";
     }
+    if ([null,0,'0','',[]].includes(subclass)) {
+        subclass = "§NUL";
+    }
     for (var c = 0; c < internals.length; c++) {
         if (String(internals[c].class_name).toLowerCase() == _class.toLowerCase() && (String(internals[c].subclass).toLowerCase() == String(subclass).toLowerCase() || internals[c].subclass == null && subclass == '§NUL')) {
             if (internals[c].subclass == null) {
@@ -353,8 +356,8 @@ function get_class(internals,_class,subclass) {
                 for (var k = 0; k < internals.length; k++) {
                     if (String(internals[k].class_name).toLowerCase() == _class.toLowerCase() && internals[k].subclass == null) {
                         return {
-                            class: internals[c],
-                            subclass: internals[k]
+                            class: internals[k],
+                            subclass: internals[c]
                         };
                     }
                 }
@@ -761,7 +764,7 @@ function load_races_classes(data, races_internal, classes_internal) {
                 $(class_select).children('select.input').append($('<option></option>').attr('value', class_names[cn].toLowerCase()).text(class_names[cn]));
             }
         }
-        var subclass_select = $('<div class="input direct update" data-style="sub-name"></div>')
+        var subclass_select = $('<div class="input direct update allowedEmpty" data-style="sub-name"></div>')
             .attr('data-path', 'level.classes.' + c + '.subclass')
             .append(
                 $('<select class="input"></select>')
@@ -1083,15 +1086,18 @@ function load_caster_stats(data, classes_internal) {
             data.spellcasting.caster_classes[i].class.class,
             data.spellcasting.caster_classes[i].class.subclass
         );
-        var sc_ability = cond(
-            class_data.class.spellcasting_ability == null,
-            cond(
-                class_data.subclass.spellcasting_ability == null,
-                'N/A',
-                class_data.subclass.spellcasting_ability
-            ),
-            class_data.class.spellcasting_ability
-        );
+        if (class_data.class.spellcasting_ability == null) {
+            if (class_data.subclass.spellcasting_ability == null) {
+                var sc_ability = null;
+            } else {
+                var sc_ability = class_data.subclass.spellcasting_ability;
+            }
+        } else {
+            var sc_ability = class_data.class.spellcasting_ability;
+        }
+        if (sc_ability == null) {
+            continue;
+        }
         var sp_atk = get_mod_from_score([
             data.abilities[sc_ability.toLowerCase()].score_base,
             data.abilities[sc_ability.toLowerCase()].score_manual_mod,
@@ -1116,9 +1122,9 @@ function load_caster_stats(data, classes_internal) {
                         .append(
                             $('<span></span>').text(titleCase(data.spellcasting.caster_classes[i].class.class))
                         )
-                        .append('<span> - </span>')
+                        .append(cond(data.spellcasting.caster_classes[i].class.subclass == null,'','<span> - </span>'))
                         .append(
-                            $('<span></span>').text(titleCase(data.spellcasting.caster_classes[i].class.subclass))
+                            $('<span></span>').text(titleCase(cond(data.spellcasting.caster_classes[i].class.subclass == null, '', data.spellcasting.caster_classes[i].class.subclass)))
                         )
                     )
                     .append(
@@ -1327,12 +1333,14 @@ $(document).ready(function () {
                 armor.push(data[i].data);
             } else if (data[i].endpoint == 'magicitems') {
                 magicitems.push(data[i].data);
+            } else if (data[i].endpoint == 'spells') {
+                spells.push(data[i].data);
             } else {
                 equipment.push(data[i].data);
             }
 
         }
-    }, {}, { cats: ['races', 'classes', 'weapons', 'equipment', 'armor', 'magicitems'] });
+    }, {}, { cats: ['races', 'classes', 'weapons', 'equipment', 'armor', 'magicitems','spells'] });
     $('.output-mod').fadeOut(0);
     $(window).on('resize', update_blocks);
 });
