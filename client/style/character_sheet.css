@@ -562,3 +562,35 @@ div.speed-block.output[data-style=internal-label] {
 #attacks-table td:nth-child(3), #attacks-table th:nth-child(3) {
     width: 50%;
 }
+
+/* Spellcasting */
+.casting-stats-item > .class-item.output {
+    display: inline-block;
+    height: 80px;
+    margin-bottom: 5px;
+    margin-left: 1%;
+}
+.casting-stats-item > .class-item.output:first-child {
+    width: 41%;
+}
+.casting-stats-item > .class-item.output:nth-child(2) {
+    width: 20%;
+}
+.casting-stats-item > .class-item.output:nth-child(3) {
+    width: 15%;
+}
+.casting-stats-item > .class-item.output:nth-child(4) {
+    width: 15%;
+}
+.casting-stats-item {
+    display: inline-block;
+    width: 100%;
+}
+.casting-stats-item > .class-item.output .op-content {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: fit-content;
+    font-weight: bold;
+}

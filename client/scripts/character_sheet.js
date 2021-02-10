@@ -338,6 +338,35 @@ function manual_event_listeners() {
     });
 }
 
+function get_class(internals,_class,subclass) {
+    if (subclass == undefined) {
+        subclass = "§NUL";
+    }
+    for (var c = 0; c < internals.length; c++) {
+        if (String(internals[c].class_name).toLowerCase() == _class.toLowerCase() && (String(internals[c].subclass).toLowerCase() == String(subclass).toLowerCase() || internals[c].subclass == null && subclass == '§NUL')) {
+            if (internals[c].subclass == null) {
+                return {
+                    class: internals[c],
+                    subclass: null
+                };
+            } else {
+                for (var k = 0; k < internals.length; k++) {
+                    if (String(internals[k].class_name).toLowerCase() == _class.toLowerCase() && internals[k].subclass == null) {
+                        return {
+                            class: internals[c],
+                            subclass: internals[k]
+                        };
+                    }
+                }
+            }
+        }
+    }
+    return {
+        class: null,
+        subclass: null
+    };
+}
+
 function load_equipped(data) {
     // Equipped Items
     var dummy_equipped = $('<div></div>');
@@ -432,9 +461,9 @@ function load_equipped(data) {
                 .on('change', function (event) {
                     if ($(this).val().length > 0) {
                         data.equipped.push($(this).val());
-                        post('/character/'+sid+'/modify/',console.log,{},{
-                            path:'equipped',
-                            value:data.equipped
+                        post('/character/' + sid + '/modify/', console.log, {}, {
+                            path: 'equipped',
+                            value: data.equipped
                         });
                     }
                 })
@@ -463,7 +492,7 @@ function load_languages(data) {
                         'border': '2px solid var(--gradient6)',
                         'margin-bottom': '2px'
                     })
-                    
+
             )
             .append(
                 $('<datalist></datalist>')
@@ -485,9 +514,9 @@ function load_languages(data) {
                 .on('change', function (event) {
                     if ($(this).val().length > 0) {
                         data.languages.push($(this).val());
-                        post('/character/'+sid+'/modify/',console.log,{},{
-                            path:'languages',
-                            value:data.languages
+                        post('/character/' + sid + '/modify/', console.log, {}, {
+                            path: 'languages',
+                            value: data.languages
                         });
                     }
                 })
@@ -516,7 +545,7 @@ function load_traits(data) {
                         'border': '2px solid var(--gradient6)',
                         'margin-bottom': '2px'
                     })
-                    
+
             )
     }
     dummy_traits
@@ -531,9 +560,9 @@ function load_traits(data) {
                 .on('change', function (event) {
                     if ($(this).val().length > 0) {
                         data.traits.push($(this).val());
-                        post('/character/'+sid+'/modify/',console.log,{},{
-                            path:'traits',
-                            value:data.traits
+                        post('/character/' + sid + '/modify/', console.log, {}, {
+                            path: 'traits',
+                            value: data.traits
                         });
                     }
                 })
@@ -692,7 +721,7 @@ function load_attacks(data, attacks_internal) {
     $('#attacks-table').append(dummy_attacks);
 }
 
-function load_races_classes(data,races_internal,classes_internal) {
+function load_races_classes(data, races_internal, classes_internal) {
     // Load races dropdown
     var dummy_options = $('<select></select>');
     var race_names = races_internal.map(function (v, i, a) { return v.race_name; }).sort();
@@ -776,7 +805,7 @@ function load_levelxp(data) {
     }
 }
 
-function load_hd_ac_init(data,dynamic) {
+function load_hd_ac_init(data, dynamic) {
     // Hit dice display
     var hd_keys = Object.keys(data.hit_dice_current);
     var dummy_hd = $('<div></div>');
@@ -1029,11 +1058,138 @@ function load_internals(data) {
         gear_internal.push(proc_item);
     }
     return {
-        races:races_internal,
-        classes:classes_internal,
-        attacks:attacks_internal,
-        gear:gear_internal
+        races: races_internal,
+        classes: classes_internal,
+        attacks: attacks_internal,
+        gear: gear_internal
     };
+}
+
+function load_caster_stats(data, classes_internal) {
+    var dummy_cstat = $('<div id="cstat-sub"></div>');
+    for (var i = 0; i < data.spellcasting.caster_classes.length; i++) {
+        /*
+        <div class='output noselect score-output' data-style='internal-label' id='score-str'>
+            <span class='value direct update convert-mod' data-path='abilities.strength.score_base+abilities.strength.score_manual_mod+abilities.strength.score_mod~reduce'></span>
+            <span class='value direct update raw-score' data-path='abilities.strength.score_base+abilities.strength.score_manual_mod+abilities.strength.score_mod~reduce'></span>
+            <span class='label noselect'>STR</span>
+            <span class='edit-btn noselect'><i class='material-icons'>settings</i></span>
+            <span class='output-mod noselect'>MOD: <input class='seamless contained direct update' data-path='abilities.strength.score_manual_mod'> BASE: <input class='seamless contained direct update' data-path='abilities.strength.score_base'></span>
+        </div>
+        */
+
+        var class_data = get_class(
+            classes_internal,
+            data.spellcasting.caster_classes[i].class.class,
+            data.spellcasting.caster_classes[i].class.subclass
+        );
+        var sc_ability = cond(
+            class_data.class.spellcasting_ability == null,
+            cond(
+                class_data.subclass.spellcasting_ability == null,
+                'N/A',
+                class_data.subclass.spellcasting_ability
+            ),
+            class_data.class.spellcasting_ability
+        );
+        var sp_atk = get_mod_from_score([
+            data.abilities[sc_ability.toLowerCase()].score_base,
+            data.abilities[sc_ability.toLowerCase()].score_manual_mod,
+            data.abilities[sc_ability.toLowerCase()].score_mod.reduce(function(p,c,i) {
+                return p+c;
+            },0)
+        ].reduce(function(p,c,i) {
+            return p+c;
+        },0))+[
+            data.spellcasting.caster_classes[i].mods.attack.manual,
+            data.spellcasting.caster_classes[i].mods.attack.automatic.reduce(function(p,c,i) {
+                return p+c;
+            },0)
+        ].reduce(function(p,c,i) {
+            return p+c;
+        },0)+data.proficiency_bonus;
+
+        dummy_cstat.append(
+            $('<div class="casting-stats-item noselect"></div>')
+                .append($('<div class="output class-item" data-style="internal-label"></div>')
+                    .append($('<span class="op-content"></span>')
+                        .append(
+                            $('<span></span>').text(titleCase(data.spellcasting.caster_classes[i].class.class))
+                        )
+                        .append('<span> - </span>')
+                        .append(
+                            $('<span></span>').text(titleCase(data.spellcasting.caster_classes[i].class.subclass))
+                        )
+                    )
+                    .append(
+                        $('<span class="label noselect">Class</span>')
+                    )
+                )
+                .append($('<div class="output class-item" data-style="internal-label"></div>')
+                    .append($('<span class="op-content"></span>')
+                        .append(
+                            $('<span></span>').text(sc_ability)
+                        )
+                    )
+                    .append(
+                        $('<span class="label noselect">Casting Ability</span>')
+                    )
+                )
+                .append($('<div class="output class-item" data-style="internal-label"></div>')
+                    .append($('<span class="op-content"></span>')
+                        .append(
+                            $('<span></span>').text(8+get_mod_from_score([
+                                data.abilities[sc_ability.toLowerCase()].score_base,
+                                data.abilities[sc_ability.toLowerCase()].score_manual_mod,
+                                data.abilities[sc_ability.toLowerCase()].score_mod.reduce(function(p,c,i) {
+                                    return p+c;
+                                },0)
+                            ].reduce(function(p,c,i) {
+                                return p+c;
+                            },0))+[
+                                data.spellcasting.caster_classes[i].mods.save.manual,
+                                data.spellcasting.caster_classes[i].mods.save.automatic.reduce(function(p,c,i) {
+                                    return p+c;
+                                },0)
+                            ].reduce(function(p,c,i) {
+                                return p+c;
+                            },0)+data.proficiency_bonus)
+                        )
+                    )
+                    .append(
+                        $('<span class="label noselect">Save DC</span>')
+                    )
+                    .append(
+                        $("<span class='edit-btn noselect'><i class='material-icons'>settings</i></span>")
+                    )
+                    .append(
+                        $("<span class='output-mod noselect'>MOD: <input class='seamless contained direct update' data-path='spellcasting.caster_classes."+i+".mods.save.manual'></span>").hide()
+                    )
+                )
+                .append($('<div class="output class-item" data-style="internal-label"></div>')
+                    .append($('<span class="op-content"></span>')
+                        .append(
+                            $('<span></span>').text(cond(sp_atk >= 0, '+', '') + sp_atk)
+                        )
+                    )
+                    .append(
+                        $('<span class="label noselect">Spell Attack</span>')
+                    )
+                    .append(
+                        $("<span class='edit-btn noselect'><i class='material-icons'>settings</i></span>")
+                    )
+                    .append(
+                        $("<span class='output-mod noselect'>MOD: <input class='seamless contained direct update' data-path='spellcasting.caster_classes."+i+".mods.attack.manual'></span>").hide()
+                    )
+                )
+        );
+    }
+
+    $('#cstat-sub').remove();
+    $(dummy_cstat).appendTo('#caster-stats');
+}
+function load_spellcasting(data, classes_internal) {
+    load_caster_stats(data, classes_internal);
 }
 
 
@@ -1049,16 +1205,16 @@ function load_character(_data) {
     var classes_internal = _int.classes;
     var attacks_internal = _int.attacks;
     var gear_internal = _int.gear;
-    
+
     $('title').text(data.name);
     $('#panel-definition .title span').text(data.name);
 
     console.log(classes_internal);
 
-    load_races_classes(data,races_internal,classes_internal);
+    load_races_classes(data, races_internal, classes_internal);
     load_levelxp(data);
-    load_hd_ac_init(data,dynamic)
-    
+    load_hd_ac_init(data, dynamic)
+
     load_rvi(data);
     load_saves(data);
     load_all_proficiencies(data)
@@ -1068,7 +1224,8 @@ function load_character(_data) {
     load_equipped(data);
     load_languages(data);
     load_traits(data);
-    
+
+    load_spellcasting(data, classes_internal);
 
     load_update_directs(data);
     setup_direct_event_listeners();
