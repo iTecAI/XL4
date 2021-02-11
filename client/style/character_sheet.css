@@ -594,3 +594,42 @@ div.speed-block.output[data-style=internal-label] {
     width: fit-content;
     font-weight: bold;
 }
+
+.spell-level {
+    padding: 5px;
+    margin: 5px;
+    border: 2px solid var(--gradient6);
+    border-radius: 4px;
+    height: fit-content;
+    font-family: Roboto;
+}
+.spell-level .slots {
+    position: relative;
+    display: block;
+    width: 80%;
+    background-color: var(--gradient6);
+    height: 35px;
+    border-radius: 0 0 4px 4px;
+    margin-left: 10%;
+    margin-top: -5px;
+    font-weight: bold;
+}
+.spell-level .slots .slot-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+.spell-level .slots .slot-content input.slots-current {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    background-color: var(--gradient6);
+    font-weight: bold;
+    margin-top: 2px;
+    font-family: Roboto;
+    color: var(--gradient1);
+}
+.spell-level .slots .slot-content input.slots-current:focus {
+    background-color: var(--gradient7);
+}

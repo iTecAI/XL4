@@ -1196,6 +1196,11 @@ function load_caster_stats(data, classes_internal) {
 }
 function load_spellcasting(data, classes_internal) {
     load_caster_stats(data, classes_internal);
+    for (var l = 0; l < 9; l++) {
+        $('#spell-level-'+(l+1)+' .slots-current').val(data.spellcasting.main_casting.slots[l].current);
+        $('#spell-level-'+(l+1)+' .slots-max').text(data.spellcasting.main_casting.slots[l].max);
+    }
+
 }
 
 
