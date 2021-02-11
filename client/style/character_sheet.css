@@ -574,7 +574,7 @@ div.speed-block.output[data-style=internal-label] {
     width: 41%;
 }
 .casting-stats-item > .class-item.output:nth-child(2) {
-    width: 20%;
+    width: 22%;
 }
 .casting-stats-item > .class-item.output:nth-child(3) {
     width: 15%;
@@ -647,4 +647,20 @@ div.speed-block.output[data-style=internal-label] {
 }
 .spell-level .slots .slot-content input.pact-slots-current:focus {
     background-color: var(--gradient7);
+}
+
+.spell-level .spells {
+    margin-top: 5px;
+}
+.spell-item {
+    display: inline-block;
+    width: 33%;
+}
+.spell-item > input.spell-input.seamless-light {
+    display: inline-block;
+    width: calc(100% - 20px);
+    margin-left: 5px;
+}
+.spell-item > .proficiency-button {
+    margin-top: 10px;
 }

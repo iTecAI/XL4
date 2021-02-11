@@ -338,11 +338,11 @@ function manual_event_listeners() {
     });
 }
 
-function get_class(internals,_class,subclass) {
+function get_class(internals, _class, subclass) {
     if (subclass == undefined) {
         subclass = "§NUL";
     }
-    if ([null,0,'0','',[]].includes(subclass)) {
+    if ([null, 0, '0', '', []].includes(subclass)) {
         subclass = "§NUL";
     }
     for (var c = 0; c < internals.length; c++) {
@@ -1101,19 +1101,19 @@ function load_caster_stats(data, classes_internal) {
         var sp_atk = get_mod_from_score([
             data.abilities[sc_ability.toLowerCase()].score_base,
             data.abilities[sc_ability.toLowerCase()].score_manual_mod,
-            data.abilities[sc_ability.toLowerCase()].score_mod.reduce(function(p,c,i) {
-                return p+c;
-            },0)
-        ].reduce(function(p,c,i) {
-            return p+c;
-        },0))+[
+            data.abilities[sc_ability.toLowerCase()].score_mod.reduce(function (p, c, i) {
+                return p + c;
+            }, 0)
+        ].reduce(function (p, c, i) {
+            return p + c;
+        }, 0)) + [
             data.spellcasting.caster_classes[i].mods.attack.manual,
-            data.spellcasting.caster_classes[i].mods.attack.automatic.reduce(function(p,c,i) {
-                return p+c;
-            },0)
-        ].reduce(function(p,c,i) {
-            return p+c;
-        },0)+data.proficiency_bonus;
+            data.spellcasting.caster_classes[i].mods.attack.automatic.reduce(function (p, c, i) {
+                return p + c;
+            }, 0)
+        ].reduce(function (p, c, i) {
+            return p + c;
+        }, 0) + data.proficiency_bonus;
 
         dummy_cstat.append(
             $('<div class="casting-stats-item noselect"></div>')
@@ -1122,7 +1122,7 @@ function load_caster_stats(data, classes_internal) {
                         .append(
                             $('<span></span>').text(titleCase(data.spellcasting.caster_classes[i].class.class))
                         )
-                        .append(cond(data.spellcasting.caster_classes[i].class.subclass == null,'','<span> - </span>'))
+                        .append(cond(data.spellcasting.caster_classes[i].class.subclass == null, '', '<span> - </span>'))
                         .append(
                             $('<span></span>').text(titleCase(cond(data.spellcasting.caster_classes[i].class.subclass == null, '', data.spellcasting.caster_classes[i].class.subclass)))
                         )
@@ -1144,22 +1144,22 @@ function load_caster_stats(data, classes_internal) {
                 .append($('<div class="output class-item" data-style="internal-label"></div>')
                     .append($('<span class="op-content"></span>')
                         .append(
-                            $('<span></span>').text(8+get_mod_from_score([
+                            $('<span></span>').text(8 + get_mod_from_score([
                                 data.abilities[sc_ability.toLowerCase()].score_base,
                                 data.abilities[sc_ability.toLowerCase()].score_manual_mod,
-                                data.abilities[sc_ability.toLowerCase()].score_mod.reduce(function(p,c,i) {
-                                    return p+c;
-                                },0)
-                            ].reduce(function(p,c,i) {
-                                return p+c;
-                            },0))+[
+                                data.abilities[sc_ability.toLowerCase()].score_mod.reduce(function (p, c, i) {
+                                    return p + c;
+                                }, 0)
+                            ].reduce(function (p, c, i) {
+                                return p + c;
+                            }, 0)) + [
                                 data.spellcasting.caster_classes[i].mods.save.manual,
-                                data.spellcasting.caster_classes[i].mods.save.automatic.reduce(function(p,c,i) {
-                                    return p+c;
-                                },0)
-                            ].reduce(function(p,c,i) {
-                                return p+c;
-                            },0)+data.proficiency_bonus)
+                                data.spellcasting.caster_classes[i].mods.save.automatic.reduce(function (p, c, i) {
+                                    return p + c;
+                                }, 0)
+                            ].reduce(function (p, c, i) {
+                                return p + c;
+                            }, 0) + data.proficiency_bonus)
                         )
                     )
                     .append(
@@ -1169,7 +1169,7 @@ function load_caster_stats(data, classes_internal) {
                         $("<span class='edit-btn noselect'><i class='material-icons'>settings</i></span>")
                     )
                     .append(
-                        $("<span class='output-mod noselect'>MOD: <input class='seamless contained direct update' data-path='spellcasting.caster_classes."+i+".mods.save.manual'></span>").hide()
+                        $("<span class='output-mod noselect'>MOD: <input class='seamless contained direct update' data-path='spellcasting.caster_classes." + i + ".mods.save.manual'></span>").hide()
                     )
                 )
                 .append($('<div class="output class-item" data-style="internal-label"></div>')
@@ -1185,7 +1185,7 @@ function load_caster_stats(data, classes_internal) {
                         $("<span class='edit-btn noselect'><i class='material-icons'>settings</i></span>")
                     )
                     .append(
-                        $("<span class='output-mod noselect'>MOD: <input class='seamless contained direct update' data-path='spellcasting.caster_classes."+i+".mods.attack.manual'></span>").hide()
+                        $("<span class='output-mod noselect'>MOD: <input class='seamless contained direct update' data-path='spellcasting.caster_classes." + i + ".mods.attack.manual'></span>").hide()
                     )
                 )
         );
@@ -1201,31 +1201,91 @@ function load_spellcasting(data, classes_internal) {
     load_caster_stats(data, classes_internal);
     if (data.spellcasting.main_casting != null) {
         for (var l = 0; l < 9; l++) {
-            $('#spell-level-'+(l+1)+' .slots-current').val(data.spellcasting.main_casting.slots[l].current);
-            $('#spell-level-'+(l+1)+' .slots-max').text(data.spellcasting.main_casting.slots[l].max);
+            $('#spell-level-' + (l + 1) + ' .slots-current').val(data.spellcasting.main_casting.slots[l].current);
+            $('#spell-level-' + (l + 1) + ' .slots-max').text(data.spellcasting.main_casting.slots[l].max);
         }
     } else {
-        $('#spell-level-'+(l+1)+' .slots-current').val(0).attr('disabled',true);
-        $('#spell-level-'+(l+1)+' .slots-max').text(0);
+        $('#spell-level-' + (l + 1) + ' .slots-current').val(0).attr('disabled', true);
+        $('#spell-level-' + (l + 1) + ' .slots-max').text(0);
     }
-    
+
     if (data.spellcasting.pact_magic != null) {
         for (var l = 0; l < 5; l++) {
             if (data.spellcasting.pact_magic.slots[l].max == 0) {
-                $('#spell-level-'+(l+1)+' .pact-magic').remove();
+                $('#spell-level-' + (l + 1) + ' .pact-magic').remove();
             } else {
-                $('#spell-level-'+(l+1)+' .slots .slot-content').append(
+                $('#spell-level-' + (l + 1) + ' .slots .slot-content').append(
                     $('<span class="pact-magic"></span>')
-                    .append('<span> - </span>')
-                    .append($('<input class="seamless-light input contained direct pact-slots-current">').attr('data-path','spellcasting.pact-magic.slots.'+l+'.current').val(data.spellcasting.pact_magic.slots[l].current))
-                    .append(' / ')
-                    .append($('<span class="pact-slots-max"></span>').text(data.spellcasting.pact_magic.slots[l].max))
-                    .append(' Pact Slots')
+                        .append('<span> - </span>')
+                        .append($('<input class="seamless-light input contained direct pact-slots-current">').attr('data-path', 'spellcasting.pact-magic.slots.' + l + '.current').val(data.spellcasting.pact_magic.slots[l].current))
+                        .append(' / ')
+                        .append($('<span class="pact-slots-max"></span>').text(data.spellcasting.pact_magic.slots[l].max))
+                        .append(' Pact Slots')
                 )
             }
         }
     } else {
         $('.spell-level .pact-magic').remove();
+    }
+
+    for (var level = 0; level < data.spellcasting.spells.length; level++) {
+        var dummy_spell_list = $('<div class="spells"></div>');
+        for (var s = 0; s < data.spellcasting.spells[level].length; s++) {
+            dummy_spell_list.append(
+                $('<span class="spell-item"></span>')
+                    .append(
+                        $("<span class='proficiency-button' data-path='spellcasting.spells." + level + "." + s + ".prepared'><span></span></span>")
+                    )
+                    .append(
+                        $('<input class="seamless-light input contained update direct spell-input allowedEmpty">').attr('data-path', 'spellcasting.spells.' + level + '.' + s + '.name')
+                    )
+                    .on('dblclick', function (event) {
+                        if (spells.some(function (v, i, a) {
+                            return v.name.toLowerCase() == $(event.delegateTarget).children('.input').val().toLowerCase();
+                        })) {
+                            for (var item = 0; item < spells.length; item++) {
+                                if (spells[item].name.toLowerCase() == $(event.delegateTarget).children('.input').val().toLowerCase()) {
+                                    $('#panel-spellcasting .generated-item').remove();
+                                    $('#panel-spellcasting').append(
+                                        generate_spell(spells[item])
+                                            .css({
+                                                position: 'absolute',
+                                                top: ((event.pageY - $(event.delegateTarget).parents('.spell-level').parent().offset().top) + $(window).scrollTop() + 1.5 * $(event.delegateTarget).parents('.spell-level').height()) + 'px',
+                                                left: 'calc(100% + 10px)'
+                                            })
+                                            .append(
+                                                $('<i class="material-icons noselect">close</i>')
+                                                    .css({
+                                                        position: 'absolute',
+                                                        top: '5px',
+                                                        right: '5px'
+                                                    })
+                                                    .on('click', function (event) {
+                                                        $(this).parents('.generated-item').remove();
+                                                    })
+                                            )
+                                    );
+                                }
+                            }
+                        }
+                    })
+            )
+        }
+
+        dummy_spell_list.append($(
+            $('<span class="spell-item"></span>')
+                .append(
+                    $('<input class="seamless-light spell-input" placeholder="Add New Spell">').attr('data-level',level).on('change', function (event) {
+                        data.spellcasting.spells[$(this).attr('data-level')].push({name:$(this).val(),prepared:level==0});
+                        post('/character/' + sid + '/modify/', console.log, {}, {
+                            path: 'spellcasting.spells.'+$(this).attr('data-level'),
+                            value: data.spellcasting.spells[$(this).attr('data-level')]
+                        });
+                    })
+                )
+        ))
+
+        dummy_spell_list.replaceAll('#spell-level-' + level + ' .spells');
     }
 
 }
@@ -1378,7 +1438,7 @@ $(document).ready(function () {
             }
 
         }
-    }, {}, { cats: ['races', 'classes', 'weapons', 'equipment', 'armor', 'magicitems','spells'] });
+    }, {}, { cats: ['races', 'classes', 'weapons', 'equipment', 'armor', 'magicitems', 'spells'] });
     $('.output-mod').fadeOut(0);
     $(window).on('resize', update_blocks);
 });
