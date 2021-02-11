@@ -619,6 +619,7 @@ div.speed-block.output[data-style=internal-label] {
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
+    width: fit-content;
 }
 .spell-level .slots .slot-content input.slots-current {
     width: 20px;
@@ -631,5 +632,19 @@ div.speed-block.output[data-style=internal-label] {
     color: var(--gradient1);
 }
 .spell-level .slots .slot-content input.slots-current:focus {
+    background-color: var(--gradient7);
+}
+
+.spell-level .slots .slot-content input.pact-slots-current {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    background-color: var(--gradient6);
+    font-weight: bold;
+    margin-top: 2px;
+    font-family: Roboto;
+    color: var(--gradient1);
+}
+.spell-level .slots .slot-content input.pact-slots-current:focus {
     background-color: var(--gradient7);
 }

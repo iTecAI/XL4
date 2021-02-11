@@ -1195,10 +1195,37 @@ function load_caster_stats(data, classes_internal) {
     $(dummy_cstat).appendTo('#caster-stats');
 }
 function load_spellcasting(data, classes_internal) {
+    if (data.spellcasting.caster_classes.length == 0) {
+        return;
+    }
     load_caster_stats(data, classes_internal);
-    for (var l = 0; l < 9; l++) {
-        $('#spell-level-'+(l+1)+' .slots-current').val(data.spellcasting.main_casting.slots[l].current);
-        $('#spell-level-'+(l+1)+' .slots-max').text(data.spellcasting.main_casting.slots[l].max);
+    if (data.spellcasting.main_casting != null) {
+        for (var l = 0; l < 9; l++) {
+            $('#spell-level-'+(l+1)+' .slots-current').val(data.spellcasting.main_casting.slots[l].current);
+            $('#spell-level-'+(l+1)+' .slots-max').text(data.spellcasting.main_casting.slots[l].max);
+        }
+    } else {
+        $('#spell-level-'+(l+1)+' .slots-current').val(0).attr('disabled',true);
+        $('#spell-level-'+(l+1)+' .slots-max').text(0);
+    }
+    
+    if (data.spellcasting.pact_magic != null) {
+        for (var l = 0; l < 5; l++) {
+            if (data.spellcasting.pact_magic.slots[l].max == 0) {
+                $('#spell-level-'+(l+1)+' .pact-magic').remove();
+            } else {
+                $('#spell-level-'+(l+1)+' .slots .slot-content').append(
+                    $('<span class="pact-magic"></span>')
+                    .append('<span> - </span>')
+                    .append($('<input class="seamless-light input contained direct pact-slots-current">').attr('data-path','spellcasting.pact-magic.slots.'+l+'.current').val(data.spellcasting.pact_magic.slots[l].current))
+                    .append(' / ')
+                    .append($('<span class="pact-slots-max"></span>').text(data.spellcasting.pact_magic.slots[l].max))
+                    .append(' Pact Slots')
+                )
+            }
+        }
+    } else {
+        $('.spell-level .pact-magic').remove();
     }
 
 }
@@ -1241,7 +1268,7 @@ function load_character(_data) {
     load_update_directs(data);
     setup_direct_event_listeners();
     manual_event_listeners();
-    update_blocks();
+    update_blocks(data);
 }
 
 function pagelocal_update(data) {
@@ -1250,7 +1277,7 @@ function pagelocal_update(data) {
     }
 }
 
-function update_blocks() {
+function update_blocks(data) {
     if ($(window).width() >= 1300) {
         var columns = [
             [
@@ -1305,6 +1332,12 @@ function update_blocks() {
     for (var c = 0; c < columns.length; c++) {
         var start = 10;
         for (var p = 0; p < columns[c].length; p++) {
+            if (data.spellcasting.caster_classes.length == 0 && columns[c][p] == 'spellcasting') {
+                $('#panel-' + columns[c][p]).hide();
+                continue;
+            } else {
+                $('#panel-' + columns[c][p]).show();
+            }
             $('#panel-' + columns[c][p]).css({
                 position: 'absolute',
                 top: start + 'px',
