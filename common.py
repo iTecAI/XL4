@@ -67,6 +67,7 @@ class XLCharacter(Character):
                             'subclass': error(i,'subclass',None)
                         })
             self.class_info = new[:]
+        self.reprocess()
         
     def update(self):
         self._update = True

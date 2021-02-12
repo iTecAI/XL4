@@ -1318,18 +1318,18 @@ function load_inventory(data, manual) {
             if (data.inventory[tabs[t]].removable) {
                 new_tab.append(
                     $('<i class="material-icons delete-tab">delete_forever</i>')
-                    .on('click',function(event) {
-                        bootbox.confirm('Deleting containers cannot be reversed. Continue?', function(result) {
-                            if (result) {
-                                delete data.inventory[$(event.delegateTarget).parents('.inv-tab').attr('data-tab')];
-                                current_inventory.tab = 'main';
-                                post('/character/' + sid + '/modify/', console.log, {}, {
-                                    path: 'inventory',
-                                    value: data.inventory
-                                });
-                            }
-                        });
-                    })
+                        .on('click', function (event) {
+                            bootbox.confirm('Deleting containers cannot be reversed. Continue?', function (result) {
+                                if (result) {
+                                    delete data.inventory[$(event.delegateTarget).parents('.inv-tab').attr('data-tab')];
+                                    current_inventory.tab = 'main';
+                                    post('/character/' + sid + '/modify/', console.log, {}, {
+                                        path: 'inventory',
+                                        value: data.inventory
+                                    });
+                                }
+                            });
+                        })
                 )
             }
             dummy_tabs.append(new_tab);
@@ -1356,7 +1356,9 @@ function load_inventory(data, manual) {
                         'apply_weight': true,
                         'coin_weight': true,
                         'removable': true,
-                        'items': []
+                        'items': [],
+                        'current_weight': 0,
+                        'max_weight': 0
                     };
                     post('/character/' + sid + '/modify/', console.log, {}, {
                         path: 'inventory',
@@ -1379,6 +1381,31 @@ function load_inventory(data, manual) {
             value: $(this).hasClass('selected')
         });
     });
+
+    $('#current-weight').text(data.inventory[current_inventory.tab].current_weight).css(
+        'color',
+        cond(
+            data.inventory[current_inventory.tab].current_weight <= data.inventory[current_inventory.tab].max_weight || data.inventory[current_inventory.tab].max_weight == 0,
+            'black',
+            'red'
+        )
+    );
+    if (current_inventory.tab == 'main') {
+        $('#max-weight').text(data.inventory[current_inventory.tab].max_weight);
+        $('#weight-title').text('Inventory Weight: ');
+    } else {
+        $('#max-weight').html(
+            $('<input class="input seamless-light direct contained">')
+                .attr('data-path', 'inventory.' + current_inventory.tab + '.max_weight')
+                .val(data.inventory[current_inventory.tab].max_weight)
+        );
+        $('#weight-title').text('Weight: ');
+    }
+
+    var coins = ['cp','sp','ep','gp','pp'];
+    for (var c = 0; c < coins.length; c++) {
+        $('#coin-'+coins[c]+' input').attr('data-path','inventory.' + current_inventory.tab + '.coin.' + coins[c]).val(data.inventory[current_inventory.tab].coin[coins[c]]);
+    }
 }
 
 
