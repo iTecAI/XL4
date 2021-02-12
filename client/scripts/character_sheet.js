@@ -14,6 +14,8 @@ var armor = [];
 var magicitems = [];
 var spells = [];
 
+var all_items = {};
+
 function gp_convert(gp) {
     var pp = (gp - (gp % 10)) / 10;
     var _gp = ((gp % 10) - (gp % 1));
@@ -1459,19 +1461,32 @@ function load_inventory(data, manual) {
             .append(
                 $('<td class="item-name"></td>')
                     .append(
-                        $('<input class="seamless-light input" placeholder="New Item">')
+                        $('<input class="seamless-light input" placeholder="New Item" list="new-item-list">')
                             .on('change',function(event){
-                                data.inventory[current_inventory.tab].items.push({
-                                    quantity:1,
-                                    name:$(this).val(),
-                                    weight:0,
-                                    cost:'0 gp'
-                                });
+                                if (Object.keys(all_items).includes($(this).val())) {
+                                    data.inventory[current_inventory.tab].items.push({
+                                        quantity:1,
+                                        name:$(this).val(),
+                                        weight:cond(Object.keys(all_items[$(this).val()]).includes('weight'),all_items[$(this).val()].weight,0),
+                                        cost:cond(Object.keys(all_items[$(this).val()]).includes('cost'),gp_smartconvert(all_items[$(this).val()].cost),'0 gp')
+                                    });
+                                } else {
+                                    data.inventory[current_inventory.tab].items.push({
+                                        quantity:1,
+                                        name:$(this).val(),
+                                        weight:0,
+                                        cost:'0 gp'
+                                    });
+                                }
                                 post('/character/' + sid + '/modify/', console.log, {}, {
                                     path: 'inventory.'+current_inventory.tab+'.items',
                                     value: data.inventory[current_inventory.tab].items
                                 });
                             })
+                    )
+                    .append(
+                        $('<datalist id="new-item-list"></datalist>')
+                            .append(Object.keys(all_items).map(function(v,i,a) { return $('<option>').attr('value',v); }))
                     )
             )
             .append(
@@ -1627,12 +1642,15 @@ $(document).ready(function () {
                 attacks.push(data[i].data);
             } else if (data[i].endpoint == 'armor') {
                 armor.push(data[i].data);
+                all_items[data[i].data.name] = data[i].data;
             } else if (data[i].endpoint == 'magicitems') {
                 magicitems.push(data[i].data);
+                all_items[data[i].data.name] = data[i].data;
             } else if (data[i].endpoint == 'spells') {
                 spells.push(data[i].data);
             } else {
                 equipment.push(data[i].data);
+                all_items[data[i].data.name] = data[i].data;
             }
 
         }
