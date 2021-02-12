@@ -664,3 +664,101 @@ div.speed-block.output[data-style=internal-label] {
 .spell-item > .proficiency-button {
     margin-top: 10px;
 }
+
+/* Inventory */
+#inventory-tabs {
+    position: relative;
+    overflow-x: auto;
+    white-space: nowrap;
+    margin-top: -6px;
+    margin-left: 0px;
+    margin-bottom: 0px;
+    display: inline-block;
+    height: 40px;
+    width: 100%;
+    background-color: var(--primary-dark);
+    overflow-y: hidden;
+}
+.inv-tab {
+    display: inline-block;
+    background-color: var(--primary-dark);
+    color: var(--gradient8);
+    width: 33%;
+    height: 40px;
+    font-family: Roboto;
+    font-weight: bold;
+    box-sizing: border-box;
+    position: relative;
+    margin-top: 0px;
+    transition: background-color 0.2s;
+}
+.inv-tab:hover, .inv-tab.selected {
+    background-color: var(--primary-darker);
+}
+.inv-tab input.input.seamless {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: 90%;
+    transition: background-color 0.2s;
+    background-color: #00000000;
+    cursor: pointer;
+}
+.inv-tab input.input.seamless:focus {
+    background-color: var(--primary-dark);
+    cursor: text;
+}
+.inv-tab .delete-tab {
+    cursor: pointer;
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translate(0,-50%);
+    transition: color 0.2s;
+}
+.inv-tab .delete-tab:hover {
+    color: var(--gradient7);
+}
+
+.inv-tab-new {
+    display: inline-block;
+    background-color: var(--primary-dark);
+    color: var(--gradient8);
+    width: 30px;
+    height: 30px;
+    border-radius: 15px;
+    margin: 5px;
+    font-family: Roboto;
+    font-weight: bold;
+    box-sizing: border-box;
+    position: relative;
+    margin-top: 0px;
+    transition: background-color 0.2s;
+}
+.inv-tab-new:hover {
+    background-color: var(--primary-darker);
+}
+.inv-tab-new i {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+
+#inventory-settings {
+    background-color: var(--gradient7);
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    height: 50px;
+    margin-top: -6px;
+}
+#inventory-settings > div {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: inline-block;
+    width: fit-content;
+    transform: translate(-50%,-50%);
+}

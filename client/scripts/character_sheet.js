@@ -1,6 +1,10 @@
 var sid = null;
 var current_data = {};
 var current_dynamic_data = {};
+var current_inventory = {
+    tab: 'main',
+    scroll: 0
+};
 
 var races = [];
 var classes = [];
@@ -335,6 +339,11 @@ function manual_event_listeners() {
             path: 'skills.' + $(event.delegateTarget).parents('.skill-item').attr('data-skill') + '.advantage',
             value: val
         }, true);
+    });
+
+    $('.switch-item .switch').off('click').on('click', function (event) {
+        $(this).parents('.switch-item').toggleClass('selected');
+        $(this).parents('.switch-item').trigger('change');
     });
 }
 
@@ -1275,10 +1284,10 @@ function load_spellcasting(data, classes_internal) {
         dummy_spell_list.append($(
             $('<span class="spell-item"></span>')
                 .append(
-                    $('<input class="seamless-light spell-input" placeholder="Add New Spell">').attr('data-level',level).on('change', function (event) {
-                        data.spellcasting.spells[$(this).attr('data-level')].push({name:$(this).val(),prepared:level==0});
+                    $('<input class="seamless-light spell-input" placeholder="Add New Spell">').attr('data-level', level).on('change', function (event) {
+                        data.spellcasting.spells[$(this).attr('data-level')].push({ name: $(this).val(), prepared: level == 0 });
                         post('/character/' + sid + '/modify/', console.log, {}, {
-                            path: 'spellcasting.spells.'+$(this).attr('data-level'),
+                            path: 'spellcasting.spells.' + $(this).attr('data-level'),
                             value: data.spellcasting.spells[$(this).attr('data-level')]
                         });
                     })
@@ -1290,9 +1299,93 @@ function load_spellcasting(data, classes_internal) {
 
 }
 
+function load_inventory(data, manual) {
+    if (manual == undefined) {
+        var dummy_tabs = $('<div id="inventory-tabs" class="noselect noscroll"></div>');
+        var tabs = Object.keys(data.inventory);
+        for (var t = 0; t < tabs.length; t++) {
+            var new_tab = $('<div class="inv-tab"></div>').append(
+                $('<input class="seamless input contained direct">')
+                    .val(data.inventory[tabs[t]].display_name)
+                    .attr('data-path', 'inventory.' + tabs[t] + '.display_name')
+                    .on('click', function (event) {
+                        $('.inv-tab.selected').removeClass('selected');
+                        $(this).parents('.inv-tab').addClass('selected');
+                        current_inventory.tab = $(this).parents('.inv-tab').attr('data-tab');
+                        load_inventory(JSON.parse(localStorage.getItem('characterData')), true);
+                    })
+            ).attr('data-tab', tabs[t]);
+            if (data.inventory[tabs[t]].removable) {
+                new_tab.append(
+                    $('<i class="material-icons delete-tab">delete_forever</i>')
+                    .on('click',function(event) {
+                        bootbox.confirm('Deleting containers cannot be reversed. Continue?', function(result) {
+                            if (result) {
+                                delete data.inventory[$(event.delegateTarget).parents('.inv-tab').attr('data-tab')];
+                                current_inventory.tab = 'main';
+                                post('/character/' + sid + '/modify/', console.log, {}, {
+                                    path: 'inventory',
+                                    value: data.inventory
+                                });
+                            }
+                        });
+                    })
+                )
+            }
+            dummy_tabs.append(new_tab);
+        }
+        dummy_tabs.on('mousewheel', function (event, delta) {
+            this.scrollLeft -= delta * 30;
+            event.preventDefault();
+        });
+        dummy_tabs.children('.inv-tab').removeClass('selected');
+        dummy_tabs.children('.inv-tab[data-tab=' + current_inventory.tab + ']').addClass('selected');
+        dummy_tabs.append(
+            $('<div class="inv-tab-new"></div>')
+                .append('<i class="material-icons">add</i>')
+                .on('click', function (event) {
+                    data.inventory[generate_unique_key(10)] = {
+                        'display_name': 'New Container',
+                        'coin': {
+                            'cp': 0,
+                            'sp': 0,
+                            'ep': 0,
+                            'gp': 0,
+                            'pp': 0
+                        },
+                        'apply_weight': true,
+                        'coin_weight': true,
+                        'removable': true,
+                        'items': []
+                    };
+                    post('/character/' + sid + '/modify/', console.log, {}, {
+                        path: 'inventory',
+                        value: data.inventory
+                    });
+                })
+        );
+        $(dummy_tabs).replaceAll('#inventory-tabs');
+    }
+
+    $('#setting-apply-weight').toggleClass('selected', data.inventory[current_inventory.tab].apply_weight).off('change').on('change', function (event) {
+        post('/character/' + sid + '/modify/', console.log, {}, {
+            path: 'inventory.' + current_inventory.tab + '.apply_weight',
+            value: $(this).hasClass('selected')
+        });
+    });
+    $('#setting-coin-weight').toggleClass('selected', data.inventory[current_inventory.tab].coin_weight).off('change').on('change', function (event) {
+        post('/character/' + sid + '/modify/', console.log, {}, {
+            path: 'inventory.' + current_inventory.tab + '.coin_weight',
+            value: $(this).hasClass('selected')
+        });
+    });
+}
+
 
 function load_character(_data) {
     var data = _data.character;
+    window.localStorage.setItem('characterData', JSON.stringify(data));
+
     var dynamic = _data.dynamic;
     console.log(data);
     current_data = data;
@@ -1324,6 +1417,7 @@ function load_character(_data) {
     load_traits(data);
 
     load_spellcasting(data, classes_internal);
+    load_inventory(data);
 
     load_update_directs(data);
     setup_direct_event_listeners();

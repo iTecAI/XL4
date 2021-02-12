@@ -196,6 +196,13 @@ function parse_query_string() {
     return query_string;
 }
 
+function generate_unique_key(len) {
+    if (len) {
+        return sha256(String(Date.now())).slice(0,len);
+    }
+    return sha256(String(Date.now()));
+}
+
 $(document).ready(function () {
     $('#head-menu-btn').toggle(false);
     $('#settings-window').slideToggle(0, false);

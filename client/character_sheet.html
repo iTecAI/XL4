@@ -22,6 +22,8 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
         <script src="https://unpkg.com/showdown/dist/showdown.min.js"></script>
+        <script src='libs/jquery.mousewheel.min.js'></script>
+        <script src='libs/sha.js'></script>
 
         <!-- Local Files -->
         <script src="scripts/sensitive.js"></script> <!-- Must be added after clone. Contains non-open-source code for password derivation etc -->
@@ -462,7 +464,31 @@
                     <div class='panel' id='panel-inventory'>
                         <div class='title noselect'><span>Inventory</span></div>
                         <div class='content'>
-                            
+                            <div id='inventory-tabs' class="noselect noscroll">
+
+                            </div>
+                            <div id='inventory-settings' class='noselect'>
+                                <div>
+                                    <div class='switch-item' id='setting-apply-weight'>
+                                        <span class='switch'>
+                                            <span class='switch-toggle'></span>
+                                        </span>
+                                        <span class='switch-label'>Apply Weight</span>
+                                    </div>
+                                    <div class='switch-item' id='setting-coin-weight'>
+                                        <span class='switch'>
+                                            <span class='switch-toggle'></span>
+                                        </span>
+                                        <span class='switch-label'>Coin Weight</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id='inventory-coins'>
+                                
+                            </div>
+                            <div id='inventory-items'>
+                                
+                            </div>
                         </div>
                     </div>
                     <div class='panel' id='panel-background'>
