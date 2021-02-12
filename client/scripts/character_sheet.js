@@ -345,6 +345,10 @@ function manual_event_listeners() {
         $(this).parents('.switch-item').toggleClass('selected');
         $(this).parents('.switch-item').trigger('change');
     });
+
+    $('#item-box tbody').off('mousewheel').on('mousewheel',function() {
+        current_inventory.scroll = $(this).scrollTop();
+    });
 }
 
 function get_class(internals, _class, subclass) {
@@ -1402,10 +1406,83 @@ function load_inventory(data, manual) {
         $('#weight-title').text('Weight: ');
     }
 
-    var coins = ['cp','sp','ep','gp','pp'];
+    var coins = ['cp', 'sp', 'ep', 'gp', 'pp'];
     for (var c = 0; c < coins.length; c++) {
-        $('#coin-'+coins[c]+' input').attr('data-path','inventory.' + current_inventory.tab + '.coin.' + coins[c]).val(data.inventory[current_inventory.tab].coin[coins[c]]);
+        $('#coin-' + coins[c] + ' input').attr('data-path', 'inventory.' + current_inventory.tab + '.coin.' + coins[c]).val(data.inventory[current_inventory.tab].coin[coins[c]]);
     }
+
+    var itemBox = $('<tbody class="noscroll"></tbody>');
+    var items = data.inventory[current_inventory.tab].items;
+    for (var i = 0; i < items.length; i++) {
+        itemBox.append(
+            $('<tr></tr>')
+                .attr('data-index', i)
+                .append(
+                    $('<td class="item-qt"></td>')
+                        .append(
+                            $('<input class="seamless-light input direct contained" data-type="number" data-min="0">')
+                                .attr('data-path', 'inventory.' + current_inventory.tab + '.items.' + i + '.quantity')
+                                .val(data.inventory[current_inventory.tab].items[i].quantity)
+                        )
+                )
+                .append(
+                    $('<td class="item-name"></td>')
+                        .append(
+                            $('<input class="seamless-light input direct contained allowedEmpty">')
+                                .attr('data-path', 'inventory.' + current_inventory.tab + '.items.' + i + '.name')
+                                .val(data.inventory[current_inventory.tab].items[i].name)
+                        )
+                )
+                .append(
+                    $('<td class="item-cost"></td>')
+                        .append(
+                            $('<input class="seamless-light input direct contained allowedEmpty">')
+                                .attr('data-path', 'inventory.' + current_inventory.tab + '.items.' + i + '.cost')
+                                .val(data.inventory[current_inventory.tab].items[i].cost)
+                        )
+                )
+                .append(
+                    $('<td class="item-weight"></td>')
+                        .append(
+                            $('<input class="seamless-light input direct contained allowedEmpty" data-type="number" data-min="0">')
+                                .attr('data-path', 'inventory.' + current_inventory.tab + '.items.' + i + '.weight')
+                                .val(data.inventory[current_inventory.tab].items[i].weight)
+                        )
+                )
+        )
+    }
+    itemBox.append(
+        $('<tr id="new-inv-item"></tr>')
+            .append(
+                $('<td class="item-qt"></td>')
+            )
+            .append(
+                $('<td class="item-name"></td>')
+                    .append(
+                        $('<input class="seamless-light input" placeholder="New Item">')
+                            .on('change',function(event){
+                                data.inventory[current_inventory.tab].items.push({
+                                    quantity:1,
+                                    name:$(this).val(),
+                                    weight:0,
+                                    cost:'0 gp'
+                                });
+                                post('/character/' + sid + '/modify/', console.log, {}, {
+                                    path: 'inventory.'+current_inventory.tab+'.items',
+                                    value: data.inventory[current_inventory.tab].items
+                                });
+                            })
+                    )
+            )
+            .append(
+                $('<td class="item-cost"></td>')
+            )
+            .append(
+                $('<td class="item-weight"></td>')
+            )
+    )
+    $(itemBox).replaceAll('#item-box tbody');
+    $('#item-box tbody').scrollTop(current_inventory.scroll);
 }
 
 

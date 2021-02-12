@@ -848,3 +848,66 @@ div.speed-block.output[data-style=internal-label] {
     width: 95%;
     transform: translate(-50%,-50%);
 }
+
+#inventory-items {
+    margin-top: 10px;
+    width: 98%;
+    padding: 0px;
+}
+#item-box tbody {
+    display: inline-block;
+    max-height: 70vh;
+    width: 100%;
+    overflow-y: auto;
+    height: fit-content;
+}
+#item-box tbody tr:nth-child(even) {
+    background-color: var(--gradient7);
+}
+#item-box tbody tr:nth-child(even) input.seamless-light.input {
+    background-color: var(--gradient7);
+}
+#item-box tbody tr:nth-child(even) input.seamless-light.input:focus {
+    background-color: var(--gradient6);
+}
+#item-box thead, #item-box tr {
+    display: inline-block;
+    width: 100%;
+    height: fit-content;
+}
+#item-box thead {
+    background-color: var(--gradient6);
+}
+#item-box table {
+    display: inline-block;
+    width: 100%;
+    height: fit-content;
+}
+#inventory-items th.item-qt, #inventory-items td.item-qt {
+    width: 10%;
+    text-align: center;
+    display: inline-block;
+    margin: 0px;
+    box-sizing: border-box;
+}
+#inventory-items th.item-name, #inventory-items td.item-name {
+    width: 60%;
+    text-align: center;
+    display: inline-block;
+    margin: 0px;
+    box-sizing: border-box;
+}
+#inventory-items th.item-cost, #inventory-items td.item-cost {
+    width: 14%;
+    text-align: center;
+    display: inline-block;
+    margin: 0px;
+    box-sizing: border-box;
+}
+#inventory-items th.item-weight, #inventory-items td.item-weight {
+    width: 14%;
+    text-align: center;
+    display: inline-block;
+    margin: 0px;
+    box-sizing: border-box;
+}
