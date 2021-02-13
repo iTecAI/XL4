@@ -911,3 +911,16 @@ div.speed-block.output[data-style=internal-label] {
     margin: 0px;
     box-sizing: border-box;
 }
+
+/* Character Appearance Info */
+#char-img img {
+    position: relative;
+    margin: 0px;
+    display: inline-block;
+    width: 100%;
+    height: auto;
+}
+#char-img {
+    padding: 0px;
+    overflow: hidden;
+}
