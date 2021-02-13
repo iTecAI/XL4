@@ -517,7 +517,7 @@
                             <div id='inventory-items' class='output' data-outline="yes">
                                 <div id='item-box'>
                                     <table>
-                                        <thead>
+                                        <thead class='noselect'>
                                             <tr>
                                                 <th class='item-qt'>#</th><th class='item-name'>ITEM</th><th class='item-cost'>COST</th><th class='item-weight'>WEIGHT</th>
                                             </tr>
@@ -534,7 +534,49 @@
                     <div class='panel' id='panel-background'>
                         <div class='title noselect'><span>Background</span></div>
                         <div class='content'>
-                            
+                            <div class='input direct update' data-path='background.background' data-style='sub-name'>
+                                <input spellcheck="false" class='input' list='backgrounds'>
+                                <span class='label noselect'>Background</span>
+                                <datalist id='backgrounds'>
+                                    <option value="Acolyte"></option>
+                                    <option value="Charlatan"></option>
+                                    <option value="Criminal"></option>
+                                    <option value="Entertainer"></option>
+                                    <option value="Folk Hero"></option>
+                                    <option value="Guild Artisan"></option>
+                                    <option value="Hermit"></option>
+                                    <option value="Noble"></option>
+                                    <option value="Outlander"></option>
+                                    <option value="Sage"></option>
+                                    <option value="Sailor"></option>
+                                    <option value="Soldier"></option>
+                                    <option value="Urchin"></option>
+                                </datalist>
+                            </div>
+                            <div class='input direct update allowedEmpty' data-path='background.personality_traits' data-style='sub-name'>
+                                <textarea spellcheck="false" class='input' style='resize: none;'></textarea>
+                                <span class='label noselect'>Personality Traits</span>
+                            </div>
+                            <div class='input direct update allowedEmpty' data-path='background.ideals' data-style='sub-name'>
+                                <textarea spellcheck="false" class='input' style='resize: none;'></textarea>
+                                <span class='label noselect'>Ideals</span>
+                            </div>
+                            <div class='input direct update allowedEmpty' data-path='background.bonds' data-style='sub-name'>
+                                <textarea spellcheck="false" class='input' style='resize: none;'></textarea>
+                                <span class='label noselect'>Bonds</span>
+                            </div>
+                            <div class='input direct update allowedEmpty' data-path='background.flaws' data-style='sub-name'>
+                                <textarea spellcheck="false" class='input' style='resize: none;'></textarea>
+                                <span class='label noselect'>Flaws</span>
+                            </div>
+                            <div class='input direct update allowedEmpty' data-path='background.allies_and_organizations' data-style='sub-name'>
+                                <textarea spellcheck="false" class='input' style='resize: none;'></textarea>
+                                <span class='label noselect'>Allies / Organizations</span>
+                            </div>
+                            <div class='input direct update allowedEmpty' data-path='background.backstory' data-style='sub-name'>
+                                <textarea spellcheck="false" class='input' style='resize: none; height: 300px'></textarea>
+                                <span class='label noselect'>Backstory</span>
+                            </div>
                         </div>
                     </div>
                     <div class='panel' id='panel-appearance'>

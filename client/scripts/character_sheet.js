@@ -1519,8 +1519,6 @@ function load_character(_data) {
     $('title').text(data.name);
     $('#panel-definition .title span').text(data.name);
 
-    console.log(classes_internal);
-
     load_races_classes(data, races_internal, classes_internal);
     load_levelxp(data);
     load_hd_ac_init(data, dynamic)
@@ -1556,8 +1554,7 @@ function update_blocks(data) {
             [
                 'definition',
                 'proficiencies',
-                'spellcasting',
-                'appearance'
+                'spellcasting'
             ],
             [
                 'defense',
@@ -1571,7 +1568,8 @@ function update_blocks(data) {
                 'scores-saves',
                 'attacks',
                 'traits',
-                'background'
+                'background',
+                'appearance'
             ]
         ];
         var step = 0.33;
@@ -1657,4 +1655,5 @@ $(document).ready(function () {
     }, {}, { cats: ['races', 'classes', 'weapons', 'equipment', 'armor', 'magicitems', 'spells'] });
     $('.output-mod').fadeOut(0);
     $(window).on('resize', update_blocks);
+    $('textarea').on('resize', update_blocks);
 });

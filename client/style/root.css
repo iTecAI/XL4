@@ -41,7 +41,7 @@
     scrollbar-width: none;
 }
 
-button:focus, input:focus, select:focus {
+button:focus, input:focus, select:focus, textarea:focus {
     outline: none;
 }
 
