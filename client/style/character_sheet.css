@@ -924,3 +924,269 @@ div.speed-block.output[data-style=internal-label] {
     padding: 0px;
     overflow: hidden;
 }
+
+/* Homebrew */
+#homebrew-tabs {
+    position: relative;
+    margin-top: -6px;
+    display: inline-block;
+    width: 100%;
+    height: 45px;
+}
+#homebrew-tabs .tab {
+    position: relative;
+    display: inline-block;
+    height: 100%;
+    width: 25%;
+    background-color: var(--primary-dark);
+    transition: background-color 0.2s;
+    color: white;
+    font-family: Roboto;
+    font-weight: bold;
+    margin: 0px;
+}
+#homebrew-tabs .tab:hover, #homebrew-tabs .tab.selected {
+    background-color: var(--primary-darker);
+}
+#homebrew-tabs .tab span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+
+#homebrews {
+    overflow-y: auto;
+    height: fit-content;
+    max-height: 480px;
+}
+#homebrew-box.output[data-outline=yes] {
+    padding: 0px;
+    width: 98%;
+}
+#homebrews .homebrew-item .homebrew-name {
+    display: inline-block;
+    width: calc(100% - 90px);
+    position: absolute;
+    top: 50%;
+    left: 5px;
+    transform: translate(0,-50%);
+}
+#homebrews .homebrew-item {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    height: 40px;
+    padding: 5px;
+    margin: 0px;
+    margin-bottom: -6px;
+}
+#homebrews .homebrew-item:nth-child(even) {
+    background-color: var(--gradient7);
+}
+#homebrews .homebrew-item:nth-child(even) button {
+    background-color: var(--gradient6);
+}
+#homebrews .homebrew-item button {
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+    border: none;
+    border-radius: 15px;
+    margin-left: 5px;
+    background-color: var(--gradient7);
+    position: absolute;
+    top: 50%;
+    transform: translate(0,-50%);
+    transition: background-color 0.2s;
+}
+#homebrews .homebrew-item button:hover {
+    background-color: var(--gradient5);
+}
+#homebrews .homebrew-item button i {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    font-size: 24px;
+}
+#homebrews .homebrew-item button.edit-homebrew-button {
+    right: 45px;
+}
+#homebrews .homebrew-item button.delete-homebrew-button {
+    right: 5px;
+}
+
+#new-homebrew {
+    display: inline-block;
+    margin: 5px;
+    border-radius: 20px;
+    margin-left: 25%;
+    width: 50%;
+    height: 40px;
+    border: none;
+    background-color: var(--gradient7);
+    font-family: Roboto;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+#new-homebrew:hover {
+    background-color: var(--gradient6);
+}
+
+/* Homebrew Dialogs */
+#hb-modal {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    display: inline-block;
+    width: 100vw;
+    height: 100vh;
+    background-color: #00000088;
+    z-index: 101;
+}
+
+@media (min-width: 1000px) {
+    .homebrew-dialog {
+        z-index: 102;
+        position: absolute;
+        display: inline-block;
+        top: 10vh;
+        width: 40vw;
+        height: fit-content;
+        max-height: 80vh;
+        left: 30vw;
+        background-color: var(--primary-dark);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+}
+@media (max-width: 999px) {
+    .homebrew-dialog {
+        z-index: 102;
+        position: absolute;
+        display: inline-block;
+        top: 10vh;
+        width: 80vw;
+        height: fit-content;
+        max-height: 80vh;
+        left: 10vw;
+        background-color: var(--primary-dark);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+}
+
+.homebrew-dialog .hb-inputs {
+    position: relative;
+    display: inline-block;
+    overflow: scroll;
+    height: fit-content;
+    max-height: calc(80vh - 45px);
+    width: 100%;
+}
+
+.homebrew-dialog .title {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    height: 45px;
+    background-color: var(--primary-darker);
+    margin-bottom: -7px;
+}
+.homebrew-dialog .title span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    font-family: Roboto;
+    font-weight: bold;
+    font-size: 30px;
+    color: white;
+}
+
+.homebrew-dialog .hb-input {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    height: fit-content;
+}
+.homebrew-dialog .hb-input .input-title {
+    background-color: var(--primary-darker);
+    color: white;
+    font-family: Roboto;
+    font-weight: bold;
+    font-size: 16px;
+    text-align: center;
+    display: inline-block;
+    width: 30%;
+    height: fit-content;
+    padding: 15px;
+}
+.homebrew-dialog .hb-input .input-val {
+    display: inline-block;
+    width: 70%;
+    margin: 0px;
+    position: relative;
+    margin-left: -6px;
+    padding: 5px;
+}
+.homebrew-dialog .hb-input .input-val input {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: var(--primary-dark);
+    transition: background-color 0.2s;
+    color: white;
+    font-family: Roboto;
+    padding: 5px;
+    border: none;
+    border-radius: 5px;
+}
+.homebrew-dialog .hb-input .input-val input:focus, .homebrew-dialog .hb-input .input-val input:hover {
+    background-color: var(--primary-darker);
+}
+.homebrew-dialog .hb-input .input-val button {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: var(--primary-darker);
+    transition: background-color 0.2s, color 0.2s;
+    color: white;
+    font-family: Roboto;
+    padding: 5px;
+    border: none;
+    border-radius: 5px;
+}
+.homebrew-dialog .hb-input .input-val button:hover {
+    background-color: var(--primary-darker2);
+}
+.homebrew-dialog .hb-input .input-val button.toggled {
+    background-color: var(--secondary);
+    color: var(--secondary-text);
+}
+.homebrew-dialog .hb-input .input-val button.toggled:hover {
+    background-color: var(--secondary-dark);
+    color: white;
+}
+
+.homebrew-finish {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    width: 20%;
+    height: 45px;
+    background-color: var(--secondary);
+    color: var(--secondary-text);
+    font-family: Roboto;
+    font-weight: bold;
+    font-size: 20px;
+    border: none;
+    transition: background-color 0.2s, color 0.2s;
+}
+.homebrew-finish:hover {
+    background-color: var(--secondary-dark);
+    color: white;
+}

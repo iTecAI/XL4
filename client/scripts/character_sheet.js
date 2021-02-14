@@ -6,6 +6,13 @@ var current_inventory = {
     scroll: 0
 };
 
+var custom_display_map = {
+    attack: "Attacks",
+    gear: "Gear",
+    race: "Races",
+    class: "Classes"
+};
+
 var races = [];
 var classes = [];
 var attacks = [];
@@ -15,6 +22,62 @@ var magicitems = [];
 var spells = [];
 
 var all_items = {};
+
+var default_homebrews = {
+    'attack': {
+        ability_override: null,
+        apply_mod: 1,
+        bonus_damage: null,
+        bonus_type: null,
+        damage: "0",
+        enchant_bonus: null,
+        monk_weapon: 0,
+        name: "New Attack",
+        proficiency_category: "Simple",
+        properties: null,
+        range_class: "Melee",
+        type: "bludgeoning"
+    },
+    'gear': {
+        ac_bonus: 0,
+        category: "Clothes",
+        enchantment_bonus: null,
+        max_dex: null,
+        name: "New Gear",
+        proficiency_bonus: null,
+        properties: null,
+        required_str: null,
+        saves_bonus: null,
+        skills_bonus: null,
+        stealth_mod: null
+    },
+    'race': {
+        ability_score_increase: '',
+        armor_class: null,
+        attacks: null,
+        bonus_hp: null,
+        bonus_weapon_armor_profs: null,
+        features_profs: null,
+        languages: "Common",
+        race_name: "New Race",
+        resist_vuln_immune: null,
+        speed: 30
+    },
+    'class': {
+        additional_proficiencies: null,
+        armor_class: null,
+        bonus_hp_per_level: null,
+        class_name: "New Class",
+        first_level_proficiencies: null,
+        hit_die: null,
+        init: null,
+        saves_skills: null,
+        speed_increase: null,
+        spellcasting_ability: null,
+        spellcasting_type: null,
+        subclass: "Subclass Name"
+    }
+};
 
 function gp_convert(gp) {
     var pp = (gp - (gp % 10)) / 10;
@@ -351,7 +414,7 @@ function manual_event_listeners() {
         $(this).parents('.switch-item').trigger('change');
     });
 
-    $('#item-box tbody').off('mousewheel').on('mousewheel',function() {
+    $('#item-box tbody').off('mousewheel').on('mousewheel', function () {
         current_inventory.scroll = $(this).scrollTop();
     });
 }
@@ -1465,31 +1528,31 @@ function load_inventory(data, manual) {
                 $('<td class="item-name"></td>')
                     .append(
                         $('<input class="seamless-light input" placeholder="New Item" list="new-item-list">')
-                            .on('change',function(event){
+                            .on('change', function (event) {
                                 if (Object.keys(all_items).includes($(this).val())) {
                                     data.inventory[current_inventory.tab].items.push({
-                                        quantity:1,
-                                        name:$(this).val(),
-                                        weight:cond(Object.keys(all_items[$(this).val()]).includes('weight'),all_items[$(this).val()].weight,0),
-                                        cost:cond(Object.keys(all_items[$(this).val()]).includes('cost'),gp_smartconvert(all_items[$(this).val()].cost),'0 gp')
+                                        quantity: 1,
+                                        name: $(this).val(),
+                                        weight: cond(Object.keys(all_items[$(this).val()]).includes('weight'), all_items[$(this).val()].weight, 0),
+                                        cost: cond(Object.keys(all_items[$(this).val()]).includes('cost'), gp_smartconvert(all_items[$(this).val()].cost), '0 gp')
                                     });
                                 } else {
                                     data.inventory[current_inventory.tab].items.push({
-                                        quantity:1,
-                                        name:$(this).val(),
-                                        weight:0,
-                                        cost:'0 gp'
+                                        quantity: 1,
+                                        name: $(this).val(),
+                                        weight: 0,
+                                        cost: '0 gp'
                                     });
                                 }
                                 post('/character/' + sid + '/modify/', console.log, {}, {
-                                    path: 'inventory.'+current_inventory.tab+'.items',
+                                    path: 'inventory.' + current_inventory.tab + '.items',
                                     value: data.inventory[current_inventory.tab].items
                                 });
                             })
                     )
                     .append(
                         $('<datalist id="new-item-list"></datalist>')
-                            .append(Object.keys(all_items).map(function(v,i,a) { return $('<option>').attr('value',v); }))
+                            .append(Object.keys(all_items).map(function (v, i, a) { return $('<option>').attr('value', v); }))
                     )
             )
             .append(
@@ -1505,10 +1568,110 @@ function load_inventory(data, manual) {
 
 function load_appearance(data) {
     if (data.appearance.image == null) {
-        $('#char-img img').attr('src','assets/logo_large.png');
+        $('#char-img img').attr('src', 'assets/logo_large.png');
     } else {
-        $('#char-img img').attr('src',data.appearance.image);
+        $('#char-img img').attr('src', data.appearance.image);
     }
+}
+
+function load_homebrew(data) {
+    $('#homebrew-tabs .tab').removeClass('selected');
+    $('#homebrew-tabs .tab[data-tab=' + $('#homebrew-tabs').attr('data-current') + ']').addClass('selected');
+    $('#homebrew-tabs .tab').off('click').on('click', function (event) {
+        $('#homebrew-tabs').attr('data-current', $(this).attr('data-tab'));
+        load_homebrew(JSON.parse(localStorage.getItem('characterData')));
+    });
+    $('#homebrew-box .main-label').text('Custom ' + custom_display_map[$('#homebrew-tabs').attr('data-current')]);
+
+    var current = $('#homebrew-tabs').attr('data-current');
+    if (current == 'attack' || current == 'gear') {
+        var name_prefix = '';
+    } else if (current == 'race' || current == 'class') {
+        var name_prefix = current + '_';
+    }
+
+    $('<div id="homebrews"></div>').append(data[current + '_info'].map(function (v, i, a) {
+        return $('<div class="homebrew-item"></div>')
+            .attr('data-index', i)
+            .attr('data-current-tab', current + '_info')
+            .attr('data-current', current)
+            .append(
+                $('<span class="homebrew-name"></span>').text(cond(current == 'class', v['subclass'] + ' ' + v[name_prefix + 'name'], v[name_prefix + 'name']))
+            )
+            .append(
+                $('<button class="edit-homebrew-button"><i class="material-icons">create</i></button>')
+                    .on('click', function (event) {
+                        var hb_data = data[$(this).parents('.homebrew-item').attr('data-current-tab')][$(this).parents('.homebrew-item').attr('data-index')];
+                        var cid = '#custom-' + $(this).parents('.homebrew-item').attr('data-current') + '-dialog';
+                        Object.keys(hb_data).forEach(function (v, i, a) {
+                            $(cid + ' .hb-inputs .hb-input[data-key=' + v + '] input').val(hb_data[v]);
+                            $(cid + ' .hb-inputs .hb-input[data-key=' + v + '] button').toggleClass('toggled', hb_data[v] == 1);
+                        });
+                        $(cid).attr('data-current', $(this).parents('.homebrew-item').attr('data-current')).attr('data-index', $(this).parents('.homebrew-item').attr('data-index'));
+                        $(cid).show();
+                        $('#hb-modal').show();
+                    })
+            )
+            .append(
+                $('<button class="delete-homebrew-button"><i class="material-icons">delete</i></button>')
+                    .on('click', function (event) {
+                        data[$(this).parents('.homebrew-item').attr('data-current-tab')].splice($(this).parents('.homebrew-item').attr('data-index'), 1);
+                        post('/character/' + sid + '/modify/', console.log, {}, {
+                            path: $(this).parents('.homebrew-item').attr('data-current-tab'),
+                            value: data[$(this).parents('.homebrew-item').attr('data-current-tab')]
+                        });
+                    })
+            )
+    })).append(
+        $('<button id="new-homebrew"></button>')
+            .text('Add New')
+            .on('click', function (event) {
+                var hb_data = default_homebrews[$('#homebrew-tabs').attr('data-current')];
+                var cid = '#custom-' + $('#homebrew-tabs').attr('data-current') + '-dialog';
+                Object.keys(hb_data).forEach(function (v, i, a) {
+                    $(cid + ' .hb-inputs .hb-input[data-key=' + v + '] input').val(hb_data[v]);
+                    console.log(v, hb_data[v] == 1, hb_data[v]);
+                    $(cid + ' .hb-inputs .hb-input[data-key=' + v + '] button').toggleClass('toggled', hb_data[v] == 1);
+                });
+                $(cid).attr('data-current', $('#homebrew-tabs').attr('data-current')).attr('data-index', 'new');
+                $(cid).show();
+                $('#hb-modal').show();
+            })
+    ).replaceAll('#homebrews');
+
+    $('.homebrew-finish').off('click').on('click', function (event) {
+        var items = $(this).parents('.homebrew-dialog').children('.hb-inputs').children('.hb-input').map(function (i, e) {
+            if ($(e).children('.input-val').children('button').length == 1) {
+                var v = $(e).children('.input-val').children('button').hasClass('toggled');
+            } else {
+                var v = $(e).children('.input-val').children('input').val();
+                if (v == '-' || v == '' || v == null) {
+                    v = null;
+                }
+            }
+            return {name:$(e).attr('data-key'), value:v};
+        });
+
+        var outputObj = {};
+        for (var i = 0; i < items.length; i++) {
+            outputObj[items[i].name] = items[i].value;
+        }
+
+        if ($(this).parents('.homebrew-dialog').attr('data-index') == 'new') {
+            data[$(this).parents('.homebrew-dialog').attr('data-current') + '_info'].push(outputObj);
+        } else {
+            data[$(this).parents('.homebrew-dialog').attr('data-current') + '_info'][Number($(this).parents('.homebrew-dialog').attr('data-index'))] = outputObj;
+        }
+        post('/character/' + sid + '/modify/', console.log, {}, {
+            path: $(this).parents('.homebrew-dialog').attr('data-current') + '_info',
+            value: data[$(this).parents('.homebrew-dialog').attr('data-current') + '_info']
+        });
+        $(this).parents('.homebrew-dialog').hide();
+        $('#hb-modal').hide();
+    });
+
+    $('.homebrew-dialog .hb-input button').off('click').on('click', function () { $(this).toggleClass('toggled') });
+
 }
 
 function load_character(_data) {
@@ -1546,6 +1709,7 @@ function load_character(_data) {
     load_spellcasting(data, classes_internal);
     load_inventory(data);
     load_appearance(data);
+    load_homebrew(data);
 
     load_update_directs(data);
     setup_direct_event_listeners();
@@ -1632,6 +1796,8 @@ function update_blocks(data) {
 }
 
 $(document).ready(function () {
+    $('.homebrew-dialog').hide();
+    $('#hb-modal').hide();
     var params = parse_query_string();
     if (params.sheet == undefined) {
         window.location = '/characters';
@@ -1665,6 +1831,6 @@ $(document).ready(function () {
         }
     }, {}, { cats: ['races', 'classes', 'weapons', 'equipment', 'armor', 'magicitems', 'spells'] });
     $('.output-mod').fadeOut(0);
-    $(window).on('resize', update_blocks);
-    $('textarea').on('resize', update_blocks);
+    $(window).on('resize', function () { update_blocks(JSON.parse(localStorage.getItem('characterData'))) });
+    $('textarea').on('resize', function () { update_blocks(JSON.parse(localStorage.getItem('characterData'))) });
 });

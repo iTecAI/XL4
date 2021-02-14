@@ -616,9 +616,26 @@
                         </div>
                     </div>
                     <div class='panel' id='panel-custom-info'>
-                        <div class='title noselect'><span>Custom Information</span></div>
+                        <div class='title noselect'><span>Homebrew</span></div>
                         <div class='content'>
-                            
+                            <div id='homebrew-tabs' class='noselect' data-current='attack'>
+                                <div class='tab' data-tab='attack'>
+                                    <span>Attacks</span>
+                                </div><div class='tab' data-tab='gear'>
+                                    <span>Gear</span>
+                                </div><div class='tab' data-tab='race'>
+                                    <span>Races</span>
+                                </div><div class='tab' data-tab='class'>
+                                    <span>Classes</span>
+                                </div>
+                            </div>
+
+                            <div id='homebrew-box' class='output' data-outline='yes'>
+                                <div id='homebrews'>
+
+                                </div>
+                                <span class="main-label noselect">Custom Attacks</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -627,5 +644,259 @@
         <div id='noconn' class='noselect small-box-shadow'>
             Cannot connect to server. Most features will be non-functional.
         </div>
+        <div class="homebrew-dialog noselect" id='custom-attack-dialog'>
+            <div class="title"><span>Custom Attack</span></div>
+            <div class="hb-inputs noscroll">
+                <div class='hb-input' data-key="name">
+                    <div class="input-title"><span>Attack/Weapon Name</span></div>
+                    <div class="input-val"><input></div>
+                </div>
+                <div class='hb-input' data-key="damage">
+                    <div class="input-title"><span>Damage Die</span></div>
+                    <div class="input-val"><input></div>
+                </div>
+                <div class='hb-input' data-key="type">
+                    <div class="input-title"><span>Damage Type</span></div>
+                    <div class="input-val"><input list='hb-damage-types'></div>
+                    <datalist id='hb-damage-types'>
+                        <option value="acid"></option>
+                        <option value="bludgeoning"></option>
+                        <option value="cold"></option>
+                        <option value="fire"></option>
+                        <option value="force"></option>
+                        <option value="lightning"></option>
+                        <option value="necrotic"></option>
+                        <option value="piercing"></option>
+                        <option value="poison"></option>
+                        <option value="psychic"></option>
+                        <option value="radiant"></option>
+                        <option value="slashing"></option>
+                        <option value="thunder"></option>
+                    </datalist>
+                </div>
+                <div class='hb-input' data-key="proficiency_category">
+                    <div class="input-title"><span>Proficiency Category</span></div>
+                    <div class="input-val"><input list='hb-prof-cat'></div>
+                    <datalist id='hb-prof-cat'>
+                        <option value="Unarmed"></option>
+                        <option value="Natural"></option>
+                        <option value="Improvised"></option>
+                        <option value="Simple"></option>
+                        <option value="Martial"></option>
+                    </datalist>
+                </div>
+                <div class='hb-input' data-key="range_class">
+                    <div class="input-title"><span>Range Classification</span></div>
+                    <div class="input-val"><input list='hb-range-class'></div>
+                    <datalist id='hb-range-class'>
+                        <option value="Melee"></option>
+                        <option value="Ranged"></option>
+                        <option value="Melee or Ranged"></option>
+                    </datalist>
+                </div>
+                <div class='hb-input' data-key="monk_weapon">
+                    <div class="input-title"><span>Monk Weapon</span></div>
+                    <div class="input-val"><button>Toggle</button></div>
+                </div>
+                <div class='hb-input' data-key="enchant_bonus">
+                    <div class="input-title"><span>Enchantment Bonus</span></div>
+                    <div class="input-val"><input></div>
+                </div>
+                <div class='hb-input' data-key="bonus_damage">
+                    <div class="input-title"><span>Bonus Damage Die</span></div>
+                    <div class="input-val"><input></div>
+                </div>
+                <div class='hb-input' data-key="bonus_type">
+                    <div class="input-title"><span>Bonus Damage Type</span></div>
+                    <div class="input-val"><input></div>
+                </div>
+                <div class='hb-input' data-key="ability_override">
+                    <div class="input-title"><span>Attack Ability Override</span></div>
+                    <div class="input-val"><input></div>
+                </div>
+                <div class='hb-input' data-key="properties">
+                    <div class="input-title"><span>Weapon Properties</span></div>
+                    <div class="input-val"><input></div>
+                </div>
+                <div class='hb-input' data-key="apply_mod">
+                    <div class="input-title"><span>Apply Ability Mod</span></div>
+                    <div class="input-val"><button>Toggle</button></div>
+                </div>
+            </div>
+            <button class='homebrew-finish'>Finish</button>
+        </div>
+        <div class="homebrew-dialog noselect" id='custom-gear-dialog'>
+            <div class="title"><span>Custom Gear</span></div>
+            <div class="hb-inputs noscroll">
+                <div class='hb-input' data-key="name">
+                    <div class="input-title"><span>Item Name</span></div>
+                    <div class="input-val"><input></div>
+                </div>
+                <div class='hb-input' data-key="ac_bonus">
+                    <div class="input-title"><span>AC Bonus</span></div>
+                    <div class="input-val"><input></div>
+                </div>
+                <div class='hb-input' data-key="max_dex">
+                    <div class="input-title"><span>Maximum Dexterity Modifier</span></div>
+                    <div class="input-val"><input></div>
+                </div>
+                <div class='hb-input' data-key="category">
+                    <div class="input-title"><span>Category</span></div>
+                    <div class="input-val"><input list="hb-gear-category"></div>
+                    <datalist id='hb-gear-category'>
+                        <option value="Light Armor"></option>
+                        <option value="Medium Armor"></option>
+                        <option value="Heavy Armor"></option>
+                        <option value="Shield"></option>
+                        <option value="Clothes"></option>
+                        <option value="Wondrous Item"></option>
+                        <option value="Wand"></option>
+                        <option value="Rod"></option>
+                        <option value="Ring"></option>
+                    </datalist>
+                </div>
+                <div class='hb-input' data-key="required_str">
+                    <div class="input-title"><span>Strength Required</span></div>
+                    <div class="input-val"><input></div>
+                </div>
+                <div class='hb-input' data-key="stealth_mod">
+                    <div class="input-title"><span>Stealth Dis/advantage</span></div>
+                    <div class="input-val"><input></div>
+                </div>
+                <div class='hb-input' data-key="enchantment_bonus">
+                    <div class="input-title"><span>Enchantment Bonus</span></div>
+                    <div class="input-val"><input></div>
+                </div>
+                <div class='hb-input' data-key="proficiency_bonus">
+                    <div class="input-title"><span>Proficiency Bonus Bonus</span></div>
+                    <div class="input-val"><input></div>
+                </div>
+                <div class='hb-input' data-key="skills_bonus">
+                    <div class="input-title"><span>Skills Bonus</span></div>
+                    <div class="input-val"><input></div>
+                </div>
+                <div class='hb-input' data-key="saves_bonus">
+                    <div class="input-title"><span>Saves Bonus</span></div>
+                    <div class="input-val"><input></div>
+                </div>
+                <div class='hb-input' data-key="properties">
+                    <div class="input-title"><span>Additional Properties</span></div>
+                    <div class="input-val"><input></div>
+                </div>
+            </div>
+            <button class='homebrew-finish'>Finish</button>
+        </div>
+        <div class="homebrew-dialog noselect" id='custom-race-dialog'>
+            <div class="title"><span>Custom Race</span></div>
+            <div class="hb-inputs noscroll">
+                <div class='hb-input' data-key="race_name">
+                    <div class="input-title"><span>Race Name</span></div>
+                    <div class="input-val"><input></div>
+                </div>
+                <div class='hb-input' data-key="abilitiy_score_increase">
+                    <div class="input-title"><span>Ability Score Increases</span></div>
+                    <div class="input-val"><input></div>
+                </div>
+                <div class='hb-input' data-key="armor_class">
+                    <div class="input-title"><span>Natural AC</span></div>
+                    <div class="input-val"><input></div>
+                </div>
+                <div class='hb-input' data-key="attacks">
+                    <div class="input-title"><span>Speed</span></div>
+                    <div class="input-val"><input></div>
+                </div>
+                <div class='hb-input' data-key="bonus_hp">
+                    <div class="input-title"><span>Bonus HP per Level</span></div>
+                    <div class="input-val"><input></div>
+                </div>
+                <div class='hb-input' data-key="resist_vuln_immune">
+                    <div class="input-title"><span>Resistances, Vulnerabilities, and Immunities</span></div>
+                    <div class="input-val"><input></div>
+                </div>
+                <div class='hb-input' data-key="languages">
+                    <div class="input-title"><span>Languages</span></div>
+                    <div class="input-val"><input></div>
+                </div>
+                <div class='hb-input' data-key="attacks">
+                    <div class="input-title"><span>Natural Attack</span></div>
+                    <div class="input-val"><input></div>
+                </div>
+                <div class='hb-input' data-key="bonus_weapon_armor_profs">
+                    <div class="input-title"><span>Bonus Weapon & Armor Proficiencies</span></div>
+                    <div class="input-val"><input></div>
+                </div>
+                <div class='hb-input' data-key="features_profs">
+                    <div class="input-title"><span>Other Features & Proficiencies</span></div>
+                    <div class="input-val"><input></div>
+                </div>
+            </div>
+            <button class='homebrew-finish'>Finish</button>
+        </div>
+        <div class="homebrew-dialog noselect" id='custom-class-dialog'>
+            <div class="title"><span>Custom Class</span></div>
+            <div class="hb-inputs noscroll">
+                <div class='hb-input' data-key="class_name">
+                    <div class="input-title"><span>Class Name</span></div>
+                    <div class="input-val"><input></div>
+                </div>
+                <div class='hb-input' data-key="subclass">
+                    <div class="input-title"><span>Subclass</span></div>
+                    <div class="input-val"><input></div>
+                </div>
+                <div class='hb-input' data-key="armor_class">
+                    <div class="input-title"><span>Alt. Armor Class</span></div>
+                    <div class="input-val"><input></div>
+                </div>
+                <div class='hb-input' data-key="hit_die">
+                    <div class="input-title"><span>Hit Die Size</span></div>
+                    <div class="input-val"><input></div>
+                </div>
+                <div class='hb-input' data-key="init">
+                    <div class="input-title"><span>Initiative Bonus</span></div>
+                    <div class="input-val"><input></div>
+                </div>
+                <div class='hb-input' data-key="bonus_hp_per_level">
+                    <div class="input-title"><span>Bonus HP per Level</span></div>
+                    <div class="input-val"><input></div>
+                </div>
+                <div class='hb-input' data-key="saves_skills">
+                    <div class="input-title"><span>Saving Throw Proficiencies & Class Skills</span></div>
+                    <div class="input-val"><input></div>
+                </div>
+                <div class='hb-input' data-key="first_level_proficiencies">
+                    <div class="input-title"><span>1st Level Exclusive Proficiencies</span></div>
+                    <div class="input-val"><input></div>
+                </div>
+                <div class='hb-input' data-key="additional_proficiencies">
+                    <div class="input-title"><span>Multiclassing Proficiencies</span></div>
+                    <div class="input-val"><input></div>
+                </div>
+                <div class='hb-input' data-key="spellcasting_type">
+                    <div class="input-title"><span>Spellcasting Type</span></div>
+                    <div class="input-val"><input list="hb-spell-type"></div>
+                    <datalist id="hb-spell-type">
+                        <option value="Full Caster"></option>
+                        <option value="Half Caster"></option>
+                        <option value="Third Caster"></option>
+                        <option value="Artificer Casting"></option>
+                    </datalist>
+                </div>
+                <div class='hb-input' data-key="spellcasting_ability">
+                    <div class="input-title"><span>Spellcasting Ability</span></div>
+                    <div class="input-val"><input list='hb-spell-ability'></div>
+                    <datalist id='hb-spell-ability'>
+                        <option value="Intelligence"></option>
+                        <option value="Wisdom"></option>
+                        <option value="Charisma"></option>
+                    </datalist>
+                </div>
+                <div class='hb-input' data-key="speed_increase">
+                    <div class="input-title"><span>Speed Increase</span></div>
+                    <div class="input-val"><input></div>
+                </div>
+            </div>
+            <button class='homebrew-finish'>Finish</button>
+        </div>
+        <div id='hb-modal'></div>
     </body>
 </html>
