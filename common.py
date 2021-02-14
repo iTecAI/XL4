@@ -8,6 +8,12 @@ logger = logging.getLogger('uvicorn.error')
 def _get_mod_from_score(score):
     return int((score-10)/2)
 
+def try_keys(object,keys):
+    for i in keys:
+        if i in object.keys():
+            return object[i]
+    return KeyError(f'None of {",".join(keys)} are keys of the given object.')
+
 class XLCharacter(Character):
     def __init__(self, dct):
         super().__init__(dct)
@@ -29,41 +35,41 @@ class XLCharacter(Character):
 
             new = []
             for i in self.race_info:
-                if len(search_static(i['name'],'races',exclude=[])) == 0 or not any([x['race_name'].lower() == i['name'].lower() for x in search_static(i['name'],'races',exclude=[])]):
+                if len(search_static(try_keys(i,['name','race_name']),'races',exclude=[])) == 0 or not any([try_keys(x,['name','race_name']).lower() == try_keys(i,['name','race_name']).lower() for x in search_static(try_keys(i,['name','race_name']),'races',exclude=[])]):
                     new.append({
-                        'ability_score_increase': i['scores'],
-                        'armor_class': i['armor'],
+                        'ability_score_increase': try_keys(i,['scores','ability_score_increase']),
+                        'armor_class': try_keys(i,['armor','armor_class']),
                         'attacks': i['attacks'],
-                        'bonus_hp': i['hp_bonus'],
-                        'bonus_weapon_armor_profs': i['weapon_armor_profs'],
-                        'features_profs': i['other_proficiencies'],
+                        'bonus_hp': try_keys(i,['bonus_hp','hp_bonus']),
+                        'bonus_weapon_armor_profs': try_keys(i,['weapon_armor_profs','bonus_weapon_armor_profs']),
+                        'features_profs':try_keys(i,['other_proficiencies','features_profs']),
                         'languages': i['languages'],
-                        'race_name': i['name'],
-                        'resist_vuln_immune': i['resist_immune_vuln'],
-                        'speed': i['speed']
+                        'race_name': try_keys(i,['name','race_name']),
+                        'resist_vuln_immune': try_keys(i,['resist_immune_vuln','resist_vuln_immune']),
+                        'speed': error(i, 'speed', 30)
                     })
             self.race_info = new[:]
             
 
             new = []
             for i in self.class_info:
-                s = search_static(i['name'],'classes',exclude=[])
+                s = search_static(try_keys(i,['name','class_name']),'classes',exclude=[])
                 if len(s) == 0:
                     new.append(i)
                 else:
                     if not any([str(i['subclass']).lower() == str(n['subclass']).lower() or i['subclass'] == n['subclass'] for n in s]):
                         new.append({
-                            'additional_proficiencies': error(i,'multiclass_profs',None),
-                            'armor_class': error(i,'alt_ac',None),
-                            'bonus_hp_per_level': error(i,'bonus_hp',None),
-                            'class_name': error(i,'name',None),
-                            'first_level_proficiencies': error(i,'first_level_profs',None),
+                            'additional_proficiencies': error(i,['additional_proficiencies','multiclass_profs'],None),
+                            'armor_class': error(i,['armor_class','alt_ac'],None),
+                            'bonus_hp_per_level': error(i,['bonus_hp_per_level','bonus_hp'],None),
+                            'class_name': error(i,['class_name','name'],None),
+                            'first_level_proficiencies': error(i,['first_level_proficiencies','first_level_profs'],None),
                             'hit_die': error(i,'hit_die',None),
-                            'init': error(i,'init_bonus',None),
+                            'init': error(i,['init','init_bonus'],None),
                             'saves_skills': error(i,'saves_skills',None),
                             'speed_increase': error(i,'speed_increase',None),
-                            'spellcasting_ability': error(i,'spell_ability',None),
-                            'spellcasting_type': error(i,'spell_type',None),
+                            'spellcasting_ability': error(i,['spellcasting_ability','spell_ability'],None),
+                            'spellcasting_type': error(i,['spellcasting_type','spell_type'],None),
                             'subclass': error(i,'subclass',None)
                         })
             self.class_info = new[:]

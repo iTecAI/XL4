@@ -12,6 +12,11 @@ def generate_id(l=12): # Shorter unique (probably) fingerprint with length {l}
     ) for i in range(l)])
 
 def error(dct,key,default):
+    if type(key) == list:
+        for i in key:
+            if i in dct.keys():
+                return dct[i]
+        return default
     try:
         return dct[key]
     except KeyError as e:
