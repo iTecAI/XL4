@@ -50,6 +50,10 @@ async def get_chars_main():
 async def get_char_sheet():
     return FileResponse(os.path.join('client','character_sheet.html'))
 
+@app.get('/campaigns', include_in_schema=False)
+async def get_char_sheet():
+    return FileResponse(os.path.join('client','campaigns.html'))
+
 
 logger.info('Loading static files.')
 files = list(os.walk('client'))
