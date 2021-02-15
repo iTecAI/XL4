@@ -405,6 +405,8 @@ class Server:
             updates['user'] = u.check_update()
             updates['characters']['global'] = any([self.get('characters',i)._update for i in u.characters]) or u.check_update(endpoint='characters')
             updates['characters']['specific'] = {i:self.get('characters',i).check_update() for i in u.characters}
+            updates['campaigns']['global'] = u.check_update('campaigns') or any([self.get('campaigns.campaigns',i)._update['self'] for i in u.campaigns])
+            updates['campaigns']['specific'] = {i:self.get('campaigns.campaigns',i).check_update() for i in u.campaigns}
         return updates, uid
     def check_connection(self,_id):
         if _id in self.connections.keys():
