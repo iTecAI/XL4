@@ -98,12 +98,14 @@ function update_cmp_directory(data) {
         }))
         .replaceAll('#campaigns');
 
-        if ($('.cmp-item.selected').length == 0) {
-            $('.cmp-item').first().addClass('selected');
-        }
-        if ($('.cmp-item.selected').length != 0) {
-            current_cmp = $('.cmp-item.selected').attr('data-id');
-        }
+    if ($('.cmp-item.selected').length == 0) {
+        $('.cmp-item').first().addClass('selected');
+    }
+    if ($('.cmp-item.selected').length != 0) {
+        current_cmp = $('.cmp-item.selected').attr('data-id');
+    } else {
+        current_cmp =  null;
+    }
 }
 
 $(document).ready(function () {
