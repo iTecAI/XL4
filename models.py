@@ -21,3 +21,6 @@ class CharacterModifyModel(BaseModel):
 
 class CharacterBatchModifyModel(BaseModel):
     items: dict
+
+class NewCampaignModel(BaseModel):
+    name: str

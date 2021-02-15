@@ -217,10 +217,11 @@ class User(BaseObject):
             'display_name':dct['username'].split('@')[0]
         })
         self.characters = error(dct,'characters',[])
-        self.campaigns = error(dct,'campaigns',{})
+        self.campaigns = error(dct,'campaigns',[])
         self._update = error(dct,'_update',{
             'self':False,
-            'characters':False
+            'characters':False,
+            'campaigns':False
         })
         self.passhash = dct['passhash']
         self.username = dct['username']
@@ -246,7 +247,7 @@ class Campaign(BaseObject):
             }
         })
         self.name = error(dct,'name','New Campaign')
-        self.maps = error(dct,'maps',{})
+        self.maps = error(dct,'maps',[])
         self.homebrew_creatures = error(dct,'homebrew_creatures',[])
         self.characters = error(dct,'characters',[])
         self.dms = error(dct,'dms',[dct['owner']])
@@ -266,7 +267,8 @@ class Campaign(BaseObject):
 
 OE_MAP = {
     'characters':XLCharacter,
-    'users':User
+    'users':User,
+    'campaigns.campaigns':Campaign
 }
 
 def store_usermap(name,_id):

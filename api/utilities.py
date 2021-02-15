@@ -1,4 +1,4 @@
-import hashlib, time, random, base64, json, os
+import hashlib, time, random, base64, json, os, copy
 import logging
 
 logger = logging.getLogger('uvicorn.error')
@@ -15,12 +15,19 @@ def error(dct,key,default):
     if type(key) == list:
         for i in key:
             if i in dct.keys():
-                return dct[i]
-        return default
-    try:
-        return dct[key]
-    except KeyError as e:
-        return default
+                out = copy.deepcopy(dct[i])
+        out = copy.deepcopy(default)
+    else:
+        try:
+            out = copy.deepcopy(dct[key])
+        except KeyError as e:
+            out = copy.deepcopy(default)
+    
+    if type(default) == dict:
+        for i in default.keys():
+            if not i in out.keys():
+                out[i] = copy.deepcopy(default[i])
+    return out
 
 def search_static(search,endpoint=None,exclude=['spellcasting','classes','races']):
     results = []

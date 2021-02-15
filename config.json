@@ -25,7 +25,8 @@
     },
     "user_restrictions":{
         "default":{
-            "max_characters":15
+            "max_characters":15,
+            "max_campaigns":5
         }
     }
 }

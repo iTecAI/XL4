@@ -12,6 +12,7 @@ from endpoints.server import router as server_router
 from endpoints.user import router as user_router
 from endpoints.compendium import router as comp_router
 from endpoints.character import router as char_router
+from endpoints.campaign import router as cmp_router
 
 app = FastAPI()
 
@@ -36,6 +37,11 @@ app.include_router(
     char_router,
     prefix='/character',
     tags=['character']
+)
+app.include_router(
+    cmp_router,
+    prefix='/campaign',
+    tags=['campaign']
 )
 
 @app.get('/', include_in_schema=False)
