@@ -256,6 +256,7 @@ class Campaign(BaseObject):
             'self':False,
             'maps':False
         })
+        self.icon = error(dct,'icon',None)
     def update(self,endpoint='self'):
         self._update[endpoint] = True
     def check_update(self,endpoint='self'):

@@ -1,26 +1,158 @@
-#add-campaign {
-    position: fixed;
-    bottom: 20px;
-    right: calc(20px + 5vh);
-    background-color: var(--secondary);
+#cmp-directory {
+    position: absolute;
+    top: 0px;
+    left: 0px;
     display: inline-block;
-    width: 64px;
-    height: 64px;
-    border-radius: 32px;
-    -webkit-box-shadow: 0px 0px 4px -1px rgba(89,89,89,1);
-    -moz-box-shadow: 0px 0px 4px -1px rgba(89,89,89,1);
-    box-shadow: 0px 0px 4px -1px rgba(89,89,89,1);
-    transition: background-color 0.2s, color 0.2s;
-    cursor: pointer;
+    width: 5vh;
+    height: 100%;
+    background-color: var(--primary-dark);
+    transition: width 0.4s;
 }
-#add-campaign:hover {
-    background-color: var(--secondary-dark);
+#cmp-directory:hover {
+    width: 20vw;
+}
+#add-cmp {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    display: inline-block;
+    width: 100%;
+    height: 5vh;
+    background-color: var(--primary-darker);
+    transition: background-color 0.2s;
     color: white;
+    cursor: pointer;
+    font-size: 4vh;
 }
-#add-campaign i {
+#add-cmp:hover {
+    background-color: var(--primary-darker2);
+}
+#add-cmp i {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
-    font-size: 32px;
+    font-size: 4vh;
+}
+
+.cmp-item {
+    position: relative;
+    margin: 0.5vh;
+    margin-bottom: -0.5vh;
+    display: inline-block;
+    width: 4vh;
+    height: 4vh;
+    background-color: var(--primary-darker);
+    border-radius: 2vh;
+    transition: width 0.4s, height 0.2s, background-color 0.2s;
+    overflow: hidden;
+    -webkit-box-shadow: 0px 0px 4px -1px rgb(20, 20, 20);
+    -moz-box-shadow: 0px 0px 4px -1px rgb(20, 20, 20);
+    box-shadow: 0px 0px 4px -1px rgb(20, 20, 20);
+    cursor: pointer;
+}
+#cmp-directory:hover .cmp-item {
+    width: calc(20vw - 1vh);
+}
+#cmp-directory:hover .cmp-item:hover, #cmp-directory:hover .cmp-item.selected {
+    height: calc(4vh + 80px);
+    background-color: var(--primary-darker2);
+}
+.cmp-item .cmp-item-icon {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    display: inline-block;
+    width: 4vh;
+    height: 4vh;
+    border-radius: 50%;
+    background-color: var(--primary-darker2);
+    overflow: hidden;
+}
+.cmp-item .cmp-item-icon span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    font-family: Roboto;
+    font-size: 1.5vh;
+    color: white;
+    border-radius: 50%;
+}
+.cmp-item .cmp-item-icon img {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+}
+
+.cmp-item .cmp-name {
+    display: inline-block;
+    width: 0px;
+    height: 4vh;
+    overflow: hidden;
+    transition: width 0.4s;
+    background-color: var(--primary-darker);
+    position: absolute;
+    left: 4vh;
+    top: 0px;
+    white-space: nowrap;
+    transition: background-color 0.2s;
+}
+#cmp-directory:hover .cmp-item:hover .cmp-name, #cmp-directory:hover .cmp-item.selected .cmp-name {
+    background-color: var(--primary-darker2);
+}
+.cmp-item .cmp-name span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    font-family: Roboto;
+    font-size: 2vh;
+    color: white;
+    white-space: nowrap;
+}
+#cmp-directory:hover .cmp-item .cmp-name {
+    width: calc(20vw - 5vh);
+}
+
+.cmp-stats {
+    position: absolute;
+    top: 4vh;
+    left: 0px;
+    display: inline-block;
+    width: 100%;
+    height: fit-content;
+}
+.cmp-stats .stat {
+    padding: 5px;
+    padding-left: 2vh;
+    font-family: Roboto;
+    color: white;
+}
+.cmp-stats .stat .stat-title {
+    font-weight: bold;
+}
+
+.cmp-delete {
+    position: absolute;
+    left: calc(20vw - 5vh);
+    top: 0.5vh;
+    border-bottom-left-radius: 4px;
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    transition: color 0.2s;
+    color: white;
+}
+.cmp-delete:hover {
+    color: var(--secondary);
+}
+.cmp-delete i {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
 }

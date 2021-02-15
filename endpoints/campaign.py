@@ -21,7 +21,10 @@ async def get_campaigns(response: Response, fp: Optional[str] = Header(None)):
     if server.connections[fp].user == None:
         response.status_code = status.HTTP_405_METHOD_NOT_ALLOWED
         return {'result':'Must be logged in.'}
-    return {i: server.get('campaigns.campaigns', i).to_dict() for i in server.get('users',server.connections[fp].user).campaigns}
+    return {
+        'uid': server.connections[fp].user,
+        'campaigns': {i: server.get('campaigns.campaigns', i).to_dict() for i in server.get('users',server.connections[fp].user).campaigns}
+    }
 
 @router.get('/{sid}/')
 async def get_campaign_specific(sid: str, response: Response, fp: Optional[str] = Header(None)):
