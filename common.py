@@ -217,10 +217,7 @@ class User(BaseObject):
             'display_name':dct['username'].split('@')[0]
         })
         self.characters = error(dct,'characters',[])
-        self.campaigns = error(dct,'campaigns',{
-            'owned':[],
-            'participating':[]
-        })
+        self.campaigns = error(dct,'campaigns',{})
         self._update = error(dct,'_update',{
             'self':False,
             'characters':False
@@ -229,6 +226,35 @@ class User(BaseObject):
         self.username = dct['username']
         self.user_type = error(dct,'user_type','default')
 
+    def update(self,endpoint='self'):
+        self._update[endpoint] = True
+    def check_update(self,endpoint='self'):
+        if self._update[endpoint]:
+            self._update[endpoint] = False
+            return True
+        else:
+            return False
+
+class Campaign(BaseObject):
+    def __init__(self,dct):
+        super().__init__()
+        self.owner = dct['owner']
+        self.id = error(dct,'id',generate_id())
+        self.settings = error(dct,'settings',{
+            'rules':{
+                'variant_encumbrance':False
+            }
+        })
+        self.name = error(dct,'name','New Campaign')
+        self.maps = error(dct,'maps',{})
+        self.homebrew_creatures = error(dct,'homebrew_creatures',[])
+        self.characters = error(dct,'characters',[])
+        self.dms = error(dct,'dms',[dct['owner']])
+        self.players = error(dct,'players',[])
+        self._update = error(dct,'_update',{
+            'self':False,
+            'maps':False
+        })
     def update(self,endpoint='self'):
         self._update[endpoint] = True
     def check_update(self,endpoint='self'):
