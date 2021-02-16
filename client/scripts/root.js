@@ -203,6 +203,10 @@ function generate_unique_key(len) {
     return sha256(String(Date.now()));
 }
 
+function result_alert(data) {
+    bootbox.alert(data.result);
+}
+
 $(document).ready(function () {
     $('#head-menu-btn').toggle(false);
     $('#settings-window').slideToggle(0, false);

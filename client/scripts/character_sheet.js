@@ -417,6 +417,30 @@ function manual_event_listeners() {
     $('#item-box tbody').off('mousewheel').on('mousewheel', function () {
         current_inventory.scroll = $(this).scrollTop();
     });
+
+    $('#character-update').off('click').on('click', function (event) {
+        bootbox.confirm('Updating this sheet will remove all custom changes. Continue?', function (result) {
+            if (result) {
+                post('/character/' + sid + '/update/', console.log);
+            }
+        });
+    });
+
+    $('#character-add-to-cmp').off('click').on('click', function (event) {
+        bootbox.prompt('Enter Campaign ID (ask your DM for this information)', function (result) {
+            if (result != null) {
+                post('/character/' + sid + '/join_campaign/' + result, result_alert);
+            }
+        });
+    });
+
+    $('#character-leave-cmp').off('click').on('click', function (event) {
+        bootbox.confirm('Are you sure you want to leave the campaign?', function (result) {
+            if (result) {
+                post('/character/' + sid + '/leave_campaign/', result_alert);
+            }
+        });
+    });
 }
 
 function get_class(internals, _class, subclass) {
@@ -1691,6 +1715,9 @@ function load_character(_data) {
 
     $('title').text(data.name);
     $('#panel-definition .title span').text(data.name);
+    $('#character-update').toggle(data.source != null);
+    $('#character-add-to-cmp').toggle(data.campaign == null);
+    $('#character-leave-cmp').toggle(data.campaign != null);
 
     load_races_classes(data, races_internal, classes_internal);
     load_levelxp(data);

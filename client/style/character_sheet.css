@@ -1190,3 +1190,42 @@ div.speed-block.output[data-style=internal-label] {
     background-color: var(--secondary-dark);
     color: white;
 }
+
+#char-buttons {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    display: inline-block;
+    width: 100%;
+    height: 50px;
+    text-align: right;
+}
+.char-button {
+    position: relative;
+    display: inline-block;
+    height: 40px;
+    width: 160px;
+    background-color: var(--primary-dark);
+    border: none;
+    border-radius: 20px;
+    color: white;
+    transition: background-color 0.2s;
+    margin: 5px;
+    margin-left: 0px;
+}
+.char-button:hover {
+    background-color: var(--secondary-dark);
+}
+.char-button i {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translate(0,-50%);
+}
+.char-button span {
+    position: absolute;
+    top: 50%;
+    left: 40px;
+    transform: translate(0,-50%);
+    font-size: 14px;
+}

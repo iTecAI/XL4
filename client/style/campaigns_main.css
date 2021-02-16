@@ -56,7 +56,7 @@
     width: calc(20vw - 1vh);
 }
 #cmp-directory:hover .cmp-item:hover, #cmp-directory:hover .cmp-item.selected {
-    height: calc(4vh + 80px);
+    height: calc(4vh + 120px);
     background-color: var(--primary-darker2);
 }
 .cmp-item .cmp-item-icon {
@@ -136,6 +136,9 @@
 .cmp-stats .stat .stat-title {
     font-weight: bold;
 }
+.stat.id-stat .stat-value {
+    cursor: text;
+}
 
 .cmp-delete {
     position: absolute;
@@ -183,4 +186,56 @@
     width: 310px;
     height: 100%;
     background-color: var(--gradient7);
+}
+
+@media (min-width: 550px) {
+    .card.character-box {
+        display: inline-block;
+        width: 300px;
+        height: 400px;
+    }
+}
+@media (max-width: 549px) {
+    .card.character-box {
+        display: inline-block;
+        width: 80%;
+        height: 400px;
+        margin-left: 10%;
+        margin-right: 10%;
+    }
+}
+.character-box {
+    margin: 5px;
+    cursor: pointer;
+}
+.character-box .buttons {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    display: inline-block;
+    width: 40px;
+    height: 55px;
+    transition: width 0.2s;
+    overflow-x: hidden;
+    overflow-y: visible;
+    white-space: nowrap;
+    margin: 3px;
+}
+.character-box .card-content {
+    height: 20%;
+}
+.character-box .card-image {
+    height: 80%;
+}
+.character-box .buttons button {
+    -webkit-box-shadow: 0px 0px 4px -1px rgba(89,89,89,1);
+    -moz-box-shadow: 0px 0px 4px -1px rgba(89,89,89,1);
+    box-shadow: 0px 0px 4px -1px rgba(89,89,89,1);
+    display: inline-block;
+}
+.character-box:hover .buttons .character-edit {
+    width: 100px;
+}
+.character-box:hover .buttons {
+    width: 120px;
 }

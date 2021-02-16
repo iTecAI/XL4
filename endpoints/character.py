@@ -103,9 +103,16 @@ async def get_batch_chars(model: GetCharsBatchModel, response: Response, fp: Opt
                     failures.append(sid)
             except KeyError:
                 failures.append(sid)
+        else:
+            characters[sid] = {
+                'character': server.get('characters', sid).to_dict(),
+                'dynamic': {
+                    'initiative': server.get('characters', sid).get_init_bonus()
+                }
+            }
     return {
-        'characters':characters,
-        'failed_to_retrieve':failures
+        'characters': characters,
+        'failed_to_retrieve': failures
     }
 
 
@@ -345,3 +352,57 @@ async def batch_modify_character(sid: str, model: CharacterBatchModifyModel, res
     server.get('characters', sid).update()
     server.store(sid)
     return server.get('characters', sid).to_dict()
+
+
+@router.post('/{sid}/join_campaign/{cid}/')
+async def join_campaign(sid: str, cid: str, response: Response, fp: Optional[str] = Header(None)):
+    response, res = fingerprint_validate(fp, response)
+    if res != 0:
+        return res
+    if server.connections[fp].user == None:
+        response.status_code = status.HTTP_405_METHOD_NOT_ALLOWED
+        return {'result': 'Must be logged in.'}
+    if not sid in server.get('users', server.connections[fp].user).characters:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return {'result': 'Could not find that character.'}
+    try:
+        server.get('campaigns.campaigns', cid)
+    except KeyError:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return {'result': 'Could not find that campaign.'}
+    server.get('characters', sid).campaign = cid
+    server.get('characters', sid).update()
+    server.store(sid)
+    server.get('campaigns.campaigns', cid).characters.append(sid)
+    server.get('campaigns.campaigns', cid).update()
+    server.store(cid)
+    return {'result': f'Successfully joined campaign "{server.get("campaigns.campaigns",cid).name}".'}
+
+
+@router.post('/{sid}/leave_campaign/')
+async def leave_campaign(sid: str, response: Response, fp: Optional[str] = Header(None)):
+    response, res = fingerprint_validate(fp, response)
+    if res != 0:
+        return res
+    if server.connections[fp].user == None:
+        response.status_code = status.HTTP_405_METHOD_NOT_ALLOWED
+        return {'result': 'Must be logged in.'}
+    if not sid in server.get('users', server.connections[fp].user).characters:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return {'result': 'Could not find that character.'}
+    if server.get('characters', sid).campaign == None:
+        response.status_code = status.HTTP_405_METHOD_NOT_ALLOWED
+        return {'result': 'Character is not in a campaign'}
+
+    cid = server.get('characters', sid).campaign
+    cmp = server.get('campaigns.campaigns', cid)
+    try:
+        server.get('campaigns.campaigns', cid).characters.remove(sid)
+    except ValueError:
+        pass
+    server.get('characters', sid).campaign = None
+    server.get('characters', sid).update()
+    server.store(sid)
+    server.get('campaigns.campaigns', cid).update()
+    server.store(cid)
+    return {'result': f'Successfully left campaign "{cmp.name}".'}
