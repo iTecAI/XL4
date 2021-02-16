@@ -186,6 +186,11 @@
     width: 310px;
     height: 100%;
     background-color: var(--gradient7);
+    overflow: auto;
+    margin-bottom: 0px;
+}
+#character-panel:last-child {
+    margin-bottom: 5px;
 }
 
 @media (min-width: 550px) {

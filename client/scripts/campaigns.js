@@ -116,7 +116,7 @@ function update_cmp_directory(data) {
 function load_cmp_characters(data) {
     post('/character/batchGet/',function (data) {
         console.log(data);
-        var char_bar = $('<div id="character-panel"></div>');
+        var char_bar = $('<div id="character-panel" class="noscroll"></div>');
         for (var c = 0; c < Object.values(data.characters).length; c++) {
             var char_item = make_character_card(Object.values(data.characters)[c].character, Object.values(data.characters)[c].character.id);
             $(char_item).children('.buttons').children('.character-copy').remove();
