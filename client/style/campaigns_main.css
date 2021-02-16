@@ -9,9 +9,58 @@
     transition: width 0.4s;
     z-index: 21;
 }
-#cmp-directory:hover {
-    width: 20vw;
+
+@media (max-width: 599px) {
+    #cmp-directory:hover {
+        width: 60vw;
+    }
+    .cmp-delete {
+        position: absolute;
+        left: calc(60vw - 4.5vh);
+        top: 0.5vh;
+        border-bottom-left-radius: 4px;
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        transition: color 0.2s;
+        color: white;
+    }
 }
+
+@media (min-width: 600px) and (max-width: 1099px) {
+    #cmp-directory:hover {
+        width: 40vw;
+    }
+    .cmp-delete {
+        position: absolute;
+        left: calc(40vw - 4.5vh);
+        top: 0.5vh;
+        border-bottom-left-radius: 4px;
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        transition: color 0.2s;
+        color: white;
+    }
+}
+
+@media (min-width: 1100px) {
+    #cmp-directory:hover {
+        width: 20vw;
+    }
+    .cmp-delete {
+        position: absolute;
+        left: calc(20vw - 4.5vh);
+        top: 0.5vh;
+        border-bottom-left-radius: 4px;
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        transition: color 0.2s;
+        color: white;
+    }
+}
+
 #add-cmp {
     position: absolute;
     bottom: 0px;
@@ -53,7 +102,7 @@
     cursor: pointer;
 }
 #cmp-directory:hover .cmp-item {
-    width: calc(20vw - 1vh);
+    width: calc(100% - 1vh);
 }
 #cmp-directory:hover .cmp-item:hover, #cmp-directory:hover .cmp-item.selected {
     height: calc(4vh + 120px);
@@ -105,6 +154,10 @@
 #cmp-directory:hover .cmp-item:hover .cmp-name, #cmp-directory:hover .cmp-item.selected .cmp-name {
     background-color: var(--primary-darker2);
 }
+#cmp-directory:hover .cmp-item .cmp-name {
+    width: calc(100% - 5vh);
+}
+
 .cmp-item .cmp-name span {
     position: absolute;
     top: 50%;
@@ -114,9 +167,6 @@
     font-size: 2vh;
     color: white;
     white-space: nowrap;
-}
-#cmp-directory:hover .cmp-item .cmp-name {
-    width: calc(20vw - 5vh);
 }
 
 .cmp-stats {
@@ -140,17 +190,6 @@
     cursor: text;
 }
 
-.cmp-delete {
-    position: absolute;
-    left: calc(20vw - 4.5vh);
-    top: 0.5vh;
-    border-bottom-left-radius: 4px;
-    display: inline-block;
-    width: 24px;
-    height: 24px;
-    transition: color 0.2s;
-    color: white;
-}
 .cmp-delete:hover {
     color: var(--secondary);
 }
@@ -169,13 +208,13 @@
     width: calc(100% - 5vh);
     height: 100%;
     background-color: var(--gradient7);
+    z-index: 20;
 }
 #no-campaign-box img {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
-    z-index: 20;
 }
 
 #character-panel {
@@ -188,6 +227,7 @@
     background-color: var(--gradient7);
     overflow: auto;
     margin-bottom: 0px;
+    z-index: 19;
 }
 #character-panel:last-child {
     margin-bottom: 5px;
@@ -243,4 +283,51 @@
 }
 .character-box:hover .buttons {
     width: 120px;
+}
+
+#add-map {
+    cursor: pointer;
+    position: fixed;
+    bottom: 20px;
+    right: calc(20px + 5vh);
+    background-color: var(--secondary);
+    display: inline-block;
+    width: 64px;
+    height: 64px;
+    border-radius: 32px;
+    -webkit-box-shadow: 0px 0px 4px -1px rgba(89,89,89,1);
+    -moz-box-shadow: 0px 0px 4px -1px rgba(89,89,89,1);
+    box-shadow: 0px 0px 4px -1px rgba(89,89,89,1);
+    transition: background-color 0.2s, width 0.2s;
+    z-index: 18;
+    overflow: hidden;
+}
+#add-map span {
+    position: absolute;
+    top: 52%;
+    left: 64px;
+    transform: translate(0,-50%);
+    white-space: nowrap;
+    font-family: Roboto;
+    color: white;
+    font-weight: bold;
+}
+#add-map:hover {
+    background-color: var(--secondary-dark);
+    width: 160px;
+}
+#add-map i {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    font-size: 32px;
+    transition: color 0.2s, left 0.2s, transform 0.2s;
+}
+#add-map:hover i {
+    color: white;
+    position: absolute;
+    top: 50%;
+    left: 32px;
+    transform: translate(-50%,-50%);
 }

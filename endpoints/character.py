@@ -420,6 +420,6 @@ async def leave_campaign(sid: str, response: Response, fp: Optional[str] = Heade
     server.get('characters', sid).campaign = None
     server.get('characters', sid).update()
     server.store(sid)
-    server.get('campaigns.campaigns', cid).update()
+    server.get('campaigns.campaigns', cmp.id).update()
     server.store(cid)
     return {'result': f'Successfully left campaign "{cmp.name}".'}

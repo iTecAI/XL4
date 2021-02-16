@@ -141,7 +141,8 @@ function load_cmp_page(data) {
 }
 
 function pagelocal_update(data) {
-    if (data.updates.campaigns.global) {
+    console.log(data.updates.campaigns.specific[current_cmp]);
+    if (data.updates.campaigns.global || data.updates.campaigns.specific[current_cmp]) {
         get('/campaign/', load_cmp_page);
     }
 }
