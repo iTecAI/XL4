@@ -88,7 +88,7 @@ async def get_batch_chars(model: GetCharsBatchModel, response: Response, fp: Opt
                 if ochar.campaign != None:
                     try:
                         cmp = server.get('campaigns.campaigns', ochar.campaign)
-                        if not server.connections[fp].user == cmp.owner and not server.connections[fp].user in cmp.dms:
+                        if not server.connections[fp].user == cmp.owner and not server.connections[fp].user in cmp.dms and not server.connections[fp].user in cmp.players:
                             failures.append(sid)
                         else:
                             characters[sid] = {
@@ -374,8 +374,14 @@ async def join_campaign(sid: str, cid: str, response: Response, fp: Optional[str
     server.get('characters', sid).update()
     server.store(sid)
     server.get('campaigns.campaigns', cid).characters.append(sid)
+    if not server.connections[fp].user in server.get('campaigns.campaigns', cid).players:
+        server.get('campaigns.campaigns', cid).players.append(server.connections[fp].user)
     server.get('campaigns.campaigns', cid).update()
     server.store(cid)
+    if not cid in server.get('users', server.connections[fp].user).campaigns:
+        server.get('users', server.connections[fp].user).campaigns.append(cid)
+        server.store(server.connections[fp].user)
+        server.get('users', server.connections[fp].user).update()
     return {'result': f'Successfully joined campaign "{server.get("campaigns.campaigns",cid).name}".'}
 
 
@@ -400,6 +406,17 @@ async def leave_campaign(sid: str, response: Response, fp: Optional[str] = Heade
         server.get('campaigns.campaigns', cid).characters.remove(sid)
     except ValueError:
         pass
+    if not any([i in server.get('users', server.connections[fp].user).characters for i in server.get('campaigns.campaigns', cid).characters]):
+        try:
+            server.get('campaigns.campaigns', cid).players.remove(sid)
+        except ValueError:
+            pass
+        try:
+            server.get('users', server.connections[fp].user).campaigns.remove(cid)
+            server.store(server.connections[fp].user)
+            server.get('users', server.connections[fp].user).update()
+        except ValueError:
+            pass
     server.get('characters', sid).campaign = None
     server.get('characters', sid).update()
     server.store(sid)
