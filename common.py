@@ -19,6 +19,8 @@ class XLCharacter(Character):
         super().__init__(dct)
         self.id = error(dct,'id',generate_id())
         self._update = error(dct,'_update',False)
+        self.campaign = error(dct,'campaign',None)
+        self.owner = error(dct,'owner',None)
 
         if not 'id' in dct.keys():
             new = []

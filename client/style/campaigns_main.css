@@ -7,6 +7,7 @@
     height: 100%;
     background-color: var(--primary-dark);
     transition: width 0.4s;
+    z-index: 21;
 }
 #cmp-directory:hover {
     width: 20vw;
@@ -138,7 +139,7 @@
 
 .cmp-delete {
     position: absolute;
-    left: calc(20vw - 5vh);
+    left: calc(20vw - 4.5vh);
     top: 0.5vh;
     border-bottom-left-radius: 4px;
     display: inline-block;
@@ -155,4 +156,31 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
+}
+
+#no-campaign-box {
+    position: absolute;
+    top: 0px;
+    left: 5vh;
+    display: inline-block;
+    width: calc(100% - 5vh);
+    height: 100%;
+    background-color: var(--gradient7);
+}
+#no-campaign-box img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    z-index: 20;
+}
+
+#character-panel {
+    position: absolute;
+    top: 0px;
+    left: 5vh;
+    display: inline-block;
+    width: 310px;
+    height: 100%;
+    background-color: var(--gradient7);
 }

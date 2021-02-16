@@ -24,3 +24,6 @@ class CharacterBatchModifyModel(BaseModel):
 
 class NewCampaignModel(BaseModel):
     name: str
+
+class GetCharsBatchModel(BaseModel):
+    ids: list

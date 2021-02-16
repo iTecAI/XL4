@@ -12,54 +12,7 @@ function load_char_directory() {
         var ckeys = Object.keys(data);
         for (var c = 0; c < ckeys.length; c++) {
             var dat = data[ckeys[c]];
-            var char_item = $('<div class="character-box card"></div>');
-            char_item.attr({ id: 'cbox-' + ckeys[c], 'data-id': ckeys[c] });
-            if (dat.appearance.image) {
-                $(char_item).append($('<span class="card-image"></span>')
-                    .on('click', function (event) {
-                        window.location = '/character_sheet?sheet=' + $(this).parents('.character-box').attr('data-id');
-                    })
-                    .append($('<img>').attr('src', dat.appearance.image)));
-            } else {
-                $(char_item).append($('<span class="card-image"></span>')
-                    .on('click', function (event) {
-                        window.location = '/character_sheet?sheet=' + $(this).parents('.character-box').attr('data-id');
-                    })
-                    .append($('<img>').attr('src', 'assets/logo_large.png')));
-            }
-            $(char_item)
-                .append(
-                    $('<div class="card-content"></div>')
-                        .append(
-                            $('<div class="title"></div>').text(dat.name)
-                        )
-                        .append(
-                            $('<div class="content"></div>').text('Level ' + dat.level.level + ' ' + dat.race + ' (' + dat.level.classes.map(function (t, i, a) {
-                                return titleCase(t.class) + ' ' + t.level;
-                            }).join('/') + ')')
-                        )
-                )
-                .append(
-                    $('<div class="buttons"></div>')
-                        .append(
-                            $('<button class="character-edit"><i class="material-icons">create</i> <span>Edit</span></button>')
-                                .on('click', function (event) {
-                                    window.location = '/character_sheet?sheet=' + $(this).parents('.character-box').attr('data-id');
-                                })
-                        )
-                        .append(
-                            $('<button class="character-copy"><i class="material-icons">content_copy</i> <span>Copy</span></button>')
-                                .on('click', function (event) {
-                                    post('/character/' + $(this).parents('.character-box').attr('data-id') + '/duplicate/', console.log, {}, {}, true);
-                                })
-                        )
-                        .append(
-                            $('<button class="character-delete"><i class="material-icons">delete</i> <span>Delete</span></button>')
-                                .on('click', function (event) {
-                                    post('/character/' + $(this).parents('.character-box').attr('data-id') + '/delete/', console.log, {}, {}, true);
-                                })
-                        )
-                );
+            var char_item = make_character_card(dat, ckeys[c]);
 
             dummy_directory.append(char_item);
         }

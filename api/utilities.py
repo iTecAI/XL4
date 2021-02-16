@@ -12,11 +12,13 @@ def generate_id(l=12): # Shorter unique (probably) fingerprint with length {l}
     ) for i in range(l)])
 
 def error(dct,key,default):
+    out = None
     if type(key) == list:
         for i in key:
             if i in dct.keys():
                 out = copy.deepcopy(dct[i])
-        out = copy.deepcopy(default)
+        if out == None:
+            out = copy.deepcopy(default)
     else:
         try:
             out = copy.deepcopy(dct[key])

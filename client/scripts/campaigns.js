@@ -106,6 +106,7 @@ function update_cmp_directory(data) {
     } else {
         current_cmp =  null;
     }
+    $('#no-campaign-box').toggle(current_cmp == null);
 }
 
 $(document).ready(function () {
