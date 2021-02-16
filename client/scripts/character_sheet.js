@@ -1703,7 +1703,6 @@ function load_character(_data) {
     window.localStorage.setItem('characterData', JSON.stringify(data));
 
     var dynamic = _data.dynamic;
-    console.log(data);
     current_data = data;
     current_dynamic_data = dynamic;
 
@@ -1715,9 +1714,9 @@ function load_character(_data) {
 
     $('title').text(data.name);
     $('#panel-definition .title span').text(data.name);
-    $('#character-update').toggle(data.source != null);
-    $('#character-add-to-cmp').toggle(data.campaign == null);
-    $('#character-leave-cmp').toggle(data.campaign != null);
+    $('#character-update').toggle(data.source != null && uid == data.owner);
+    $('#character-add-to-cmp').toggle(data.campaign == null && uid == data.owner);
+    $('#character-leave-cmp').toggle(data.campaign != null && uid == data.owner);
 
     load_races_classes(data, races_internal, classes_internal);
     load_levelxp(data);

@@ -1,9 +1,9 @@
 from common import *
-from fastapi import FastAPI, Response, status
+from fastapi import FastAPI, Response, status, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import *
 import sys, uvicorn
-import logging
+import logging, copy
 
 logger = logging.getLogger('uvicorn.error')
 
@@ -43,6 +43,14 @@ app.include_router(
     prefix='/campaign',
     tags=['campaign']
 )
+
+@app.middleware("http")
+async def add_process_time_header(request: Request, call_next):
+    response = await call_next(request)
+    if 'fp' in request.headers.keys():
+        if not request.headers['fp'] == 'requesting':
+            response.headers['uid'] = condition(server.connections[request.headers['fp']].user == None, 'none', server.connections[request.headers['fp']].user)
+    return response
 
 @app.get('/', include_in_schema=False)
 async def get_compendium():

@@ -77,12 +77,18 @@ var CRXP = {
 function get_mod_from_score(score) {
     return Math.floor(((score-10)/2));
 }
+function exec_callback(callback) {
+    return function(data, textStatus, jqXHR) {
+        uid = jqXHR.getResponseHeader('uid');
+        callback(data);
+    };
+}
 function post(path, callback, parameters, body, showFailMessage) {
     if (showFailMessage) {
         return $.post({
             url: path + '?' + $.param(parameters),
             data: JSON.stringify(body),
-            success: callback,
+            success: exec_callback(callback),
             beforeSend: function (xhr) { xhr.setRequestHeader('FP', fingerprint) }
         }).fail(function (result) {
             if (result.responseJSON.result) {
@@ -99,7 +105,7 @@ function post(path, callback, parameters, body, showFailMessage) {
         return $.post({
             url: path + '?' + $.param(parameters),
             data: JSON.stringify(body),
-            success: callback,
+            success: exec_callback(callback),
             beforeSend: function (xhr) { xhr.setRequestHeader('FP', fingerprint) }
         });
     }
@@ -108,7 +114,7 @@ function get(path, callback, parameters, showFailMessage) {
     if (showFailMessage) {
         return $.get({
             url: path + '?' + $.param(parameters),
-            success: callback,
+            success: exec_callback(callback),
             beforeSend: function (xhr) { xhr.setRequestHeader('FP', fingerprint) }
         }).fail(function (result) {
             if (result.responseJSON.result) {
@@ -124,7 +130,7 @@ function get(path, callback, parameters, showFailMessage) {
     } else {
         return $.get({
             url: path + '?' + $.param(parameters),
-            success: callback,
+            success: exec_callback(callback),
             beforeSend: function (xhr) { xhr.setRequestHeader('FP', fingerprint) }
         });
     }
