@@ -7,6 +7,8 @@ from fastapi import status
 
 logger = logging.getLogger('uvicorn.error')
 
+ALLOWED_FS_ENDPOINTS = ['images']
+
 
 def _get_mod_from_score(score):
     return int((score-10)/2)
@@ -229,6 +231,19 @@ def remove_cache(endpoint, object):
     path.append(_id+'.json')
     os.remove(os.path.join(*path))
 
+def get_raw(endpoint, filename, mode='r'):
+    path = []
+    path = [CONFIG['database_path']]
+    path.extend(endpoint.split('.'))
+    path.append(filename)
+    return open(os.path.join(*path),mode)
+
+def get_raw_path(endpoint, filename):
+    path = []
+    path = [CONFIG['database_path']]
+    path.extend(endpoint.split('.'))
+    path.append(filename)
+    return os.path.join(*path)
 
 class Connection(BaseObject):
     def __init__(self, dct):
@@ -327,13 +342,23 @@ class Map(BaseObject):
         else:
             return False
 
-
-
+class FileSystemMeta(BaseObject):
+    def __init__(self, dct):
+        super().__init__()
+        self.id = dct['id']
+        self.can_access = error(dct, 'can_access', {
+            'user':[],
+            'campaign_participant':[],
+            'campaign_dm':[]
+        })
+        self.ext = dct['ext']
 
 OE_MAP = {
     'characters': XLCharacter,
     'users': User,
-    'campaigns.campaigns': Campaign
+    'campaigns.campaigns': Campaign,
+    'campaigns.maps': Map,
+    'images.meta': FileSystemMeta
 }
 
 

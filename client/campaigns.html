@@ -3,6 +3,7 @@
     <head>
         <title>Campaigns</title>
         <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <!-- Libraries -->
         <script
@@ -93,10 +94,23 @@
                     
                 </div>
                 <div id='add-map' class='noselect'><i class="material-icons noselect">add_photo_alternate</i> <span>New Map</span></div>
+                <div id='maps-panel'>
+
+                </div>
             </div>
         </div>
         <div id='noconn' class='noselect small-box-shadow'>
             Cannot connect to server. Most features will be non-functional.
+        </div>
+        <div id='add-map-dialog'>
+            <div class='title'><span>New Map</span></div>
+            <div id='map-img-prev'>
+                <img src='none' alt='Map Preview'>
+            </div>
+            <div id='map-img-input-area'>
+                <input type="file" id='map-img-input' accept="image/*">
+                <button id='img-upload'>Upload</button>
+            </div>
         </div>
     </body>
 </html>

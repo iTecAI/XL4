@@ -10,6 +10,13 @@
                 "campaigns",
                 "maps"
             ]
+        },
+        {
+            "name":"images",
+            "folders":[
+                "meta",
+                "raw"
+            ]
         }
     ],
     "session_lock":"lock.json",

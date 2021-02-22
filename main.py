@@ -13,6 +13,7 @@ from endpoints.user import router as user_router
 from endpoints.compendium import router as comp_router
 from endpoints.character import router as char_router
 from endpoints.campaign import router as cmp_router
+from endpoints.file_system import router as fs_router
 
 app = FastAPI()
 
@@ -42,6 +43,11 @@ app.include_router(
     cmp_router,
     prefix='/campaign',
     tags=['campaign']
+)
+app.include_router(
+    fs_router,
+    prefix='/fs',
+    tags=['filesystem']
 )
 
 @app.middleware("http")

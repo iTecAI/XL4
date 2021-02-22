@@ -27,3 +27,7 @@ class NewCampaignModel(BaseModel):
 
 class GetCharsBatchModel(BaseModel):
     ids: list
+
+class FSPostModel(BaseModel):
+    uri: str
+    permissions: dict

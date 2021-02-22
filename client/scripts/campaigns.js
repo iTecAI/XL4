@@ -75,7 +75,7 @@ function update_cmp_directory(data) {
                         .on('click', function (event) {
                             bootbox.confirm('Deleting a campaign is permanent, and data cannot be recovered. Continue?', function (result) {
                                 if (result) {
-                                    post('/campaign/'+$(event.delegateTarget).parents('.cmp-item').attr('data-id')+'/delete/');
+                                    post('/campaign/' + $(event.delegateTarget).parents('.cmp-item').attr('data-id') + '/delete/');
                                 }
                             });
                         })
@@ -110,14 +110,14 @@ function update_cmp_directory(data) {
     if ($('.cmp-item.selected').length != 0) {
         current_cmp = $('.cmp-item.selected').attr('data-id');
     } else {
-        current_cmp =  null;
+        current_cmp = null;
     }
     $('#no-campaign-box').toggle(current_cmp == null);
 }
 
 function load_cmp_characters(data) {
     var cmpd = data;
-    post('/character/batchGet/',function (data) {
+    post('/character/batchGet/', function (data) {
         var char_bar = $('<div id="character-panel" class="noscroll"></div>');
         for (var c = 0; c < Object.values(data.characters).length; c++) {
             var char_item = make_character_card(Object.values(data.characters)[c].character, Object.values(data.characters)[c].character.id);
@@ -126,13 +126,13 @@ function load_cmp_characters(data) {
             if (!cmpd.campaigns[current_cmp].dms.includes(cmpd.uid) && cmpd.campaigns[current_cmp].owner != cmpd.uid && Object.values(data.characters)[c].character.owner != cmpd.uid) {
                 $(char_item).children('.buttons').children('.character-edit').remove();
                 $(char_item).children('.card-image').off('click');
-                $(char_item).css('cursor','default');
-                $(char_item).children('.card-image').css('cursor','default');
+                $(char_item).css('cursor', 'default');
+                $(char_item).children('.card-image').css('cursor', 'default');
             }
             char_bar.append(char_item);
         }
         $(char_bar).replaceAll('#character-panel');
-    },{},{ids:data.campaigns[current_cmp].characters});
+    }, {}, { ids: data.campaigns[current_cmp].characters });
 }
 
 function load_cmp_page(data) {
@@ -141,7 +141,6 @@ function load_cmp_page(data) {
 }
 
 function pagelocal_update(data) {
-    console.log(data.updates.campaigns.specific[current_cmp]);
     if (data.updates.campaigns.global || data.updates.campaigns.specific[current_cmp]) {
         get('/campaign/', load_cmp_page);
     }
@@ -153,8 +152,21 @@ $(document).ready(function () {
     $('#add-cmp').on('click', function (event) {
         bootbox.prompt('Enter name of new campaign.', function (result) {
             if (result) {
-                post('/campaign/new/',console.log,{},{name:result});
+                post('/campaign/new/', console.log, {}, { name: result });
             }
         });
+    });
+
+    $('#img-upload').on('click', function (event) {
+        $('#map-img-input').trigger('click');
+    });
+    $('#map-img-input').on('change', function (event) {
+        var file = this.files[0];
+        var reader = new FileReader();
+        $(reader).on('load', function () {
+            console.log(reader.result);
+            $('#map-img-prev img').attr('src', reader.result);
+        });
+        reader.readAsDataURL(file);
     });
 });
