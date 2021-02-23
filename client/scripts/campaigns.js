@@ -56,7 +56,7 @@ function update_cmp_directory(data) {
                                 $('<span class="stat-title"></span>').text('Maps: ')
                             )
                             .append(
-                                $('<span class="stat-value"></span>').text(v.maps.length)
+                                $('<span class="stat-value"></span>').text(Object.keys(v.maps).length)
                             )
                     )
                     .append(
@@ -137,9 +137,53 @@ function load_cmp_characters(data) {
     }, {}, { ids: data.campaigns[current_cmp].characters });
 }
 
+function load_cmp_maps(data) {
+    var maps = data.campaigns[current_cmp].maps;
+    var maps_panel = $('<div id="maps-panel" class="noselect noscroll"></div>');
+    maps_panel.append(Object.keys(maps).map(function (v, i, a) {
+        var map = maps[v];
+        var item = $('<div class="map-item noselect card"></div>');
+        item.attr('data-id',v);
+        item.append(
+            $('<span class="card-image"></span>')
+                .append(
+                    $('<img>').attr('src',format_loaded_url(map.map_img))
+                )
+        );
+        item.append(
+            $('<div class="card-content"></div>')
+                .append($('<div class="title"></div>').text(map.name))
+                .append($('<div class="content"></div>').text(map.dimensions.columns + ' x ' + map.dimensions.rows + ' @ '+ map.dimensions.scale + 'ft.'))
+        );
+        item.append(
+            $('<div class="buttons"></div>')
+                .append(
+                    $('<button id="play-map-button"></button>')
+                        .append('<i class="material-icons">play_arrow</i>')
+                        .append('<span>Play</span>')
+                )
+                .append(
+                    $('<button id="delete-map-button"></button>')
+                        .append('<i class="material-icons">delete</i>')
+                        .append('<span>Delete</span>')
+                        .on('click', function (event) {
+                            bootbox.confirm('Deleting this map will delete all of its associated data, which cannot be recovered. Continue?', function (result) {
+                                if (result) {
+                                    post('/campaign/'+current_cmp+'/maps/'+$(event.delegateTarget).parents('.buttons').parents('.map-item').attr('data-id')+'/delete/');
+                                }
+                            });
+                        })
+                )
+        )
+        return item;
+    }));
+    maps_panel.replaceAll('#maps-panel')
+}
+
 function load_cmp_page(data) {
     update_cmp_directory(data);
     load_cmp_characters(data);
+    load_cmp_maps(data);
 }
 
 function pagelocal_update(data) {
@@ -175,7 +219,7 @@ $(document).ready(function () {
 
     $('#add-map').on('click', function (event) {
         $('#add-map-dialog input').val('');
-        $('#add-map-dialog img').attr('src','none');
+        $('#add-map-dialog img').attr('src', 'none');
         $('#add-map-dialog').show();
         $('#dialog-modal').show();
     });
@@ -195,23 +239,23 @@ $(document).ready(function () {
         } else {
             var imgdata = $('#add-map-dialog img').attr('src');
             var dimensions = {
-                columns: $('#map-cols input').val(),
-                rows: $('#map-rows input').val(),
-                scale: $('#map-scale input').val()
+                columns: Number($('#map-cols input').val()),
+                rows: Number($('#map-rows input').val()),
+                scale: Number($('#map-scale input').val())
             };
             post(
                 '/fs/images/',
                 function (result) {
                     post(
-                        '/campaign/'+current_cmp+'/maps/new/',
+                        '/campaign/' + current_cmp + '/maps/new/',
                         function (result) {
                             $('#add-map-dialog').hide();
                             $('#dialog-modal').hide();
-                            
+
                         },
                         {},
                         {
-                            image: '/fs/images/'+result.id+'/?fingerprint={fp}',
+                            image: '/fs/images/' + result.id + '/?fingerprint={fp}',
                             dimensions: dimensions,
                             name: $('#map-name input').val()
                         },

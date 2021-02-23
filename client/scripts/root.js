@@ -213,6 +213,10 @@ function result_alert(data) {
     bootbox.alert(data.result);
 }
 
+function format_loaded_url(url) {
+    return url.replace(/{fp}/g, fingerprint);
+}
+
 $(document).ready(function () {
     $('#head-menu-btn').toggle(false);
     $('#settings-window').slideToggle(0, false);
