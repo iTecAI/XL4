@@ -297,7 +297,7 @@ class Campaign(BaseObject):
         })
         self.name = error(dct, 'name', 'New Campaign')
         self.maps = error(dct, 'maps', [])
-        self.homebrew_creatures = error(dct, 'homebrew_creatures', [])
+        self.homebrew_creatures = error(dct, 'homebrew_creatures', {})
         self.characters = error(dct, 'characters', [])
         self.dms = error(dct, 'dms', [dct['owner']])
         self.players = error(dct, 'players', [])

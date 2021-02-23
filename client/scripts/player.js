@@ -141,39 +141,51 @@ function pagelocal_update(data) {
 
 $(document).ready(function () {
     params = parse_query_string();
-    get(
-        '/campaign/' + params.campaign + '/maps/' + params.map + '/',
-        overall_update
-    );
-
-    $('#map-name').on('change', function (event) {
-        post('/campaign/'+params.campaign+'/maps/'+params.map+'/modify/',function(){},{},{
-            path: 'name',
-            value: $(this).val()
+    console.log(params);
+    if (Object.keys(params).length != 2) {
+        bootbox.alert('Error fetching map. Returning to campaign page.', function () {
+            window.location = '/campaigns';
         });
-    });
-    $('#map-cols').on('change', function (event) {
-        if (!isNaN(Number($(this).val()))) {
-            post('/campaign/'+params.campaign+'/maps/'+params.map+'/modify/',function(){},{},{
-                path: 'dimensions.columns',
-                value: Number($(this).val())
+    } else {
+        get(
+            '/campaign/' + params.campaign + '/maps/' + params.map + '/',
+            overall_update
+        ).fail(function (result) {
+            console.log(result);
+            bootbox.alert('Error fetching map: ' + result.responseJSON.result + '<br>Returning to campaign page.', function () {
+                window.location = '/campaigns';
             });
-        }
-    });
-    $('#map-rows').on('change', function (event) {
-        if (!isNaN(Number($(this).val()))) {
-            post('/campaign/'+params.campaign+'/maps/'+params.map+'/modify/',function(){},{},{
-                path: 'dimensions.rows',
-                value: Number($(this).val())
+        });
+
+        $('#map-name').on('change', function (event) {
+            post('/campaign/' + params.campaign + '/maps/' + params.map + '/modify/', function () { }, {}, {
+                path: 'name',
+                value: $(this).val()
             });
-        }
-    });
-    $('#map-scale').on('change', function (event) {
-        if (!isNaN(Number($(this).val()))) {
-            post('/campaign/'+params.campaign+'/maps/'+params.map+'/modify/',function(){},{},{
-                path: 'dimensions.scale',
-                value: Number($(this).val())
-            });
-        }
-    });
+        });
+        $('#map-cols').on('change', function (event) {
+            if (!isNaN(Number($(this).val()))) {
+                post('/campaign/' + params.campaign + '/maps/' + params.map + '/modify/', function () { }, {}, {
+                    path: 'dimensions.columns',
+                    value: Number($(this).val())
+                });
+            }
+        });
+        $('#map-rows').on('change', function (event) {
+            if (!isNaN(Number($(this).val()))) {
+                post('/campaign/' + params.campaign + '/maps/' + params.map + '/modify/', function () { }, {}, {
+                    path: 'dimensions.rows',
+                    value: Number($(this).val())
+                });
+            }
+        });
+        $('#map-scale').on('change', function (event) {
+            if (!isNaN(Number($(this).val()))) {
+                post('/campaign/' + params.campaign + '/maps/' + params.map + '/modify/', function () { }, {}, {
+                    path: 'dimensions.scale',
+                    value: Number($(this).val())
+                });
+            }
+        });
+    }
 });
