@@ -8,6 +8,7 @@
     overflow: hidden;
     margin: 0;
     padding: 0;
+    z-index: 5;
 }
 #map-container {
     width: fit-content;
@@ -17,6 +18,11 @@
     -webkit-box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.46);
     -moz-box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.46);
     box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.46);
+    z-index: 6;
+    position: absolute;
+}
+#map-container img {
+    z-index: 7;
 }
 #map-options {
     position: absolute;
@@ -46,4 +52,43 @@
 }
 #map-options input:first-child {
     width: 20vw;
+}
+
+#toolbar {
+    z-index: 10;
+    position: absolute;
+    display: inline-block;
+    width: 40px;
+    height: fit-content;
+    -webkit-box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.46);
+    -moz-box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.46);
+    box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.46);
+    background-color: rgba(0,0,0,0);
+    border-radius: 5px;
+}
+#toolbar button {
+    display: block;
+    margin: 0px;
+    background-color: var(--primary-darker);
+    transition: background-color 0.2s;
+    border: none;
+    color: white;
+    position: relative;
+    width: 100%;
+    height: 40px;
+}
+#toolbar button:first-child {
+    border-radius: 5px 5px 0 0;
+}
+#toolbar button:last-child {
+    border-radius: 0 0 5px 5px;
+}
+#toolbar button i {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+#toolbar button:hover, #toolbar button.selected {
+    background-color: var(--primary-darker2);
 }

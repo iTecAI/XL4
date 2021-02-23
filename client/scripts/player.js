@@ -44,6 +44,16 @@ var current_map_data = {
         self: false
     }
 };
+var current_tool = 'move';
+var cursor_tool_map = {
+    '#map-container img':{
+        move: 'move',
+        obscure: 'crosshair',
+        draw: 'crosshair',
+        shape: 'crosshair',
+        measure: 'crosshair'
+    }
+}
 
 // Panning/Zooming constants
 var scale = 1,
@@ -59,9 +69,10 @@ function setTransform(element) {
 
 function setup_map_base() {
     var map_container = $('<div id="map-container" class="noselect noscroll"></div>');
-    map_container.append($('<img>').attr('src', format_loaded_url(current_map_data.map_img)));
+    map_container.append($('<img draggable=false>').attr('src', format_loaded_url(current_map_data.map_img)));
 
     $(map_container).on('mousedown', function (e) {
+        if (current_tool != 'move') { return; }
         e.preventDefault();
         e = e.originalEvent;
         start = { x: e.clientX - xoff, y: e.clientY - yoff };
@@ -71,6 +82,7 @@ function setup_map_base() {
         panning = false;
     });
     $(map_container).on('mousemove', function (e) {
+        if (current_tool != 'move') { return; }
         e.preventDefault();
         e = e.originalEvent;
         if (!panning) {
@@ -81,6 +93,7 @@ function setup_map_base() {
         setTransform(map_container);
     });
     $(map_container).on('wheel', function (e) {
+        if (current_tool != 'move') { return; }
         e.preventDefault();
         e = e.originalEvent;
         // take the scale into account with the offset
@@ -122,12 +135,26 @@ function update_settings() {
     $('#map-scale').val(current_map_data.dimensions.scale);
 }
 
+function prep_dynamic_event_listeners() {
+    Object.keys(cursor_tool_map).map(function (v) {
+        $(v).off('mousemove').on('mousemove', function (event) {
+            for (var i = 0; i < Object.keys(cursor_tool_map).length; i++) {
+                if ($(this).is(Object.keys(cursor_tool_map)[i])) {
+                    $(this).css('cursor',cursor_tool_map[Object.keys(cursor_tool_map)[i]][current_tool]);
+                }
+            }
+        });
+    });
+}
+
 function overall_update(data) {
     current_map_data = data;
     get('/campaign/' + data.campaign + '/', function (_data) { current_cmp_data = _data; });
 
     update_settings()
     draw_map();
+
+    prep_dynamic_event_listeners();
 }
 
 function pagelocal_update(data) {
@@ -141,7 +168,6 @@ function pagelocal_update(data) {
 
 $(document).ready(function () {
     params = parse_query_string();
-    console.log(params);
     if (Object.keys(params).length != 2) {
         bootbox.alert('Error fetching map. Returning to campaign page.', function () {
             window.location = '/campaigns';
@@ -186,6 +212,12 @@ $(document).ready(function () {
                     value: Number($(this).val())
                 });
             }
+        });
+
+        $('#toolbar button').on('click', function (event) {
+            $('#toolbar button.selected').removeClass('selected');
+            current_tool = $(this).attr('data-tool');
+            $(this).addClass('selected');
         });
     }
 });
