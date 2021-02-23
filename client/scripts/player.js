@@ -58,7 +58,7 @@ function setTransform(element) {
 }
 
 function setup_map_base() {
-    var map_container = $('<div id="map-container"></div>');
+    var map_container = $('<div id="map-container" class="noselect noscroll"></div>');
     map_container.append($('<img>').attr('src', format_loaded_url(current_map_data.map_img)));
 
     $(map_container).on('mousedown', function (e) {
@@ -104,6 +104,7 @@ function setup_map_base() {
 
         setTransform(map_container);
     });
+    setTransform(map_container);
     return map_container;
 }
 
@@ -114,9 +115,18 @@ function draw_map() {
     player.replaceAll('#player');
 }
 
+function update_settings() {
+    $('#map-name').val(current_map_data.name);
+    $('#map-cols').val(current_map_data.dimensions.columns);
+    $('#map-rows').val(current_map_data.dimensions.rows);
+    $('#map-scale').val(current_map_data.dimensions.scale);
+}
+
 function overall_update(data) {
     current_map_data = data;
     get('/campaign/' + data.campaign + '/', function (_data) { current_cmp_data = _data; });
+
+    update_settings()
     draw_map();
 }
 
@@ -135,4 +145,35 @@ $(document).ready(function () {
         '/campaign/' + params.campaign + '/maps/' + params.map + '/',
         overall_update
     );
+
+    $('#map-name').on('change', function (event) {
+        post('/campaign/'+params.campaign+'/maps/'+params.map+'/modify/',function(){},{},{
+            path: 'name',
+            value: $(this).val()
+        });
+    });
+    $('#map-cols').on('change', function (event) {
+        if (!isNaN(Number($(this).val()))) {
+            post('/campaign/'+params.campaign+'/maps/'+params.map+'/modify/',function(){},{},{
+                path: 'dimensions.columns',
+                value: Number($(this).val())
+            });
+        }
+    });
+    $('#map-rows').on('change', function (event) {
+        if (!isNaN(Number($(this).val()))) {
+            post('/campaign/'+params.campaign+'/maps/'+params.map+'/modify/',function(){},{},{
+                path: 'dimensions.rows',
+                value: Number($(this).val())
+            });
+        }
+    });
+    $('#map-scale').on('change', function (event) {
+        if (!isNaN(Number($(this).val()))) {
+            post('/campaign/'+params.campaign+'/maps/'+params.map+'/modify/',function(){},{},{
+                path: 'dimensions.scale',
+                value: Number($(this).val())
+            });
+        }
+    });
 });

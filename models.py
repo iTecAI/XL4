@@ -15,11 +15,11 @@ class NewCharacterModel(BaseModel):
     ctype: str
     url: str
 
-class CharacterModifyModel(BaseModel):
+class ModifyModel(BaseModel):
     path: str
     value: Any
 
-class CharacterBatchModifyModel(BaseModel):
+class BatchModifyModel(BaseModel):
     items: dict
 
 class NewCampaignModel(BaseModel):

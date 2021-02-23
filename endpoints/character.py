@@ -237,7 +237,7 @@ async def duplicate_character(sid: str, response: Response, fp: Optional[str] = 
 
 
 @router.post('/{sid}/modify/')
-async def modify_character(sid: str, model: CharacterModifyModel, response: Response, fp: Optional[str] = Header(None)):
+async def modify_character(sid: str, model: ModifyModel, response: Response, fp: Optional[str] = Header(None)):
     response, res = fingerprint_validate(fp, response)
     if res != 0:
         return res
@@ -295,7 +295,7 @@ async def modify_character(sid: str, model: CharacterModifyModel, response: Resp
 
 
 @router.post('/{sid}/batch_modify/')
-async def batch_modify_character(sid: str, model: CharacterBatchModifyModel, response: Response, fp: Optional[str] = Header(None)):
+async def batch_modify_character(sid: str, model: BatchModifyModel, response: Response, fp: Optional[str] = Header(None)):
     response, res = fingerprint_validate(fp, response)
     if res != 0:
         return res
