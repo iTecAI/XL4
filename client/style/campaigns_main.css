@@ -247,10 +247,30 @@
     #character-panel {
         width: 310px;
     }
+    #maps-panel {
+        position: absolute;
+        top: 0px;
+        left: calc(310px + 5vh);
+        display: inline-block;
+        width: calc(100% - 310px - 5vh);
+        height: 100%;
+        background-color: white;
+        z-index: 15;
+    }
 }
 @media (max-width: 699px) {
     #character-panel {
         width: 200px;
+    }
+    #maps-panel {
+        position: absolute;
+        top: 0px;
+        left: calc(200px + 5vh);
+        display: inline-block;
+        width: calc(100% - 200px - 5vh);
+        height: 100%;
+        background-color: white;
+        z-index: 15;
     }
 }
 .character-box {
@@ -334,17 +354,6 @@
     top: 50%;
     left: 32px;
     transform: translate(-50%,-50%);
-}
-
-#maps-panel {
-    position: absolute;
-    top: 0px;
-    left: calc(310px + 5vh);
-    display: inline-block;
-    width: calc(100% - 310px - 5vh);
-    height: 100%;
-    background-color: white;
-    z-index: 15;
 }
 
 #dialog-modal {
