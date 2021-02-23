@@ -16,7 +16,9 @@ logger = logging.getLogger('uvicorn.error')
 router = APIRouter()
 
 @router.get('/{endpoint}/{filename}/')
-def get_file(endpoint: str, filename: str, response: Response, fp: Optional[str] = Header(None)):
+async def get_file(endpoint: str, filename: str, response: Response, fingerprint: Optional[str] = None, fp: Optional[str] = Header(None)):
+    if (fp == None):
+        fp = fingerprint+''
     response, res = fingerprint_validate(fp,response)
     if res != 0:
         return res
@@ -35,7 +37,7 @@ def get_file(endpoint: str, filename: str, response: Response, fp: Optional[str]
     
     if (
         server.connections[fp].user in metadata.can_access['user'] or
-        any([server.connections[fp].user in server.get('campaigns.campaigns', i).players for i in metadata.can_access['campaign_participant']]) or
+        any([server.connections[fp].user in server.get('campaigns.campaigns', i).players or server.connections[fp].user in server.get('campaigns.campaigns', i).dms for i in metadata.can_access['campaign_participant']]) or
         any([server.connections[fp].user in server.get('campaigns.campaigns', i).dms for i in metadata.can_access['campaign_dm']])
     ):
         return FileResponse(get_raw_path(endpoint+'.raw', filename + '.' + metadata.ext))
@@ -44,7 +46,7 @@ def get_file(endpoint: str, filename: str, response: Response, fp: Optional[str]
         return {'result':f'You do not access to the file at {endpoint}.{filename}'}
 
 @router.post('/{endpoint}/')
-def post_file(endpoint: str, model: FSPostModel, response: Response, fp: Optional[str] = Header(None)):
+async def post_file(endpoint: str, model: FSPostModel, response: Response, fp: Optional[str] = Header(None)):
     response, res = fingerprint_validate(fp,response)
     if res != 0:
         return res
@@ -65,5 +67,19 @@ def post_file(endpoint: str, model: FSPostModel, response: Response, fp: Optiona
         'result':'Success',
         'id':new_meta.id
     }
+
+@router.post('/{endpoint}/{filename}/remove/')
+async def remove_file(endpoint: str, filename: str, response: Response, fp: Optional[str] = Header(None)):
+    response, res = fingerprint_validate(fp,response)
+    if res != 0:
+        return res
+    if server.connections[fp].user == None:
+        response.status_code = status.HTTP_405_METHOD_NOT_ALLOWED
+        return {'result':'Must be logged in.'}
+    if not endpoint in ALLOWED_FS_ENDPOINTS:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return {'result':f'Endpoint {endpoint} is invalid for FS access. Use one of {str(ALLOWED_FS_ENDPOINTS)}'}
+    response.status_code, result = fs_delete(endpoint,filename)
+    return result
     
 

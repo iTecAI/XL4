@@ -1,4 +1,5 @@
 var current_cmp = null;
+var current_cmp_data = null;
 
 function update_cmp_directory(data) {
     var params = parse_query_string();
@@ -113,6 +114,7 @@ function update_cmp_directory(data) {
         current_cmp = null;
     }
     $('#no-campaign-box').toggle(current_cmp == null);
+    current_cmp_data = data.campaigns[current_cmp];
 }
 
 function load_cmp_characters(data) {
@@ -147,6 +149,8 @@ function pagelocal_update(data) {
 }
 
 $(document).ready(function () {
+    $('#add-map-dialog').hide();
+    $('#dialog-modal').hide();
     get('/campaign/', load_cmp_page);
 
     $('#add-cmp').on('click', function (event) {
@@ -164,9 +168,66 @@ $(document).ready(function () {
         var file = this.files[0];
         var reader = new FileReader();
         $(reader).on('load', function () {
-            console.log(reader.result);
             $('#map-img-prev img').attr('src', reader.result);
         });
         reader.readAsDataURL(file);
+    });
+
+    $('#add-map').on('click', function (event) {
+        $('#add-map-dialog input').val('');
+        $('#add-map-dialog img').attr('src','none');
+        $('#add-map-dialog').show();
+        $('#dialog-modal').show();
+    });
+    $('#dialog-modal').on('click', function (event) {
+        $('#add-map-dialog').hide();
+        $('#dialog-modal').hide();
+    });
+    $('#submit-map').on('click', function (event) {
+        if (
+            $('#map-img-prev img').attr('src') == 'none'
+            || $('#map-cols input').val() == ''
+            || $('#map-rows input').val() == ''
+            || $('#map-scale input').val() == ''
+            || $('#map-name input').val() == ''
+        ) {
+            bootbox.alert('Please fill out all fields, and make sure you have a map image uploaded.');
+        } else {
+            var imgdata = $('#add-map-dialog img').attr('src');
+            var dimensions = {
+                columns: $('#map-cols input').val(),
+                rows: $('#map-rows input').val(),
+                scale: $('#map-scale input').val()
+            };
+            post(
+                '/fs/images/',
+                function (result) {
+                    post(
+                        '/campaign/'+current_cmp+'/maps/new/',
+                        function (result) {
+                            $('#add-map-dialog').hide();
+                            $('#dialog-modal').hide();
+                            
+                        },
+                        {},
+                        {
+                            image: '/fs/images/'+result.id+'/?fingerprint={fp}',
+                            dimensions: dimensions,
+                            name: $('#map-name input').val()
+                        },
+                        true
+                    );
+                },
+                {},
+                {
+                    uri: imgdata,
+                    permissions: {
+                        user: [uid],
+                        campaign_participant: current_cmp_data.players,
+                        campaign_dm: current_cmp_data.dms
+                    }
+                }
+            );
+        }
     });
 });

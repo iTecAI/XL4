@@ -21,9 +21,12 @@ async def get_campaigns(response: Response, fp: Optional[str] = Header(None)):
     if server.connections[fp].user == None:
         response.status_code = status.HTTP_405_METHOD_NOT_ALLOWED
         return {'result':'Must be logged in.'}
+    cmps = {i: server.get('campaigns.campaigns', i).to_dict() for i in server.get('users',server.connections[fp].user).campaigns}
+    for c in cmps.keys():
+        cmps[c]['maps'] = {i:server.get('campaigns.maps',i) for i in cmps[c]['maps']}
     return {
         'uid': server.connections[fp].user,
-        'campaigns': {i: server.get('campaigns.campaigns', i).to_dict() for i in server.get('users',server.connections[fp].user).campaigns}
+        'campaigns': cmps
     }
 
 @router.get('/{sid}/')
@@ -35,7 +38,9 @@ async def get_campaign_specific(sid: str, response: Response, fp: Optional[str] 
         response.status_code = status.HTTP_405_METHOD_NOT_ALLOWED
         return {'result':'Must be logged in.'}
     if sid in server.get('users',server.connections[fp].user).campaigns:
-        return server.get('campaigns.campaigns', sid).to_dict()
+        cmp = server.get('campaigns.campaigns', sid).to_dict()
+        cmp['maps'] = [server.get('campaigns.maps',i) for i in cmp['maps']]
+        return cmp
     else:
         response.status_code = status.HTTP_404_NOT_FOUND
         return {'result':f'Could not find campaign {sid}.'}
@@ -78,6 +83,68 @@ async def delete_campaign(sid: str, response: Response, fp: Optional[str] = Head
         else:
             response.status_code = status.HTTP_403_FORBIDDEN
             return {'result':f'You do not own campaign {sid}'}
+    else:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return {'result':f'Could not find campaign {sid}.'}
+
+@router.post('/{sid}/maps/new/')
+async def add_map(sid: str, model: AddMapModel, response: Response, fp: Optional[str] = Header(None)):
+    response, res = fingerprint_validate(fp,response)
+    if res != 0:
+        return res
+    if server.connections[fp].user == None:
+        response.status_code = status.HTTP_405_METHOD_NOT_ALLOWED
+        return {'result':'Must be logged in.'}
+    if sid in server.get('users',server.connections[fp].user).campaigns:
+        if server.get('campaigns.campaigns', sid).owner == server.connections[fp].user or server.connections[fp].user in server.get('campaigns.campaigns', sid).dms:
+            new_map_object = Map({
+                'campaign':sid,
+                'map_img':model.image,
+                'dimensions':model.dimensions,
+                'name': model.name
+            })
+            server.add_object(new_map_object)
+            server.get('campaigns.maps', new_map_object.id).update()
+            server.get('campaigns.campaigns', sid).maps.append(new_map_object.id)
+            server.get('campaigns.campaigns', sid).update('maps')
+            server.get('campaigns.campaigns', sid).update()
+            server.store(sid)
+            return new_map_object.to_dict()
+        else:
+            response.status_code = status.HTTP_403_FORBIDDEN
+            return {'result':f'You are not a dm of campaign {sid}'}
+    else:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return {'result':f'Could not find campaign {sid}.'}
+
+@router.post('/{sid}/maps/{mid}/delete/')
+async def add_map(sid: str, mid: str, response: Response, fp: Optional[str] = Header(None)):
+    response, res = fingerprint_validate(fp,response)
+    if res != 0:
+        return res
+    if server.connections[fp].user == None:
+        response.status_code = status.HTTP_405_METHOD_NOT_ALLOWED
+        return {'result':'Must be logged in.'}
+    if sid in server.get('users',server.connections[fp].user).campaigns:
+        if server.get('campaigns.campaigns', sid).owner == server.connections[fp].user or server.connections[fp].user in server.get('campaigns.campaigns', sid).dms:
+            if mid in server.get('campaigns.campaigns', sid).maps:
+                fs_delete('images',server.get('campaigns.maps', mid).map_img.split('/')[3])
+                try:
+                    server.get('campaigns.campaigns', sid).maps.remove(mid)
+                    server.delete('campaigns.maps',mid)
+                    server.get('campaigns.campaigns', sid).update()
+                    server.get('campaigns.campaigns', sid).update('maps')
+                    server.store(sid)
+                except ValueError:
+                    pass
+                return {'result':'Success.'}
+                    
+            else:
+                response.status_code = status.HTTP_404_NOT_FOUND
+                return {'result':f'Could not find map {mid} in campaign {sid}.'}
+        else:
+            response.status_code = status.HTTP_403_FORBIDDEN
+            return {'result':f'You are not a dm of campaign {sid}'}
     else:
         response.status_code = status.HTTP_404_NOT_FOUND
         return {'result':f'Could not find campaign {sid}.'}

@@ -66,7 +66,7 @@ async def login(user: UserLoginModel, response: Response, fp: Optional[str] = He
     response, res = fingerprint_validate(fp,response)
     if res != 0:
         return res
-    if user.username in list_usermap():
+    if get_usermap(user.username) != None:
         if sensitive.get_password_check_hash(server.get('users',get_usermap(user.username)).passhash,fp) == user.passhash:
             server.connections[fp].user = get_usermap(user.username)
             updates, uid = server.update_connection(fp)

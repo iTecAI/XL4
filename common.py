@@ -323,7 +323,13 @@ class Map(BaseObject):
         self.campaign = dct['campaign']
         self.id = error(dct, 'id', generate_id())
         self.objects = error(dct, 'objects', {})
+        self.name = error(dct, 'name', 'New Map')
         self.map_img = dct['map_img']
+        self.dimensions = error(dct, 'dimensions', {
+            'scale':5,
+            'columns':10,
+            'rows':10
+        })
         self.initiative = error(dct,'initiative',{
             'combatants':{},
             'current':None,
@@ -375,6 +381,18 @@ def get_usermap(name):
         lock = json.load(f)
     if name in lock['user_map'].keys():
         return lock['user_map'][name]
+    path = []
+    path.extend(CONFIG['database_path'].split('/'))
+    path.append('users')
+    for i in os.listdir(os.path.join(*path)):
+        subpath = path[:]
+        subpath.append(i)
+        with open(os.path.join(*subpath),'r') as f:
+            data = json.load(f)
+            if name == data['username']:
+                store_usermap(name, data['id'])
+                return data['id']
+
     return None
 
 
@@ -561,3 +579,15 @@ def fingerprint_validate(fp, response):
         response.status_code = status.HTTP_403_FORBIDDEN
         return response, {'result': 'Unknown session fingerprint'}
     return response, 0
+
+def fs_delete(endpoint, filename):
+    try:
+        metadata = server.get(endpoint+'.meta',filename)
+    except KeyError:
+        return status.HTTP_404_NOT_FOUND, {'result':f'File with name {filename} at endpoint {endpoint} not found.'}
+    try:
+        os.remove(get_raw_path(endpoint+'.raw',filename+'.'+metadata.ext))
+    except:
+        pass
+    server.delete(endpoint+'.meta',filename)
+    return status.HTTP_200_OK, {'result':'Success.'}

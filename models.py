@@ -31,3 +31,8 @@ class GetCharsBatchModel(BaseModel):
 class FSPostModel(BaseModel):
     uri: str
     permissions: dict
+
+class AddMapModel(BaseModel):
+    image: str
+    dimensions: dict
+    name: str

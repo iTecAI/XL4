@@ -79,6 +79,7 @@
         <div id='content-area'>
             <div id='content-modal'></div>
             <div id='content-box' class='noscroll'>
+                <div id='dialog-modal'></div>
                 <div id='cmp-directory'>
                     <div id='campaigns'>
 
@@ -103,7 +104,7 @@
             Cannot connect to server. Most features will be non-functional.
         </div>
         <div id='add-map-dialog'>
-            <div class='title'><span>New Map</span></div>
+            <div class='title noselect'><span>New Map</span></div>
             <div id='map-img-prev'>
                 <img src='none' alt='Map Preview'>
             </div>
@@ -111,6 +112,23 @@
                 <input type="file" id='map-img-input' accept="image/*">
                 <button id='img-upload'>Upload</button>
             </div>
+            <div class='dialog-input noselect' id='map-name'>
+                <input>
+                <span>Map Name</span>
+            </div>
+            <div class='dialog-input dims noselect' id='map-cols'>
+                <input>
+                <span>Columns</span>
+            </div>
+            <div class='dialog-input dims noselect' id='map-rows'>
+                <input>
+                <span>Rows</span>
+            </div>
+            <div class='dialog-input noselect' id='map-scale'>
+                <input>
+                <span>Grid Size (feet)</span>
+            </div>
+            <button id='submit-map'>Create</button>
         </div>
     </body>
 </html>

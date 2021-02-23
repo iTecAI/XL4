@@ -347,6 +347,18 @@
     z-index: 15;
 }
 
+#dialog-modal {
+    z-index: 99;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+    background-color: black;
+    opacity: 0.6;
+}
+
 #add-map-dialog {
     position: absolute;
     top: 50%;
@@ -441,4 +453,61 @@
 #map-img-prev img[src=none] {
     opacity: 0;
     height: 0px;
+}
+
+.dialog-input {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    height: fit-content;
+}
+.dialog-input input {
+    position: relative;
+    display: inline-block;
+    width: 90%;
+    height: auto;
+    padding: 5px;
+    border-radius: 5px;
+    border: none;
+    margin-left: 5%;
+    text-align: center;
+    background-color: var(--primary);
+    transition: background-color 0.2s;
+    color: white;
+    font-family: Roboto;
+}
+.dialog-input input:hover, .dialog-input input:focus {
+    background-color: var(--primary-light);
+}
+.dialog-input span {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    height: fit-content;
+    color: white;
+    font-family: Roboto;
+    text-align: center;
+}
+.dialog-input.dims {
+    width: 49%;
+    margin-right: 0px;
+}
+#submit-map {
+    position: relative;
+    display: inline-block;
+    width: 50%;
+    height: 40px;
+    background-color: var(--primary);
+    border: none;
+    margin: 10px;
+    border-radius: 5px;
+    margin-left: 25%;
+    transition: background-color 0.2s;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    font-family: Roboto;
+}
+#submit-map:hover {
+    background-color: var(--secondary-dark);
 }
