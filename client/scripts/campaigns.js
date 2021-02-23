@@ -161,6 +161,9 @@ function load_cmp_maps(data) {
                     $('<button id="play-map-button"></button>')
                         .append('<i class="material-icons">play_arrow</i>')
                         .append('<span>Play</span>')
+                        .on('click', function (event) {
+                            window.location = '/player?campaign='+current_cmp+'&map='+$(event.delegateTarget).parents('.buttons').parents('.map-item').attr('data-id');
+                        })
                 )
                 .append(
                     $('<button id="delete-map-button"></button>')

@@ -73,6 +73,9 @@ async def get_char_sheet():
 @app.get('/campaigns', include_in_schema=False)
 async def get_char_sheet():
     return FileResponse(os.path.join('client','campaigns.html'))
+@app.get('/player', include_in_schema=False)
+async def get_char_sheet():
+    return FileResponse(os.path.join('client','player.html'))
 
 
 logger.info('Loading static files.')

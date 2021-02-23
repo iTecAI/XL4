@@ -1,0 +1,17 @@
+#player {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+}
+#map-container {
+    width: 100%;
+    height: 100%; 
+    transform-origin: 0px 0px;
+    transform: scale(1) translate(0px, 0px);
+}

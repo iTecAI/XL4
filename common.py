@@ -267,7 +267,8 @@ class User(BaseObject):
         self._update = error(dct, '_update', {
             'self': False,
             'characters': False,
-            'campaigns': False
+            'campaigns': False,
+            'maps': False
         })
         self.passhash = dct['passhash']
         self.username = dct['username']
@@ -532,14 +533,18 @@ class Server:
             u = self.get('users', self.connections[fp].user)
             uid = u.id
             updates['user'] = u.check_update()
-            updates['characters']['global'] = any([self.get(
-                'characters', i)._update for i in u.characters]) or u.check_update(endpoint='characters')
+            updates['characters']['global'] = u.check_update(endpoint='characters')
             updates['characters']['specific'] = {i: self.get(
                 'characters', i).check_update() for i in u.characters}
-            updates['campaigns']['global'] = u.check_update('campaigns') or any(
-                [self.get('campaigns.campaigns', i)._update['self'] for i in u.campaigns])
+            updates['campaigns']['global'] = u.check_update('campaigns')
             updates['campaigns']['specific'] = {i: self.get(
                 'campaigns.campaigns', i).check_update() for i in u.campaigns}
+            updates['maps']['global'] = u.check_update('maps')
+            maps = []
+            for i in u.campaigns:
+                maps.extend(self.get('campaigns.campaigns', i).maps)
+            updates['maps']['specific'] = {i: self.get(
+                'campaigns.maps', i).check_update() for i in maps}
         return updates, uid
 
     def check_connection(self, _id):

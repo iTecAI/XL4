@@ -148,3 +148,25 @@ async def add_map(sid: str, mid: str, response: Response, fp: Optional[str] = He
     else:
         response.status_code = status.HTTP_404_NOT_FOUND
         return {'result':f'Could not find campaign {sid}.'}
+
+@router.get('/{sid}/maps/{mid}/')
+async def get_map(sid: str, mid: str, response: Response, fp: Optional[str] = Header(None)):
+    response, res = fingerprint_validate(fp,response)
+    if res != 0:
+        return res
+    if server.connections[fp].user == None:
+        response.status_code = status.HTTP_405_METHOD_NOT_ALLOWED
+        return {'result':'Must be logged in.'}
+    if sid in server.get('users',server.connections[fp].user).campaigns:
+        if server.get('campaigns.campaigns', sid).owner == server.connections[fp].user or server.connections[fp].user in server.get('campaigns.campaigns', sid).dms:
+            if mid in server.get('campaigns.campaigns', sid).maps:
+                return server.get('campaigns.maps', mid)
+            else:
+                response.status_code = status.HTTP_404_NOT_FOUND
+                return {'result':f'Could not find map {mid} in campaign {sid}.'}
+        else:
+            response.status_code = status.HTTP_403_FORBIDDEN
+            return {'result':f'You are not a dm of campaign {sid}'}
+    else:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return {'result':f'Could not find campaign {sid}.'}
