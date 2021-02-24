@@ -635,3 +635,9 @@ body {
     font-family: Roboto;
     font-weight: bold;
 }
+div.tippy-box[data-theme=material] {
+    background-color: var(--primary-darker);
+}
+div.tippy-box[data-theme~=material][data-placement^=right] > .tippy-arrow::before {
+    border-right-color: var(--primary-darker);
+}

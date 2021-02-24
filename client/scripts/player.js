@@ -588,5 +588,12 @@ $(document).ready(function () {
             $('#measuring-container').remove();
             $('#player').attr('data-tool',current_tool);
         });
+
+        tippy('#toolbar button', {
+            placement: 'right',
+            arrow: true,
+            theme: 'material',
+            offset: [0,15]
+        });
     }
 });
