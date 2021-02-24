@@ -92,3 +92,24 @@
 #toolbar button:hover, #toolbar button.selected {
     background-color: var(--primary-darker2);
 }
+#measure-tool {
+    z-index: 20;
+}
+#measuring-container {
+    display: inline-block;
+    position: absolute;
+    cursor: crosshair;
+}
+#measuring-container span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+    display: inline-block;
+    width: fit-content;
+    height: fit-content;
+    color: white;
+    font-family: Roboto;
+    z-index: 21;
+}
