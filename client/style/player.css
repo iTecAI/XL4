@@ -114,3 +114,19 @@
     font-family: Roboto;
     z-index: 21;
 }
+
+#selection-box {
+    display: none;
+    position: absolute;
+    background-color: rgba(0, 183, 255, 0.459);
+    z-index: 25;
+    cursor: crosshair;
+}
+#selection-box.selecting {
+    display: inline-block;
+}
+
+.object {
+    position: absolute;
+    display: inline-block;
+}

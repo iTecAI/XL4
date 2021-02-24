@@ -81,6 +81,157 @@ var measure_start = { x: 0, y: 0 };
 var measuring = false;
 var measure_timeout = null;
 
+// Selection box
+var selector = {
+    start: {
+        x: 0,
+        y: 0
+    },
+    end: {
+        x: 0,
+        y: 0
+    }
+};
+
+function isOverlap(div1, div2) {
+    // Div 1 data
+    var d1_offset = $(div1).position();
+    var d1_height = $(div1).outerHeight(true);
+    var d1_width = $(div1).outerWidth(true);
+    var d1_distance_from_top = d1_offset.top + d1_height;
+    var d1_distance_from_left = d1_offset.left + d1_width;
+
+    // Div 2 data
+    var d2_offset = $(div2).position();
+    var d2_height = $(div2).outerHeight(true);
+    var d2_width = $(div2).outerWidth(true);
+    var d2_distance_from_top = d2_offset.top + d2_height;
+    var d2_distance_from_left = d2_offset.left + d2_width;
+
+    var not_colliding = (
+        d1_distance_from_top < d2_offset.top || 
+        d1_offset.top > d2_distance_from_top || 
+        d1_distance_from_left < d2_offset.left || 
+        d1_offset.left > d2_distance_from_left
+    );
+
+    // Return whether it IS colliding
+    return !not_colliding;
+};
+function getCollisions(main, selector) {
+    var cols = $(selector).toArray().map(function (v, i, a) {
+        return [v, isOverlap(main, v)];
+    });
+    var rcols = [];
+    for (var i = 0; i < cols.length; i++) {
+        if (cols[i][1]) {
+            rcols.push(cols[i][0]);
+        }
+    }
+    return rcols;
+}
+function startSelector(e) {
+    var pos = evGetPercentPosition(e);
+    selector = {
+        start: {
+            x: pos.x,
+            y: pos.y
+        },
+        end: {
+            x: 0,
+            y: 0
+        }
+    };
+    $('#selection-box')
+        .addClass('selecting')
+        .css({
+            top: selector.start.y + '%',
+            left: selector.start.x + '%',
+            width: '0%',
+            height: '0%'
+        });
+}
+function updateSelector(e) {
+    if ($('#selection-box').hasClass('selecting')) {
+        selector.end = evGetPercentPosition(e);
+        if (selector.end.x >= selector.start.x && selector.end.y >= selector.start.y) {
+            var top = selector.start.y;
+            var left = selector.start.x;
+            var width = selector.end.x - selector.start.x;
+            var height = selector.end.y - selector.start.y;
+        } else if (selector.end.x < selector.start.x && selector.end.y >= selector.start.y) {
+            var top = selector.start.y;
+            var left = selector.end.x;
+            var width = selector.start.x - selector.end.x;
+            var height = selector.end.y - selector.start.y;
+        } else if (selector.end.x >= selector.start.x && selector.end.y < selector.start.y) {
+            var top = selector.end.y;
+            var left = selector.start.x;
+            var width = selector.end.x - selector.start.x;
+            var height = selector.start.y - selector.end.y;
+        } else {
+            var top = selector.end.y;
+            var left = selector.end.x;
+            var width = selector.start.x - selector.end.x;
+            var height = selector.start.y - selector.end.y;
+        }
+
+        $('#selection-box')
+            .css({
+                top: top + '%',
+                left: left + '%',
+                width: width + '%',
+                height: height + '%'
+            });
+    }
+}
+function finishSelector() {
+    var collisions = getCollisions('#selection-box', '.object');
+    $('#selection-box').removeClass('selecting');
+    var s_copy = JSON.parse(JSON.stringify(selector));
+    if (selector.end.x >= selector.start.x && selector.end.y >= selector.start.y) {
+        var top = selector.start.y;
+        var left = selector.start.x;
+        var width = selector.end.x - selector.start.x;
+        var height = selector.end.y - selector.start.y;
+    } else if (selector.end.x < selector.start.x && selector.end.y >= selector.start.y) {
+        var top = selector.start.y;
+        var left = selector.end.x;
+        var width = selector.start.x - selector.end.x;
+        var height = selector.end.y - selector.start.y;
+    } else if (selector.end.x >= selector.start.x && selector.end.y < selector.start.y) {
+        var top = selector.end.y;
+        var left = selector.start.x;
+        var width = selector.end.x - selector.start.x;
+        var height = selector.start.y - selector.end.y;
+    } else {
+        var top = selector.end.y;
+        var left = selector.end.x;
+        var width = selector.start.x - selector.end.x;
+        var height = selector.start.y - selector.end.y;
+    }
+    selector = {
+        start: {
+            x: 0,
+            y: 0
+        },
+        end: {
+            x: 0,
+            y: 0
+        }
+    };
+    return {
+        selection: s_copy,
+        dimensions: {
+            top: top,
+            left: left,
+            width: width,
+            height: height
+        },
+        collisions: collisions
+    };
+}
+
 function setup_map_base() {
     var map_container = $('<div id="map-container" class="noselect noscroll"></div>');
     map_container.append($('<img draggable=false>').attr('src', format_loaded_url(current_map_data.map_img)));
@@ -108,23 +259,25 @@ function setup_map_base() {
                     )
                     .css({
                         position: 'absolute',
-                        top: measure_start.y+'%',
-                        left: measure_start.x+'%'
+                        top: measure_start.y + '%',
+                        left: measure_start.x + '%'
                     })
                     .append(
                         $('<span>0 ft.</span>')
                     )
             );
 
-            var svgel = document.createElementNS('http://www.w3.org/2000/svg','line');
-            svgel.setAttribute('x1','0');
-            svgel.setAttribute('y1','0');
-            svgel.setAttribute('stroke','var(--secondary)');
-            svgel.setAttribute('stroke-width','2');
+            var svgel = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            svgel.setAttribute('x1', '0');
+            svgel.setAttribute('y1', '0');
+            svgel.setAttribute('stroke', 'var(--secondary)');
+            svgel.setAttribute('stroke-width', '2');
             document.getElementById('measure-tool').appendChild(svgel);
             if (measure_timeout != null) {
                 clearTimeout(measure_timeout);
             }
+        } else if (current_tool == 'obscure') {
+            startSelector(e);
         }
     });
     $(map_container).on('mouseup', function (e) {
@@ -141,10 +294,12 @@ function setup_map_base() {
             if (dist < 1) {
                 $('#measuring-container').remove();
             } else {
-                measure_timeout = window.setTimeout(function(){
+                measure_timeout = window.setTimeout(function () {
                     $('#measuring-container').remove();
                 }, 5000);
             }
+        } else if (current_tool == 'obscure') {
+            console.log(finishSelector());
         }
     });
     $(map_container).on('mousemove', function (e) {
@@ -198,57 +353,64 @@ function setup_map_base() {
             }
 
             $('#measuring-container').css({
-                top: top+'%',
-                left: left+'%',
+                top: top + '%',
+                left: left + '%',
                 height: (height + 0.1) + '%',
                 width: (width + 0.1) + '%'
             });
-            document.getElementById('measure-tool').children[0].setAttribute('x1',x1);
-            document.getElementById('measure-tool').children[0].setAttribute('y1',y1);
-            document.getElementById('measure-tool').children[0].setAttribute('x2',x2);
-            document.getElementById('measure-tool').children[0].setAttribute('y2',y2);
+            document.getElementById('measure-tool').children[0].setAttribute('x1', x1);
+            document.getElementById('measure-tool').children[0].setAttribute('y1', y1);
+            document.getElementById('measure-tool').children[0].setAttribute('x2', x2);
+            document.getElementById('measure-tool').children[0].setAttribute('y2', y2);
 
             var curpos = evGetPercentPosition(e);
             var dx = (curpos.x - measure_start.x) * (current_map_data.dimensions.scale * current_map_data.dimensions.columns) / 100;
             var dy = (curpos.y - measure_start.y) * (current_map_data.dimensions.scale * current_map_data.dimensions.rows) / 100;
             var dist = Math.round(Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2)));
 
-            $('#measuring-container span').text(dist+' ft.');
+            $('#measuring-container span').text(dist + ' ft.');
+        } else if (current_tool == 'obscure') {
+            updateSelector(e);
         }
     });
     $(map_container).on('wheel', function (e) {
         e.preventDefault();
         e = e.originalEvent;
-        if (current_tool == 'move') {
-            // take the scale into account with the offset
-            var xs = (e.clientX - xoff) / scale,
-                ys = (e.clientY - yoff) / scale,
-                delta = (e.wheelDelta ? e.wheelDelta : -e.deltaY);
+        // take the scale into account with the offset
+        var xs = (e.clientX - xoff) / scale,
+            ys = (e.clientY - yoff) / scale,
+            delta = (e.wheelDelta ? e.wheelDelta : -e.deltaY);
 
-            // get scroll direction & set zoom level
-            (delta > 0) ? (scale *= 1.2) : (scale /= 1.2);
+        // get scroll direction & set zoom level
+        (delta > 0) ? (scale *= 1.2) : (scale /= 1.2);
 
-            if (scale > scale_max) {
-                scale = scale_max + 0;
-            }
-            if (scale < scale_min) {
-                scale = scale_min + 0;
-            }
-
-            // reverse the offset amount with the new scale
-            xoff = e.clientX - xs * scale;
-            yoff = e.clientY - ys * scale;
-
-            setTransform(map_container);
+        if (scale > scale_max) {
+            scale = scale_max + 0;
         }
+        if (scale < scale_min) {
+            scale = scale_min + 0;
+        }
+
+        // reverse the offset amount with the new scale
+        xoff = e.clientX - xs * scale;
+        yoff = e.clientY - ys * scale;
+
+        setTransform(map_container);
     });
     setTransform(map_container);
     return map_container;
 }
 
+function setup_static_elements() {
+    return [
+        $('<div id="selection-box"></div>')
+    ];
+}
+
 function draw_map() {
     var player = $('<div id="player"></div>');
     player.append(setup_map_base());
+    player.children('#map-container').append(setup_static_elements());
 
     player.replaceAll('#player');
 }
