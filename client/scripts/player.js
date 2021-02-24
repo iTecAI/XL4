@@ -316,6 +316,9 @@ function setup_map_base() {
             if (selector_data.dimensions.top + selector_data.dimensions.height > 100) {
                 selector_data.dimensions.height = 100 - selector_data.dimensions.top;
             }
+            if (Math.abs(selector_data.dimensions.width) < 0.002 || Math.abs(selector_data.dimensions.height) < 0.002 || (selector_data.dimensions.top == 0.0 && selector_data.dimensions.left == 0.0)) {
+                return;
+            }
             post(
                 '/campaign/'+current_cmp_data.id+'/maps/'+current_map_data.id+'/objects/add/',
                 console.log,
@@ -506,7 +509,6 @@ function overall_update(data) {
     current_map_data = data;
     get('/campaign/' + data.campaign + '/', function (_data) {
         current_cmp_data = _data;
-        console.log(current_cmp_data,current_map_data);
         update_settings()
         draw_map();
 
