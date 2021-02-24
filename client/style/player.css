@@ -98,7 +98,8 @@
 #measuring-container {
     display: inline-block;
     position: absolute;
-    cursor: crosshair;
+    cursor: pointer;
+    pointer-events: none;
 }
 #measuring-container span {
     position: absolute;

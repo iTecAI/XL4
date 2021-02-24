@@ -79,6 +79,7 @@ function evGetPercentPosition(e) {
 // Measuring vars
 var measure_start = { x: 0, y: 0 };
 var measuring = false;
+var measure_timeout = null;
 
 function setup_map_base() {
     var map_container = $('<div id="map-container" class="noselect noscroll"></div>');
@@ -121,6 +122,9 @@ function setup_map_base() {
             svgel.setAttribute('stroke','var(--secondary)');
             svgel.setAttribute('stroke-width','2');
             document.getElementById('measure-tool').appendChild(svgel);
+            if (measure_timeout != null) {
+                clearTimeout(measure_timeout);
+            }
         }
     });
     $(map_container).on('mouseup', function (e) {
@@ -136,6 +140,10 @@ function setup_map_base() {
             measuring = false;
             if (dist < 1) {
                 $('#measuring-container').remove();
+            } else {
+                measure_timeout = window.setTimeout(function(){
+                    $('#measuring-container').remove();
+                }, 5000);
             }
         }
     });
