@@ -90,7 +90,7 @@
     transform: translate(-50%, -50%);
 }
 #toolbar button:hover, #toolbar button.selected {
-    background-color: var(--primary-darker2);
+    background-color: var(--secondary-dark);
 }
 #measure-tool {
     z-index: 20;
