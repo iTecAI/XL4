@@ -575,6 +575,13 @@ $(document).ready(function () {
         });
 
         $('#toolbar button').on('click', function (event) {
+            if ($(this).attr('data-tool') == 'home') {
+                xoff = 0;
+                yoff = 0;
+                scale = 1;
+                setTransform('#map-container');
+                return;
+            }
             $('#toolbar button.selected').removeClass('selected');
             current_tool = $(this).attr('data-tool');
             $(this).addClass('selected');
