@@ -13,6 +13,8 @@ logger = logging.getLogger('uvicorn.error')
 
 router = APIRouter()
 
+ALLOWED_PLAYER_OBJECTS = ['shape', 'character', 'drawing']
+
 
 @router.get('/')
 async def get_campaigns(response: Response, fp: Optional[str] = Header(None)):
@@ -171,15 +173,11 @@ async def get_map(sid: str, mid: str, response: Response, fp: Optional[str] = He
         response.status_code = status.HTTP_405_METHOD_NOT_ALLOWED
         return {'result': 'Must be logged in.'}
     if sid in server.get('users', server.connections[fp].user).campaigns:
-        if server.get('campaigns.campaigns', sid).owner == server.connections[fp].user or server.connections[fp].user in server.get('campaigns.campaigns', sid).dms:
-            if mid in server.get('campaigns.campaigns', sid).maps:
-                return server.get('campaigns.maps', mid)
-            else:
-                response.status_code = status.HTTP_404_NOT_FOUND
-                return {'result': f'Could not find map {mid} in campaign {sid}.'}
+        if mid in server.get('campaigns.campaigns', sid).maps:
+            return server.get('campaigns.maps', mid)
         else:
-            response.status_code = status.HTTP_403_FORBIDDEN
-            return {'result': f'You are not a dm of campaign {sid}'}
+            response.status_code = status.HTTP_404_NOT_FOUND
+            return {'result': f'Could not find map {mid} in campaign {sid}.'}
     else:
         response.status_code = status.HTTP_404_NOT_FOUND
         return {'result': f'Could not find campaign {sid}.'}
@@ -220,6 +218,7 @@ async def modify_campaign(sid: str, model: ModifyModel, response: Response, fp: 
         response.status_code = status.HTTP_404_NOT_FOUND
         return {'result': f'Could not find campaign {sid}.'}
 
+
 @router.post('/{sid}/maps/{mid}/modify/')
 async def add_map(sid: str, mid: str, model: ModifyModel, response: Response, fp: Optional[str] = Header(None)):
     response, res = fingerprint_validate(fp, response)
@@ -248,6 +247,7 @@ async def add_map(sid: str, mid: str, model: ModifyModel, response: Response, fp
                     return {'result': f'Path {model.path} not found.'}
                 server.get('campaigns.maps', mid).update()
                 server.store(sid)
+                server.store(mid)
                 return server.get('campaigns.maps', mid).to_dict()
             else:
                 response.status_code = status.HTTP_404_NOT_FOUND
@@ -255,6 +255,167 @@ async def add_map(sid: str, mid: str, model: ModifyModel, response: Response, fp
         else:
             response.status_code = status.HTTP_403_FORBIDDEN
             return {'result': f'You are not a dm of campaign {sid}'}
+    else:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return {'result': f'Could not find campaign {sid}.'}
+
+
+@router.post('/{sid}/maps/{mid}/objects/add/')
+async def add_map(sid: str, mid: str, model: AddObjectModel, response: Response, fp: Optional[str] = Header(None)):
+    response, res = fingerprint_validate(fp, response)
+    if res != 0:
+        return res
+    if server.connections[fp].user == None:
+        response.status_code = status.HTTP_405_METHOD_NOT_ALLOWED
+        return {'result': 'Must be logged in.'}
+    if sid in server.get('users', server.connections[fp].user).campaigns:
+        if server.get('campaigns.campaigns', sid).owner == server.connections[fp].user or server.connections[fp].user in server.get('campaigns.campaigns', sid).dms or model._type in ALLOWED_PLAYER_OBJECTS:
+            if mid in server.get('campaigns.campaigns', sid).maps:
+                new_object = {
+                    'type': model.object_type,
+                    'id': generate_id(),
+                    'position': {
+                        'x': model.x,
+                        'y': model.y
+                    },
+                    'data': model.data.copy()
+                }
+                server.get('campaigns.maps',
+                           mid).objects[new_object['id']] = new_object
+                server.get('campaigns.maps', mid).update()
+                server.store(sid)
+                server.store(mid)
+                return {'result': 'Success.', 'oid': new_object['id']}
+            else:
+                response.status_code = status.HTTP_404_NOT_FOUND
+                return {'result': f'Could not find map {mid} in campaign {sid}.'}
+        else:
+            response.status_code = status.HTTP_403_FORBIDDEN
+            return {'result': f'You are not a dm of campaign {sid}, and the object was not in the list of allowed objects: {str(ALLOWED_PLAYER_OBJECTS)}'}
+    else:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return {'result': f'Could not find campaign {sid}.'}
+
+
+@router.post('/{sid}/maps/{mid}/objects/{oid}/delete')
+async def add_map(sid: str, mid: str, oid: str, response: Response, fp: Optional[str] = Header(None)):
+    response, res = fingerprint_validate(fp, response)
+    if res != 0:
+        return res
+    if server.connections[fp].user == None:
+        response.status_code = status.HTTP_405_METHOD_NOT_ALLOWED
+        return {'result': 'Must be logged in.'}
+    if sid in server.get('users', server.connections[fp].user).campaigns:
+        if mid in server.get('campaigns.campaigns', sid).maps:
+            if oid in server.get('campaigns.maps', mid).objects.keys():
+                if (
+                    server.get('campaigns.campaigns', sid).owner == server.connections[fp].user or
+                    server.connections[fp].user in server.get('campaigns.campaigns', sid).dms or
+                    server.get(
+                        'campaigns.maps', mid).objects[oid]['type'] in ALLOWED_PLAYER_OBJECTS
+                ):
+                    del server.get('campaigns.maps', mid).objects[oid]
+                    server.get('campaigns.maps', mid).update()
+                    server.store(sid)
+                    server.store(mid)
+                    return {'result': 'Success.'}
+                else:
+                    response.status_code = status.HTTP_403_FORBIDDEN
+                    return {'result': f'You are not a dm of campaign {sid}, and the object was not in the list of allowed objects: {str(ALLOWED_PLAYER_OBJECTS)}'}
+            else:
+                response.status_code = status.HTTP_404_NOT_FOUND
+                return {'result': f'Could not find object {oid} in map {mid}.'}
+        else:
+            response.status_code = status.HTTP_404_NOT_FOUND
+            return {'result': f'Could not find map {mid} in campaign {sid}.'}
+    else:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return {'result': f'Could not find campaign {sid}.'}
+
+
+@router.post('/{sid}/maps/{mid}/objects/{oid}/move/')
+async def add_map(sid: str, mid: str, oid: str, model: MoveObjectModel, response: Response, fp: Optional[str] = Header(None)):
+    response, res = fingerprint_validate(fp, response)
+    if res != 0:
+        return res
+    if server.connections[fp].user == None:
+        response.status_code = status.HTTP_405_METHOD_NOT_ALLOWED
+        return {'result': 'Must be logged in.'}
+    if sid in server.get('users', server.connections[fp].user).campaigns:
+        if mid in server.get('campaigns.campaigns', sid).maps:
+            if oid in server.get('campaigns.maps', mid).objects.keys():
+                if (
+                    server.get('campaigns.campaigns', sid).owner == server.connections[fp].user or
+                    server.connections[fp].user in server.get('campaigns.campaigns', sid).dms or
+                    server.get(
+                        'campaigns.maps', mid).objects[oid]['type'] in ALLOWED_PLAYER_OBJECTS
+                ):
+                    server.get('campaigns.maps', mid).objects[oid]['position'] = {
+                        'x': model.x,
+                        'y': model.y
+                    }
+                    server.get('campaigns.maps', mid).update()
+                    server.store(sid)
+                    server.store(mid)
+                    return {'result': 'Success.'}
+                else:
+                    response.status_code = status.HTTP_403_FORBIDDEN
+                    return {'result': f'You are not a dm of campaign {sid}, and the object was not in the list of allowed objects: {str(ALLOWED_PLAYER_OBJECTS)}'}
+            else:
+                response.status_code = status.HTTP_404_NOT_FOUND
+                return {'result': f'Could not find object {oid} in map {mid}.'}
+        else:
+            response.status_code = status.HTTP_404_NOT_FOUND
+            return {'result': f'Could not find map {mid} in campaign {sid}.'}
+    else:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return {'result': f'Could not find campaign {sid}.'}
+
+@router.post('/{sid}/maps/{mid}/objects/{oid}/modify/')
+async def add_map(sid: str, mid: str, oid: str, model: ModifyModel, response: Response, fp: Optional[str] = Header(None)):
+    response, res = fingerprint_validate(fp, response)
+    if res != 0:
+        return res
+    if server.connections[fp].user == None:
+        response.status_code = status.HTTP_405_METHOD_NOT_ALLOWED
+        return {'result': 'Must be logged in.'}
+    if sid in server.get('users', server.connections[fp].user).campaigns:
+        if mid in server.get('campaigns.campaigns', sid).maps:
+            if oid in server.get('campaigns.maps', mid).objects.keys():
+                if (
+                    server.get('campaigns.campaigns', sid).owner == server.connections[fp].user or
+                    server.connections[fp].user in server.get('campaigns.campaigns', sid).dms or
+                    server.get(
+                        'campaigns.maps', mid).objects[oid]['type'] in ALLOWED_PLAYER_OBJECTS
+                ):
+                    code = f'server.get("campaigns.maps",mid).objects["{oid}"]["data"]'
+                    for i in model.path.split('.'):
+                        code += '['
+                        try:
+                            code += str(int(i))
+                        except ValueError:
+                            code += '"'+str(i)+'"'
+                        code += ']'
+                    code += ' = '+condition(type(model.value) == str,
+                                            '"'+str(model.value)+'"', str(model.value))
+                    try:
+                        exec(code, globals(), locals())
+                    except KeyError:
+                        response.status_code = status.HTTP_404_NOT_FOUND
+                        return {'result': f'Path {model.path} not found.'}
+                    server.get('campaigns.maps', mid).update()
+                    server.store(sid)
+                    server.store(mid)
+                    return {'result': 'Success.'}
+                else:
+                    response.status_code = status.HTTP_403_FORBIDDEN
+                    return {'result': f'You are not a dm of campaign {sid}, and the object was not in the list of allowed objects: {str(ALLOWED_PLAYER_OBJECTS)}'}
+            else:
+                response.status_code = status.HTTP_404_NOT_FOUND
+                return {'result': f'Could not find object {oid} in map {mid}.'}
+        else:
+            response.status_code = status.HTTP_404_NOT_FOUND
+            return {'result': f'Could not find map {mid} in campaign {sid}.'}
     else:
         response.status_code = status.HTTP_404_NOT_FOUND
         return {'result': f'Could not find campaign {sid}.'}

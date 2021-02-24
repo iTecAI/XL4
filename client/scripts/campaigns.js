@@ -270,8 +270,8 @@ $(document).ready(function () {
                     uri: imgdata,
                     permissions: {
                         user: [uid],
-                        campaign_participant: current_cmp_data.players,
-                        campaign_dm: current_cmp_data.dms
+                        campaign_participant: current_cmp_data.id,
+                        campaign_dm: current_cmp_data.id
                     }
                 }
             );

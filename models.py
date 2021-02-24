@@ -36,3 +36,13 @@ class AddMapModel(BaseModel):
     image: str
     dimensions: dict
     name: str
+
+class AddObjectModel(BaseModel):
+    object_type: str
+    data: dict
+    x: float
+    y: float
+
+class MoveObjectModel(BaseModel):
+    x: float
+    y: float

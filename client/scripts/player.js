@@ -109,9 +109,9 @@ function isOverlap(div1, div2) {
     var d2_distance_from_left = d2_offset.left + d2_width;
 
     var not_colliding = (
-        d1_distance_from_top < d2_offset.top || 
-        d1_offset.top > d2_distance_from_top || 
-        d1_distance_from_left < d2_offset.left || 
+        d1_distance_from_top < d2_offset.top ||
+        d1_offset.top > d2_distance_from_top ||
+        d1_distance_from_left < d2_offset.left ||
         d1_offset.left > d2_distance_from_left
     );
 
@@ -299,7 +299,20 @@ function setup_map_base() {
                 }, 5000);
             }
         } else if (current_tool == 'obscure') {
-            console.log(finishSelector());
+            var selector_data = finishSelector();
+            post(
+                '/campaign/'+current_cmp_data.id+'/maps/'+current_map_data.id+'/objects/add/',
+                console.log,
+                {},{
+                    object_type: 'obscure',
+                    data: {
+                        width: selector_data.dimensions.width,
+                        height: selector_data.dimensions.height
+                    },
+                    x: selector_data.dimensions.left,
+                    y: selector_data.dimensions.top
+                }
+            );
         }
     });
     $(map_container).on('mousemove', function (e) {
@@ -434,14 +447,20 @@ function prep_dynamic_event_listeners() {
     });
 }
 
+function toolbar_check() {
+    $('#toolbar .dm-tool').toggle(current_cmp_data.dms.includes(uid));
+}
+
 function overall_update(data) {
     current_map_data = data;
-    get('/campaign/' + data.campaign + '/', function (_data) { current_cmp_data = _data; });
+    get('/campaign/' + data.campaign + '/', function (_data) {
+        current_cmp_data = _data;
+        update_settings()
+        draw_map();
 
-    update_settings()
-    draw_map();
-
-    prep_dynamic_event_listeners();
+        prep_dynamic_event_listeners();
+        toolbar_check();
+    });
 }
 
 function pagelocal_update(data) {
