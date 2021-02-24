@@ -46,14 +46,14 @@ var current_map_data = {
 };
 var current_tool = 'move';
 var cursor_tool_map = {
-    '#map-container img': {
+    '#map-container img, .obscure': {
         move: 'move',
         obscure: 'crosshair',
         draw: 'crosshair',
         shape: 'crosshair',
         measure: 'crosshair'
     }
-}
+};
 
 // Panning/Zooming constants
 var scale = 1,
@@ -237,6 +237,16 @@ function setup_map_base() {
     map_container.append($('<img draggable=false>').attr('src', format_loaded_url(current_map_data.map_img)));
 
     $(map_container).on('mousedown', function (e) {
+        if ($(e.target).hasClass('object') || $(e.target).parents('.object').length > 0) {
+            if (!current_cmp_data.dms.includes(uid) && (
+                ($(e.target).hasClass('obscure') || $(e.target).parents('.obscure').length > 0) ||
+                ($(e.target).hasClass('npc') || $(e.target).parents('.npc').length > 0)
+            )) {
+
+            } else {
+                return;
+            }
+        }
         e.preventDefault();
         e = e.originalEvent;
         if (current_tool == 'move') {
@@ -300,6 +310,12 @@ function setup_map_base() {
             }
         } else if (current_tool == 'obscure') {
             var selector_data = finishSelector();
+            if (selector_data.dimensions.left + selector_data.dimensions.width > 100) {
+                selector_data.dimensions.width = 100 - selector_data.dimensions.left;
+            }
+            if (selector_data.dimensions.top + selector_data.dimensions.height > 100) {
+                selector_data.dimensions.height = 100 - selector_data.dimensions.top;
+            }
             post(
                 '/campaign/'+current_cmp_data.id+'/maps/'+current_map_data.id+'/objects/add/',
                 console.log,
@@ -420,12 +436,47 @@ function setup_static_elements() {
     ];
 }
 
+function draw_obscure(obj) {
+    return $('<div class="object obscure"></div>')
+        .toggleClass('dm',current_cmp_data.dms.includes(uid))
+        .attr('data-oid',obj.id)
+        .css({
+            top: obj.position.y+'%',
+            left: obj.position.x+'%',
+            width: obj.data.width+'%',
+            height: obj.data.height+'%'
+        })
+        .on('click', function (event) {
+            if (current_tool == 'obscure') {
+                post(
+                    '/campaign/'+current_cmp_data.id+'/maps/'+current_map_data.id+'/objects/'+$(event.delegateTarget).attr('data-oid')+'/delete/',
+                    function(){}
+                );
+            }
+        });
+}
+
+function draw_objects() {
+    var objects = [];
+    var object_keys = Object.keys(current_map_data.objects);
+    for (var o = 0; o < object_keys.length; o++) {
+        var obj = current_map_data.objects[object_keys[o]];
+        switch (obj.type) {
+            case 'obscure':
+                objects.push(draw_obscure(obj));
+        }
+    }
+    return objects;
+}
+
 function draw_map() {
     var player = $('<div id="player"></div>');
     player.append(setup_map_base());
     player.children('#map-container').append(setup_static_elements());
+    player.children('#map-container').append(draw_objects());
 
     player.replaceAll('#player');
+    $('#player').attr('data-tool',current_tool);
 }
 
 function update_settings() {
@@ -455,6 +506,7 @@ function overall_update(data) {
     current_map_data = data;
     get('/campaign/' + data.campaign + '/', function (_data) {
         current_cmp_data = _data;
+        console.log(current_cmp_data,current_map_data);
         update_settings()
         draw_map();
 
@@ -525,6 +577,7 @@ $(document).ready(function () {
             current_tool = $(this).attr('data-tool');
             $(this).addClass('selected');
             $('#measuring-container').remove();
+            $('#player').attr('data-tool',current_tool);
         });
     }
 });

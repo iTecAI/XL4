@@ -25,7 +25,7 @@ class XLCharacter(Character):
     def __init__(self, dct):
         super().__init__(dct)
         self.id = error(dct, 'id', generate_id())
-        self._update = error(dct, '_update', False)
+        self._update = error(dct, '_update', {'self':False})
         self.campaign = error(dct, 'campaign', None)
         self.owner = error(dct, 'owner', None)
 
@@ -84,12 +84,16 @@ class XLCharacter(Character):
             self.class_info = new[:]
         self.reprocess()
 
-    def update(self):
-        self._update = True
+        self.update_timeouts = error(dct, 'update_timeouts', {'self':0})
+    def update(self, endpoint='self'):
+        self._update[endpoint] = True
+        self.update_timeouts[endpoint] = time.time() + CONFIG['update_timeout']
 
-    def check_update(self):
-        if self._update:
-            self._update = False
+    def check_update(self, endpoint='self'):
+        if self._update[endpoint]:
+            if time.time() > self.update_timeouts[endpoint]:
+                self._update[endpoint] = False
+                del self.update_timeouts[endpoint]
             return True
         else:
             return False
@@ -273,13 +277,16 @@ class User(BaseObject):
         self.passhash = dct['passhash']
         self.username = dct['username']
         self.user_type = error(dct, 'user_type', 'default')
-
+        self.update_timeouts = error(dct, 'update_timeouts', {'self':0})
     def update(self, endpoint='self'):
         self._update[endpoint] = True
+        self.update_timeouts[endpoint] = time.time() + CONFIG['update_timeout']
 
     def check_update(self, endpoint='self'):
         if self._update[endpoint]:
-            self._update[endpoint] = False
+            if time.time() > self.update_timeouts[endpoint]:
+                self._update[endpoint] = False
+                del self.update_timeouts[endpoint]
             return True
         else:
             return False
@@ -306,13 +313,16 @@ class Campaign(BaseObject):
             'maps': False
         })
         self.icon = error(dct, 'icon', None)
-
+        self.update_timeouts = error(dct, 'update_timeouts', {'self':0})
     def update(self, endpoint='self'):
         self._update[endpoint] = True
+        self.update_timeouts[endpoint] = time.time() + CONFIG['update_timeout']
 
     def check_update(self, endpoint='self'):
         if self._update[endpoint]:
-            self._update[endpoint] = False
+            if time.time() > self.update_timeouts[endpoint]:
+                self._update[endpoint] = False
+                del self.update_timeouts[endpoint]
             return True
         else:
             return False
@@ -339,12 +349,16 @@ class Map(BaseObject):
         self._update = error(dct, '_update', {
             'self': False
         })
+        self.update_timeouts = error(dct, 'update_timeouts', {'self':0})
     def update(self, endpoint='self'):
         self._update[endpoint] = True
+        self.update_timeouts[endpoint] = time.time() + CONFIG['update_timeout']
 
     def check_update(self, endpoint='self'):
         if self._update[endpoint]:
-            self._update[endpoint] = False
+            if time.time() > self.update_timeouts[endpoint]:
+                self._update[endpoint] = False
+                del self.update_timeouts[endpoint]
             return True
         else:
             return False

@@ -130,3 +130,13 @@
     position: absolute;
     display: inline-block;
 }
+.obscure {
+    background-color: black;
+}
+.obscure.dm {
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+#player[data-tool=obscure] .obscure.dm:hover {
+    opacity: 0.4;
+}

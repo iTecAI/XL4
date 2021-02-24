@@ -3,6 +3,7 @@ var fingerprint = 'requesting';
 var uid = null;
 var refresh_interval = 200;
 var activating = false;
+var last_update = 0;
 
 var SKILLS = {
     'acrobatics': 'dexterity',
@@ -154,7 +155,10 @@ function root_refresh(data) {
         activate('#head-menu-btn', false);
         $('#settings-window').slideUp(0);
     }
-    pagelocal_update(data);
+    if (Date.now() > last_update + 510) {
+        pagelocal_update(data);
+        last_update = Date.now();
+    }
 }
 function activate(selector, set) {
     activating = true;
