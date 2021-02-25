@@ -641,3 +641,6 @@ div.tippy-box[data-theme=material] {
 div.tippy-box[data-theme~=material][data-placement^=right] > .tippy-arrow::before {
     border-right-color: var(--primary-darker);
 }
+div.tippy-box[data-theme~=material][data-placement^=bottom] > .tippy-arrow::before {
+    border-bottom-color: var(--primary-darker);
+}

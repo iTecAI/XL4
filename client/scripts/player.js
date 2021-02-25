@@ -103,7 +103,8 @@ var selector = {
     end: {
         x: 0,
         y: 0
-    }
+    },
+    type: null
 };
 
 function isOverlap(div1, div2) {
@@ -131,6 +132,53 @@ function isOverlap(div1, div2) {
     // Return whether it IS colliding
     return !not_colliding;
 };
+
+function getRect(x1, y1, x2, y2) {
+    if (x2 >= x1 && y2 >= y1) {
+        var top = y1;
+        var left = x1;
+        var width = x2 - x1;
+        var height = y2 - y1;
+    } else if (x2 < x1 && y2 >= y1) {
+        var top = y1;
+        var left = x2;
+        var width = x1 - x2;
+        var height = y2 - y1;
+    } else if (x2 >= x1 && y2 < y1) {
+        var top = y2;
+        var left = x1;
+        var width = x2 - x1;
+        var height = y1 - y2;
+    } else {
+        var top = y2;
+        var left = x2;
+        var width = x1 - x2;
+        var height = y1 - y2;
+    }
+    return {
+        top: top,
+        left: left,
+        width: width,
+        height: height
+    };
+}
+
+function getAngle(start, end) {
+    var angle = Math.atan((end.y - start.y) / (end.x - start.x));
+    if (end.y <= start.y && end.x >= start.x) { // Quadrant II
+        angle += Math.PI;
+    } else if (end.y >= start.y && end.x >= start.x) { // Quadrant III
+        angle += Math.PI;
+    } else if (end.y >= start.y && end.x <= start.x) { // Quadrant IV
+        angle += Math.PI * 2;
+    }
+    if (angle == 2 * Math.PI) {
+        angle = 0;
+    }
+
+    return angle;
+}
+
 function getCollisions(main, selector) {
     var cols = $(selector).toArray().map(function (v, i, a) {
         return [v, isOverlap(main, v)];
@@ -143,7 +191,7 @@ function getCollisions(main, selector) {
     }
     return rcols;
 }
-function startSelector(e) {
+function startSelector(e,type) {
     var pos = evGetPercentPosition(e);
     selector = {
         start: {
@@ -153,10 +201,12 @@ function startSelector(e) {
         end: {
             x: 0,
             y: 0
-        }
+        },
+        type: cond(type==undefined,'rectangle',type)
     };
     $('#selection-box')
         .addClass('selecting')
+        .addClass(selector.type)
         .css({
             top: selector.start.y + '%',
             left: selector.start.x + '%',
@@ -196,7 +246,19 @@ function updateSelector(e) {
                 width: width + '%',
                 height: height + '%'
             });
+        return {
+            top: top,
+            left: left,
+            width: width,
+            height: height
+        };
     }
+    return {
+        top: 0,
+        left: 0,
+        width: 0,
+        height: 0
+    };
 }
 function finishSelector() {
     var collisions = getCollisions('#selection-box', '.object');
@@ -231,7 +293,8 @@ function finishSelector() {
         end: {
             x: 0,
             y: 0
-        }
+        },
+        type: null
     };
     return {
         selection: s_copy,
@@ -241,7 +304,8 @@ function finishSelector() {
             width: width,
             height: height
         },
-        collisions: collisions
+        collisions: collisions,
+        type: s_copy.type
     };
 }
 
@@ -266,11 +330,17 @@ var custom_ctx = {
                         'character',
                         'owned'
                     ]
+                },
+                {
+                    match_type: 'any',
+                    match: [
+                        'shape'
+                    ]
                 }
             ]
         }
     },
-    label_visibility_off: {
+    visibility_off: {
         dms: {
             classes: [
                 {
@@ -279,18 +349,32 @@ var custom_ctx = {
                         'note',
                         'player-visible'
                     ]
+                },
+                {
+                    match_type: 'all',
+                    match: [
+                        'shape',
+                        'player-visible'
+                    ]
                 }
             ]
         },
         players: {}
     },
-    label_visibility_on: {
+    visibility_on: {
         dms: {
             classes: [
                 {
                     match_type: 'all',
                     match: [
                         'note',
+                        'player-invisible'
+                    ]
+                },
+                {
+                    match_type: 'all',
+                    match: [
+                        'shape',
                         'player-invisible'
                     ]
                 }
@@ -302,14 +386,25 @@ var custom_ctx = {
         dms: {
             classes: [
                 {
-                    match_type: 'all',
+                    match_type: 'any',
                     match: [
-                        'note'
+                        'note',
+                        'shape'
                     ]
                 }
             ]
         },
-        players: {}
+        players: {
+            classes: [
+                {
+                    match_type: 'any',
+                    match: [
+                        'note',
+                        'shape'
+                    ]
+                }
+            ]
+        }
     }
 };
 
@@ -337,7 +432,8 @@ function setup_map_base() {
     $(map_container).on('mousedown', function (e) {
         if ($(e.target).hasClass('object') || $(e.target).parents('.object').length > 0) {
             if ((!current_cmp_data.dms.includes(uid) && !(
-                ($(e.target).hasClass('character') || $(e.target).parents('.character').length > 0)
+                ($(e.target).hasClass('character') || $(e.target).parents('.character').length > 0) ||
+                ($(e.target).hasClass('shape') || $(e.target).parents('.shape').length > 0)
             )) || ($(e.target).hasClass('obscure') || $(e.target).parents('.obscure').length > 0)) {
 
             } else {
@@ -385,6 +481,14 @@ function setup_map_base() {
             }
         } else if (current_tool == 'obscure') {
             startSelector(e);
+        } else if (current_tool == 'shape') {
+            if ($('#toolbar-shapes button.selected').attr('data-shape') == 'rectangle') {
+                startSelector(e);
+                $('#selection-box').append('<span class="measurement"></span>');
+            } else if ($('#toolbar-shapes button.selected').attr('data-shape') == 'circle') {
+                startSelector(e,'circle');
+                $('#selection-box').append('<span class="measurement"></span>');
+            }
         }
     });
     $(map_container).on('mouseup', function (e) {
@@ -429,6 +533,55 @@ function setup_map_base() {
                 y: selector_data.dimensions.top
             }
             );
+        } else if (current_tool == 'shape') {
+            if ($('#selection-box').hasClass('selecting')) {
+                $('#selection-box .measurement').remove();
+                var selector_data = finishSelector();
+                if (selector_data.dimensions.left + selector_data.dimensions.width > 100) {
+                    selector_data.dimensions.width = 100 - selector_data.dimensions.left;
+                }
+                if (selector_data.dimensions.top + selector_data.dimensions.height > 100) {
+                    selector_data.dimensions.height = 100 - selector_data.dimensions.top;
+                }
+                if (Math.abs(selector_data.dimensions.width) < 0.002 || Math.abs(selector_data.dimensions.height) < 0.002 || (selector_data.dimensions.top == 0.0 && selector_data.dimensions.left == 0.0)) {
+                    return;
+                }
+                if (selector_data.type == 'rectangle') {
+                    post(
+                        '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/add/',
+                        console.log,
+                        {}, {
+                        object_type: 'shape',
+                        data: {
+                            shape_type: 'rectangle',
+                            width: selector_data.dimensions.width,
+                            height: selector_data.dimensions.height,
+                            player_visible: true,
+                            color: 'red'
+                        },
+                        x: selector_data.dimensions.left,
+                        y: selector_data.dimensions.top
+                    }
+                    );
+                } else if (selector_data.type == 'circle') {
+                    post(
+                        '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/add/',
+                        console.log,
+                        {}, {
+                        object_type: 'shape',
+                        data: {
+                            shape_type: 'circle',
+                            width: selector_data.dimensions.width,
+                            height: selector_data.dimensions.height,
+                            player_visible: true,
+                            color: 'red'
+                        },
+                        x: selector_data.dimensions.left,
+                        y: selector_data.dimensions.top
+                    }
+                    );
+                }
+            }
         }
     });
     $(map_container).on('mousemove', function (e) {
@@ -500,6 +653,26 @@ function setup_map_base() {
             $('#measuring-container span').text(dist + ' ft.');
         } else if (current_tool == 'obscure') {
             updateSelector(e);
+        } else if (current_tool == 'shape') {
+            updateSelector(e);
+            if ($('#toolbar-shapes button.selected').attr('data-shape') != null) {
+                if ($('#toolbar-shapes button.selected').attr('data-shape') == 'rectangle') {
+                    var dims = updateSelector(e);
+                    $('#selection-box .measurement').text(
+                        String(Math.round(dims.width * (current_map_data.dimensions.scale * current_map_data.dimensions.columns) / 100)) +
+                        'ft. x ' +
+                        String(Math.round(dims.height * (current_map_data.dimensions.scale * current_map_data.dimensions.rows) / 100)) + 'ft.'
+                    );
+                } else if ($('#toolbar-shapes button.selected').attr('data-shape') == 'circle') {
+                    var dims = updateSelector(e);
+                    $('#selection-box .measurement').text(
+                        String(Math.round(dims.width * (current_map_data.dimensions.scale * current_map_data.dimensions.columns) / 100)) +
+                        'ft. x ' +
+                        String(Math.round(dims.height * (current_map_data.dimensions.scale * current_map_data.dimensions.rows) / 100)) + 'ft.'
+                    );
+                }
+
+            }
         }
     });
     $(map_container).on('wheel', function (e) {
@@ -676,7 +849,7 @@ function draw_note(obj) {
                 function () { }
             );
         })
-        .on('ctx:label_visibility_off', function () {
+        .on('ctx:visibility_off', function () {
             post(
                 '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/' + $(this).attr('data-oid') + '/modify/',
                 function () { }, {}, {
@@ -685,7 +858,7 @@ function draw_note(obj) {
             }
             );
         })
-        .on('ctx:label_visibility_on', function () {
+        .on('ctx:visibility_on', function () {
             post(
                 '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/' + $(this).attr('data-oid') + '/modify/',
                 function () { }, {}, {
@@ -707,7 +880,102 @@ function draw_note(obj) {
                 value: c
             }
             );
-        })
+        });
+}
+
+function draw_shape(obj) {
+    if (!obj.data.player_visible && !current_cmp_data.dms.includes(uid)) {
+        return;
+    }
+    if (obj.data.shape_type == 'rectangle' || obj.data.shape_type == 'circle') {
+        return $('<div class="object shape"></div>')
+            .addClass(obj.data.shape_type)
+            .toggleClass('dm', current_cmp_data.dms.includes(uid))
+            .attr('data-oid', obj.id)
+            .css({
+                top: obj.position.y + '%',
+                left: obj.position.x + '%',
+                width: obj.data.width + '%',
+                height: obj.data.height + '%',
+                'background-color': obj.data.color
+            })
+            .on('ctx:delete', function (event) {
+                post(
+                    '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/' + $(this).attr('data-oid') + '/delete/',
+                    function () { }
+                );
+            })
+            .append(
+                $('<span class="measurement"></span>')
+                    .text(
+                        String(Math.round(obj.data.width * (current_map_data.dimensions.scale * current_map_data.dimensions.columns) / 100)) +
+                        ' x ' +
+                        String(Math.round(obj.data.height * (current_map_data.dimensions.scale * current_map_data.dimensions.rows) / 100))
+                    )
+            )
+            .toggleClass('player-visible', obj.data.player_visible)
+            .toggleClass('player-invisible', !obj.data.player_visible)
+            .on('mousemove', function (e) {
+                if ($(this).attr('data-moving') == 'true') {
+                    var pos = getPercentPosition(e.clientX - ($(this).width() / 2), e.clientY - ($(this).height() / 2));
+                    $(this).css({
+                        top: pos.y + '%',
+                        left: pos.x + '%'
+                    });
+                }
+            })
+            .on('mousedown', function (event) {
+                if (event.button == 0) {
+                    if (current_tool == 'move') {
+                        $(this).attr('data-moving', 'true');
+                    }
+                }
+            })
+            .on('mouseup', function (event) {
+                if ($(this).attr('data-moving') != 'true') {
+                    return;
+                }
+                $(this).attr('data-moving', 'false');
+                var pos = getPercentPosition(event.clientX - ($(this).width() / 2), event.clientY - ($(this).height() / 2));
+                post(
+                    '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/' + $(event.delegateTarget).attr('data-oid') + '/move/',
+                    function () { },
+                    {}, pos
+                );
+            })
+            .on('ctx:visibility_off', function () {
+                post(
+                    '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/' + $(this).attr('data-oid') + '/modify/',
+                    function () { }, {}, {
+                    path: 'player_visible',
+                    value: false
+                }
+                );
+            })
+            .on('ctx:visibility_on', function () {
+                post(
+                    '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/' + $(this).attr('data-oid') + '/modify/',
+                    function () { }, {}, {
+                    path: 'player_visible',
+                    value: true
+                }
+                );
+            })
+            .on('ctx:color_cycle', function () {
+                if (note_colors.indexOf(current_map_data.objects[$(this).attr('data-oid')].data.color) == note_colors.length - 1) {
+                    var c = note_colors[0];
+                } else {
+                    var c = note_colors[note_colors.indexOf(current_map_data.objects[$(this).attr('data-oid')].data.color) + 1];
+                }
+                post(
+                    '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/' + $(this).attr('data-oid') + '/modify/',
+                    function () { }, {}, {
+                    path: 'color',
+                    value: c
+                }
+                );
+            });
+    }
 }
 
 function draw_objects() {
@@ -721,6 +989,9 @@ function draw_objects() {
                 break;
             case 'note':
                 objects.push(draw_note(obj));
+                break;
+            case 'shape':
+                objects.push(draw_shape(obj));
                 break;
         }
     }
@@ -761,6 +1032,8 @@ function prep_dynamic_event_listeners() {
 
 function toolbar_check() {
     $('#toolbar .dm-tool').toggle(current_cmp_data.dms.includes(uid));
+    $('#toolbar-shapes').toggle(current_tool == 'shape');
+    $('#content-box').toggleClass('dm',current_cmp_data.dms.includes(uid));
 }
 
 function overall_update(data) {
@@ -786,8 +1059,8 @@ function pagelocal_update(data) {
 }
 
 $(document).ready(function () {
-    $('#context-menu')
-        .hide();
+    $('#context-menu').hide();
+    $('#toolbar-shapes').hide();
     $(document).on('click', function (event) {
         if (!$(event.target).is('#context-menu') && $(event.target).parents('#context-menu').length == 0) {
             $('#context-menu').hide();
@@ -855,10 +1128,21 @@ $(document).ready(function () {
             $(this).addClass('selected');
             $('#measuring-container').remove();
             $('#player').attr('data-tool', current_tool);
+            $('#toolbar-shapes').toggle(current_tool == 'shape');
+        });
+        $('#toolbar-shapes button').on('click', function (event) {
+            $('#toolbar-shapes button.selected').removeClass('selected');
+            $(this).addClass('selected');
         });
 
         tippy('#toolbar button', {
             placement: 'right',
+            arrow: true,
+            theme: 'material',
+            offset: [0, 15]
+        });
+        tippy('#toolbar-shapes button', {
+            placement: 'bottom',
             arrow: true,
             theme: 'material',
             offset: [0, 15]

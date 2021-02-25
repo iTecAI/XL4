@@ -13,7 +13,7 @@ logger = logging.getLogger('uvicorn.error')
 
 router = APIRouter()
 
-ALLOWED_PLAYER_OBJECTS = ['shape', 'character', 'drawing']
+ALLOWED_PLAYER_OBJECTS = ['shape', 'character']
 
 
 @router.get('/')
@@ -269,7 +269,7 @@ async def add_map(sid: str, mid: str, model: AddObjectModel, response: Response,
         response.status_code = status.HTTP_405_METHOD_NOT_ALLOWED
         return {'result': 'Must be logged in.'}
     if sid in server.get('users', server.connections[fp].user).campaigns:
-        if server.get('campaigns.campaigns', sid).owner == server.connections[fp].user or server.connections[fp].user in server.get('campaigns.campaigns', sid).dms or model._type in ALLOWED_PLAYER_OBJECTS:
+        if server.get('campaigns.campaigns', sid).owner == server.connections[fp].user or server.connections[fp].user in server.get('campaigns.campaigns', sid).dms or model.object_type in ALLOWED_PLAYER_OBJECTS:
             if mid in server.get('campaigns.campaigns', sid).maps:
                 new_object = {
                     'type': model.object_type,

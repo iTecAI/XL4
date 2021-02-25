@@ -155,7 +155,7 @@ function root_refresh(data) {
         activate('#head-menu-btn', false);
         $('#settings-window').slideUp(0);
     }
-    if (Date.now() > last_update + 510) {
+    if (Date.now() > last_update + 790) {
         pagelocal_update(data);
         last_update = Date.now();
     }

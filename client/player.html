@@ -24,6 +24,7 @@
         <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
         <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/themes/material.css">
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/3.0.16/svg.min.js" integrity="sha512-p3Tp2zn+wApBreZCgRkmMwnfpN8MUPXzzOihXx7iGYXqE7t6m9drY8HeyMeeFuDWiTFKrGUrq3jpbT0vX6zY/Q==" crossorigin="anonymous"></script>
 
         <!-- Local Files -->
         <script src="scripts/sensitive.js"></script> <!-- Must be added after clone. Contains non-open-source code for password derivation etc -->
@@ -101,9 +102,6 @@
                     <button data-tool='obscure' class="dm-tool" data-tippy-content='Obscure'>
                         <i class="material-icons">cloud</i>
                     </button>
-                    <button data-tool='draw' data-tippy-content='Draw'>
-                        <i class="material-icons">brush</i>
-                    </button>
                     <button data-tool='shape' data-tippy-content='Shapes'>
                         <i class="material-icons">category</i>
                     </button>
@@ -117,6 +115,14 @@
                         <i class="material-icons">home</i>
                     </button>
                 </div>
+                <div id='toolbar-shapes'>
+                    <button data-shape='rectangle' class='selected' data-tippy-content='Rectangle'>
+                        <i class="material-icons">crop_16_9</i>
+                    </button>
+                    <button data-shape='circle' data-tippy-content='Circle'>
+                        <i class="material-icons">panorama_fish_eye</i>
+                    </button>
+                </div>
             </div>
         </div>
         <div id='noconn' class='noselect small-box-shadow'>
@@ -126,10 +132,10 @@
             <div class='ctx-item' data-ctx='delete'>
                 <div class="menu-icon"><i class='material-icons'>delete</i></div><div class="menu-label"><span>Delete</span></div>
             </div>
-            <div class='ctx-item' data-ctx='label_visibility_off'>
+            <div class='ctx-item' data-ctx='visibility_off'>
                 <div class="menu-icon"><i class='material-icons'>visibility_off</i></div><div class="menu-label"><span>Disable Player Visibility</span></div>
             </div>
-            <div class='ctx-item' data-ctx='label_visibility_on'>
+            <div class='ctx-item' data-ctx='visibility_on'>
                 <div class="menu-icon"><i class='material-icons'>visibility</i></div><div class="menu-label"><span>Enable Player Visibility</span></div>
             </div>
             <div class='ctx-item' data-ctx='color_cycle'>

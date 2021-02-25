@@ -22,7 +22,7 @@
     "session_lock":"lock.json",
     "connection_timeout":15,
     "loaded_object_timeout":60,
-    "update_timeout":0.5,
+    "update_timeout":0.8,
     "lock_defaults":{
         "connections":{},
         "user_map":{}
