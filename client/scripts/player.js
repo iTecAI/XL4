@@ -571,6 +571,12 @@ function draw_obscure(obj) {
                     function () { }
                 );
             }
+        })
+        .on('ctx:delete', function (event) {
+            post(
+                '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/' + $(this).attr('data-oid') + '/delete/',
+                function () { }
+            );
         });
 }
 
