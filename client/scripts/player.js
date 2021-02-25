@@ -51,7 +51,8 @@ var cursor_tool_map = {
         obscure: 'crosshair',
         draw: 'crosshair',
         shape: 'crosshair',
-        measure: 'crosshair'
+        measure: 'crosshair',
+        note: 'text'
     }
 };
 
@@ -238,10 +239,9 @@ function setup_map_base() {
 
     $(map_container).on('mousedown', function (e) {
         if ($(e.target).hasClass('object') || $(e.target).parents('.object').length > 0) {
-            if (!current_cmp_data.dms.includes(uid) && (
-                ($(e.target).hasClass('obscure') || $(e.target).parents('.obscure').length > 0) ||
-                ($(e.target).hasClass('npc') || $(e.target).parents('.npc').length > 0)
-            )) {
+            if ((!current_cmp_data.dms.includes(uid) && !(
+                ($(e.target).hasClass('character') || $(e.target).parents('.character').length > 0)
+            )) || ($(e.target).hasClass('obscure') || $(e.target).parents('.obscure').length > 0)) {
 
             } else {
                 return;
@@ -320,17 +320,17 @@ function setup_map_base() {
                 return;
             }
             post(
-                '/campaign/'+current_cmp_data.id+'/maps/'+current_map_data.id+'/objects/add/',
+                '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/add/',
                 console.log,
-                {},{
-                    object_type: 'obscure',
-                    data: {
-                        width: selector_data.dimensions.width,
-                        height: selector_data.dimensions.height
-                    },
-                    x: selector_data.dimensions.left,
-                    y: selector_data.dimensions.top
-                }
+                {}, {
+                object_type: 'obscure',
+                data: {
+                    width: selector_data.dimensions.width,
+                    height: selector_data.dimensions.height
+                },
+                x: selector_data.dimensions.left,
+                y: selector_data.dimensions.top
+            }
             );
         }
     });
@@ -429,6 +429,38 @@ function setup_map_base() {
 
         setTransform(map_container);
     });
+
+    $(map_container).on('click', function (e) {
+        if (($(e.target).hasClass('object') || $(e.target).parents('.object').length > 0) || ($(e.target).hasClass('obscure') || $(e.target).parents('.obscure').length > 0)) {
+            if (!current_cmp_data.dms.includes(uid) && (
+                ($(e.target).hasClass('npc') || $(e.target).parents('.npc').length > 0)
+            )) {
+
+            } else {
+                return;
+            }
+        }
+        e.preventDefault();
+        e = e.originalEvent;
+        if (current_tool == 'note') {
+            var pos = evGetPercentPosition(e);
+            post(
+                '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/add/',
+                console.log,
+                {}, {
+                object_type: 'note',
+                data: {
+                    color: 'white',
+                    content: $('.note').length + 1,
+                    player_visible: true
+                },
+                x: pos.x,
+                y: pos.y
+            }
+            );
+        }
+    });
+
     setTransform(map_container);
     return map_container;
 }
@@ -441,20 +473,91 @@ function setup_static_elements() {
 
 function draw_obscure(obj) {
     return $('<div class="object obscure"></div>')
-        .toggleClass('dm',current_cmp_data.dms.includes(uid))
-        .attr('data-oid',obj.id)
+        .toggleClass('dm', current_cmp_data.dms.includes(uid))
+        .attr('data-oid', obj.id)
         .css({
-            top: obj.position.y+'%',
-            left: obj.position.x+'%',
-            width: obj.data.width+'%',
-            height: obj.data.height+'%'
+            top: obj.position.y + '%',
+            left: obj.position.x + '%',
+            width: obj.data.width + '%',
+            height: obj.data.height + '%'
         })
         .on('click', function (event) {
             if (current_tool == 'obscure') {
                 post(
-                    '/campaign/'+current_cmp_data.id+'/maps/'+current_map_data.id+'/objects/'+$(event.delegateTarget).attr('data-oid')+'/delete/',
-                    function(){}
+                    '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/' + $(event.delegateTarget).attr('data-oid') + '/delete/',
+                    function () { }
                 );
+            }
+        });
+}
+
+function draw_note(obj) {
+    if (!obj.data.player_visible && !current_cmp_data.dms.includes(uid)) {
+        return;
+    }
+    var note = $('<span class="note-content" contenteditable="true"></span>')
+        .text(obj.data.content);
+        
+    return $('<div class="object note" data-moving="false"></div>')
+        .append(note)
+        .css({
+            color: obj.data.color,
+            top: obj.position.y + '%',
+            left: obj.position.x + '%'
+        })
+        .attr('data-oid', obj.id)
+        .on('mousemove', function (e) {
+            if (current_tool == 'note' && current_cmp_data.dms.includes(uid)) {
+                $('.note').attr('contenteditable', 'true');
+            } else {
+                $('.note').attr('contenteditable', 'false');
+            }
+            if ($(this).attr('data-moving') == 'true') {
+                var pos = getPercentPosition(e.clientX - ($(this).width() / 2), e.clientY - ($(this).height() / 2));
+                $(this).css({
+                    top: pos.y + '%',
+                    left: pos.x + '%'
+                });
+            }
+        })
+        .on('mousedown', function () {
+            if (current_tool == 'move' && current_cmp_data.dms.includes(uid)) {
+                $(this).attr('data-moving', 'true');
+            }
+        })
+        .on('mouseup', function (event) {
+            if ($(this).attr('data-moving') != 'true') {
+                return;
+            }
+            $(this).attr('data-moving', 'false');
+            var pos = getPercentPosition(event.clientX - ($(this).width() / 2), event.clientY - ($(this).height() / 2));
+            post(
+                '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/' + $(event.delegateTarget).attr('data-oid') + '/move/',
+                function () { },
+                {}, pos
+            );
+        })
+        .on('blur paste', function (event) {
+            if ($(this).children('.note-content').text().length == 0) {
+                post(
+                    '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/' + $(event.delegateTarget).attr('data-oid') + '/delete/',
+                    function () { }
+                );
+            } else {
+                post(
+                    '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/' + $(event.delegateTarget).attr('data-oid') + '/modify/',
+                    function () { },
+                    {}, {
+                    path: 'content',
+                    value: $(this).children('.note-content').text()
+                }
+                );
+            }
+        })
+        .on('keypress', function (event) {
+            if (event.originalEvent.key == 'Enter') {
+                event.preventDefault();
+                $(this).trigger('click');
             }
         });
 }
@@ -467,6 +570,10 @@ function draw_objects() {
         switch (obj.type) {
             case 'obscure':
                 objects.push(draw_obscure(obj));
+                break;
+            case 'note':
+                objects.push(draw_note(obj));
+                break;
         }
     }
     return objects;
@@ -479,7 +586,10 @@ function draw_map() {
     player.children('#map-container').append(draw_objects());
 
     player.replaceAll('#player');
-    $('#player').attr('data-tool',current_tool);
+    $('#player').attr('data-tool', current_tool);
+    $('.object.note .note-content').each(function (i, e) {
+        $(e).css('max-width', ($(e).parents('.note').width() + 25) + 'px');
+    });
 }
 
 function update_settings() {
@@ -518,6 +628,7 @@ function overall_update(data) {
 }
 
 function pagelocal_update(data) {
+    $(document).scrollTop(0);
     if (data.updates.campaigns.global || data.updates.campaigns.specific[params.campaign] || data.updates.maps.global || data.updates.maps.specific[params.map]) {
         get(
             '/campaign/' + params.campaign + '/maps/' + params.map + '/',
@@ -580,20 +691,21 @@ $(document).ready(function () {
                 yoff = 0;
                 scale = 1;
                 setTransform('#map-container');
+                panning = false;
                 return;
             }
             $('#toolbar button.selected').removeClass('selected');
             current_tool = $(this).attr('data-tool');
             $(this).addClass('selected');
             $('#measuring-container').remove();
-            $('#player').attr('data-tool',current_tool);
+            $('#player').attr('data-tool', current_tool);
         });
 
         tippy('#toolbar button', {
             placement: 'right',
             arrow: true,
             theme: 'material',
-            offset: [0,15]
+            offset: [0, 15]
         });
     }
 });

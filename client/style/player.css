@@ -140,3 +140,34 @@
 #player[data-tool=obscure] .obscure.dm:hover {
     opacity: 0.4;
 }
+
+.note {
+    position: absolute;
+    display: inline-block;
+    width: fit-content;
+    height: fit-content;
+    padding: 5px;
+    transition: background-color 0.2s;
+    border-radius: 5px;
+    background-color: rgba(0,0,0,0);
+}
+.note-content {
+    width: fit-content;
+    height: auto;
+}
+.note:focus, .note:hover {
+    outline: none;
+    background-color: rgba(0,0,0,0.2);
+}
+.note-content:focus {
+    outline: none;
+}
+#player[data-tool=note] .note {
+    cursor: text;
+}
+#player[data-tool=move] .note {
+    cursor: move;
+}
+#player .note{
+    cursor: pointer;
+}
