@@ -846,7 +846,7 @@ $(document).ready(function () {
             var showing_items = [];
             for (var c = 0; c < ctx_keys.length; c++) {
                 var item = custom_ctx[ctx_keys[c]][cond(current_cmp_data.dms.includes(uid), 'dms', 'players')];
-                var showing = item != {};
+                var showing = Object.keys(item).length != 0;
                 if (showing) {
                     if (Object.keys(item).includes('classes')) {
                         for (var i = 0; i < item.classes.length; i++) {
