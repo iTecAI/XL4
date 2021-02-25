@@ -55,6 +55,18 @@ var cursor_tool_map = {
         note: 'text'
     }
 };
+var note_colors = [
+    'white',
+    'black',
+    'red',
+    'blue',
+    'green',
+    'pink',
+    'lightBlue',
+    'limeGreen',
+    'gray',
+    'lightGray'
+];
 
 // Panning/Zooming constants
 var scale = 1,
@@ -232,6 +244,74 @@ function finishSelector() {
         collisions: collisions
     };
 }
+
+// Context Menus
+var custom_ctx = {
+    delete: {
+        dms: {
+            classes: [
+                {
+                    match_type: 'any',
+                    match: [
+                        'object'
+                    ]
+                }
+            ]
+        },
+        players: {
+            classes: [
+                {
+                    match_type: 'all',
+                    match: [
+                        'character',
+                        'owned'
+                    ]
+                }
+            ]
+        }
+    },
+    label_visibility_off: {
+        dms: {
+            classes: [
+                {
+                    match_type: 'all',
+                    match: [
+                        'note',
+                        'player-visible'
+                    ]
+                }
+            ]
+        },
+        players: {}
+    },
+    label_visibility_on: {
+        dms: {
+            classes: [
+                {
+                    match_type: 'all',
+                    match: [
+                        'note',
+                        'player-invisible'
+                    ]
+                }
+            ]
+        },
+        players: {}
+    },
+    color_cycle: {
+        dms: {
+            classes: [
+                {
+                    match_type: 'all',
+                    match: [
+                        'note'
+                    ]
+                }
+            ]
+        },
+        players: {}
+    }
+};
 
 function setup_map_base() {
     var map_container = $('<div id="map-container" class="noselect noscroll"></div>');
@@ -482,6 +562,9 @@ function draw_obscure(obj) {
             height: obj.data.height + '%'
         })
         .on('click', function (event) {
+            if (event.button != 0) {
+                return;
+            }
             if (current_tool == 'obscure') {
                 post(
                     '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/' + $(event.delegateTarget).attr('data-oid') + '/delete/',
@@ -497,7 +580,7 @@ function draw_note(obj) {
     }
     var note = $('<span class="note-content" contenteditable="true"></span>')
         .text(obj.data.content);
-        
+
     return $('<div class="object note" data-moving="false"></div>')
         .append(note)
         .css({
@@ -506,6 +589,8 @@ function draw_note(obj) {
             left: obj.position.x + '%'
         })
         .attr('data-oid', obj.id)
+        .toggleClass('player-visible', obj.data.player_visible)
+        .toggleClass('player-invisible', !obj.data.player_visible)
         .on('mousemove', function (e) {
             if (current_tool == 'note' && current_cmp_data.dms.includes(uid)) {
                 $('.note').attr('contenteditable', 'true');
@@ -520,9 +605,11 @@ function draw_note(obj) {
                 });
             }
         })
-        .on('mousedown', function () {
-            if (current_tool == 'move' && current_cmp_data.dms.includes(uid)) {
-                $(this).attr('data-moving', 'true');
+        .on('mousedown', function (event) {
+            if (event.button == 0) {
+                if (current_tool == 'move' && current_cmp_data.dms.includes(uid)) {
+                    $(this).attr('data-moving', 'true');
+                }
             }
         })
         .on('mouseup', function (event) {
@@ -559,7 +646,45 @@ function draw_note(obj) {
                 event.preventDefault();
                 $(this).trigger('click');
             }
-        });
+        })
+        .on('ctx:delete', function () {
+            post(
+                '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/' + $(this).attr('data-oid') + '/delete/',
+                function () { }
+            );
+        })
+        .on('ctx:label_visibility_off', function () {
+            post(
+                '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/' + $(this).attr('data-oid') + '/modify/',
+                function () { },{},{
+                    path:'player_visible',
+                    value: false
+                }
+            );
+        })
+        .on('ctx:label_visibility_on', function () {
+            post(
+                '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/' + $(this).attr('data-oid') + '/modify/',
+                function () { },{},{
+                    path:'player_visible',
+                    value: true
+                }
+            );
+        })
+        .on('ctx:color_cycle', function () {
+            if (note_colors.indexOf(current_map_data.objects[$(this).attr('data-oid')].data.color) == note_colors.length - 1) {
+                var c = note_colors[0];
+            } else {
+                var c = note_colors[note_colors.indexOf(current_map_data.objects[$(this).attr('data-oid')].data.color) + 1];
+            }
+            post(
+                '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/' + $(this).attr('data-oid') + '/modify/',
+                function () { },{},{
+                    path:'color',
+                    value: c
+                }
+            );
+        })
 }
 
 function draw_objects() {
@@ -638,6 +763,14 @@ function pagelocal_update(data) {
 }
 
 $(document).ready(function () {
+    $('#context-menu')
+        .hide();
+    $(document).on('click', function (event) {
+        if (!$(event.target).is('#context-menu') && $(event.target).parents('#context-menu').length == 0) {
+            $('#context-menu').hide();
+            $('.current-ctx').removeClass('current-ctx');
+        }
+    });
     params = parse_query_string();
     if (Object.keys(params).length != 2) {
         bootbox.alert('Error fetching map. Returning to campaign page.', function () {
@@ -706,6 +839,50 @@ $(document).ready(function () {
             arrow: true,
             theme: 'material',
             offset: [0, 15]
+        });
+
+        $(document).on('contextmenu', function (event) {
+            var ctx_keys = Object.keys(custom_ctx);
+            var showing_items = [];
+            for (var c = 0; c < ctx_keys.length; c++) {
+                var item = custom_ctx[ctx_keys[c]][cond(current_cmp_data.dms.includes(uid), 'dms', 'players')];
+                var showing = item != {};
+                if (showing) {
+                    if (Object.keys(item).includes('classes')) {
+                        for (var i = 0; i < item.classes.length; i++) {
+                            if (item.classes[i].match_type == 'any') {
+                                showing = item.classes[i].match.some(function (v, i, a) { return $(event.target).hasClass(v) || $(event.target).parents('.' + v).length > 0; });
+                            } else if (item.classes[i].match_type == 'all') {
+                                showing = item.classes[i].match.every(function (v, i, a) { return $(event.target).hasClass(v) || $(event.target).parents('.' + v).length > 0; });
+                            }
+                        }
+                    }
+
+                    if (showing) {
+                        showing_items.push(ctx_keys[c]);
+                    }
+                }
+            }
+            $('.ctx-item').hide();
+            showing_items.forEach(function (v) { $('.ctx-item[data-ctx=' + v + ']').show(); });
+            if (showing_items.length > 0) {
+                event.preventDefault();
+                $('.current-ctx').removeClass('current-ctx');
+                $(event.target).addClass('current-ctx');
+                $('#context-menu')
+                    .css({
+                        top: (event.clientY + 5) + 'px',
+                        left: (event.clientX + 5) + 'px',
+                        height: (showing_items.length * 40) + 'px'
+                    })
+                    .show();
+            }
+        });
+
+        $('.ctx-item').on('click', function (event) {
+            $('.current-ctx').trigger('ctx:'+$(event.delegateTarget).attr('data-ctx'));
+            $('#context-menu').hide();
+            $('.current-ctx').removeClass('current-ctx');
         });
     }
 });
