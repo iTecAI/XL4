@@ -876,6 +876,9 @@ $(document).ready(function () {
                         height: (showing_items.length * 40) + 'px'
                     })
                     .show();
+            } else {
+                $('.current-ctx').removeClass('current-ctx');
+                $('#context-menu').hide();
             }
         });
 
