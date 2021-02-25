@@ -315,7 +315,24 @@ var custom_ctx = {
 
 function setup_map_base() {
     var map_container = $('<div id="map-container" class="noselect noscroll"></div>');
-    map_container.append($('<img draggable=false>').attr('src', format_loaded_url(current_map_data.map_img)));
+    if (localStorage.getItem('mapcache:' + current_map_data.id) == null) {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                var reader = new FileReader();
+                $(reader).on('load', function () {
+                    localStorage.setItem('mapcache:' + current_map_data.id, this.result);
+                });
+                reader.readAsDataURL(this.response);
+            }
+        }
+        xhr.open('GET', format_loaded_url(current_map_data.map_img));
+        xhr.responseType = 'blob';
+        xhr.send();
+        map_container.append($('<img draggable=false>').attr('src', format_loaded_url(current_map_data.map_img)));
+    } else {
+        map_container.append($('<img draggable=false>').attr('src', localStorage.getItem('mapcache:' + current_map_data.id)));
+    }
 
     $(map_container).on('mousedown', function (e) {
         if ($(e.target).hasClass('object') || $(e.target).parents('.object').length > 0) {
@@ -662,19 +679,19 @@ function draw_note(obj) {
         .on('ctx:label_visibility_off', function () {
             post(
                 '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/' + $(this).attr('data-oid') + '/modify/',
-                function () { },{},{
-                    path:'player_visible',
-                    value: false
-                }
+                function () { }, {}, {
+                path: 'player_visible',
+                value: false
+            }
             );
         })
         .on('ctx:label_visibility_on', function () {
             post(
                 '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/' + $(this).attr('data-oid') + '/modify/',
-                function () { },{},{
-                    path:'player_visible',
-                    value: true
-                }
+                function () { }, {}, {
+                path: 'player_visible',
+                value: true
+            }
             );
         })
         .on('ctx:color_cycle', function () {
@@ -685,10 +702,10 @@ function draw_note(obj) {
             }
             post(
                 '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/' + $(this).attr('data-oid') + '/modify/',
-                function () { },{},{
-                    path:'color',
-                    value: c
-                }
+                function () { }, {}, {
+                path: 'color',
+                value: c
+            }
             );
         })
 }
@@ -889,7 +906,7 @@ $(document).ready(function () {
         });
 
         $('.ctx-item').on('click', function (event) {
-            $('.current-ctx').trigger('ctx:'+$(event.delegateTarget).attr('data-ctx'));
+            $('.current-ctx').trigger('ctx:' + $(event.delegateTarget).attr('data-ctx'));
             $('#context-menu').hide();
             $('.current-ctx').removeClass('current-ctx');
         });
