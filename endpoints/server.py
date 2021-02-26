@@ -23,7 +23,8 @@ async def keepalive(response: Response, fp: Optional[str] = Header(None)):
             'runtime':CONFIG['runtime'],
             'updates':updates,
             'uid':uid,
-            'new_fp':fp
+            'new_fp':fp,
+            'user_data':{}
         }
     if fp == 'null':
         response.status_code = status.HTTP_403_FORBIDDEN
@@ -32,11 +33,16 @@ async def keepalive(response: Response, fp: Optional[str] = Header(None)):
         response.status_code = status.HTTP_400_BAD_REQUEST
         return {'result':f'Invalid fingerprint. Must be of length 43, recieved fingerprint "{fp}" with length {str(len(fp))}'}
     updates, uid = server.update_connection(fp)
+    if (uid != None):
+        user_data = server.get('users', uid).to_dict()
+    else:
+        user_data = {}
     return {
         'timestamp':time.time(),
         'runtime':CONFIG['runtime'],
         'updates':updates,
-        'uid':uid
+        'uid':uid,
+        'user_data':user_data
     }
 
 @router.post('/signup/')

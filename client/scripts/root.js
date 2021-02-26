@@ -145,6 +145,9 @@ function root_refresh(data) {
         fingerprint = data.new_fp;
     }
     uid = data.uid;
+    if (JSON.stringify(data.user_data) != localStorage.user_data) {
+        localStorage.user_data = JSON.stringify(data.user_data);
+    }
     $('#noconn').removeClass('active');
     $('#login-btn').toggle(data.uid == null);
     $('#head-menu-btn').toggle(data.uid != null);

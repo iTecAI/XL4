@@ -191,7 +191,7 @@ function getCollisions(main, selector) {
     }
     return rcols;
 }
-function startSelector(e,type) {
+function startSelector(e, type) {
     var pos = evGetPercentPosition(e);
     selector = {
         start: {
@@ -202,7 +202,7 @@ function startSelector(e,type) {
             x: 0,
             y: 0
         },
-        type: cond(type==undefined,'rectangle',type)
+        type: cond(type == undefined, 'rectangle', type)
     };
     $('#selection-box')
         .addClass('selecting')
@@ -405,6 +405,46 @@ var custom_ctx = {
                 }
             ]
         }
+    },
+    add_character: {
+        dms: {
+            selector: [
+                {
+                    match_type: 'any',
+                    match: [
+                        '#map-container',
+                        '#map-container img'
+                    ]
+                }
+            ],
+            predicate: [
+                {
+                    match_type: 'any',
+                    match: [
+                        'has_character_in_campaign'
+                    ]
+                }
+            ]
+        },
+        players: {
+            selector: [
+                {
+                    match_type: 'any',
+                    match: [
+                        '#map-container',
+                        '#map-container img'
+                    ]
+                }
+            ],
+            predicate: [
+                {
+                    match_type: 'any',
+                    match: [
+                        'has_character_in_campaign'
+                    ]
+                }
+            ]
+        }
     }
 };
 
@@ -486,7 +526,7 @@ function setup_map_base() {
                 startSelector(e);
                 $('#selection-box').append('<span class="measurement"></span>');
             } else if ($('#toolbar-shapes button.selected').attr('data-shape') == 'circle') {
-                startSelector(e,'circle');
+                startSelector(e, 'circle');
                 $('#selection-box').append('<span class="measurement"></span>');
             }
         }
@@ -1033,7 +1073,7 @@ function prep_dynamic_event_listeners() {
 function toolbar_check() {
     $('#toolbar .dm-tool').toggle(current_cmp_data.dms.includes(uid));
     $('#toolbar-shapes').toggle(current_tool == 'shape');
-    $('#content-box').toggleClass('dm',current_cmp_data.dms.includes(uid));
+    $('#content-box').toggleClass('dm', current_cmp_data.dms.includes(uid));
 }
 
 function overall_update(data) {
@@ -1155,12 +1195,37 @@ $(document).ready(function () {
                 var item = custom_ctx[ctx_keys[c]][cond(current_cmp_data.dms.includes(uid), 'dms', 'players')];
                 var showing = Object.keys(item).length != 0;
                 if (showing) {
-                    if (Object.keys(item).includes('classes')) {
+                    if (Object.keys(item).includes('classes') && showing) {
                         for (var i = 0; i < item.classes.length; i++) {
-                            if (item.classes[i].match_type == 'any') {
+                            if (item.classes[i].match_type == 'any' && showing) {
                                 showing = item.classes[i].match.some(function (v, i, a) { return $(event.target).hasClass(v) || $(event.target).parents('.' + v).length > 0; });
-                            } else if (item.classes[i].match_type == 'all') {
+                            } else if (item.classes[i].match_type == 'all' && showing) {
                                 showing = item.classes[i].match.every(function (v, i, a) { return $(event.target).hasClass(v) || $(event.target).parents('.' + v).length > 0; });
+                            }
+                        }
+                    }
+                    if (Object.keys(item).includes('selector') && showing) {
+                        for (var i = 0; i < item.selector.length; i++) {
+                            if (item.selector[i].match_type == 'any' && showing) {
+                                showing = item.selector[i].match.some(function (v, i, a) { return $(event.target).is(v); });
+                            } else if (item.selector[i].match_type == 'all' && showing) {
+                                showing = item.selector[i].match.every(function (v, i, a) { return $(event.target).is(v); });
+                            }
+                        }
+                    }
+                    function match_predicate(e, v) {
+                        if (v == 'has_character_in_campaign') {
+                            var uchars = JSON.parse(localStorage.user_data).characters;
+                            return uchars.some(function (x) { return current_cmp_data.characters.includes(x); });
+                        }
+                    }
+
+                    if (Object.keys(item).includes('predicate') && showing) {
+                        for (var i = 0; i < item.predicate.length; i++) {
+                            if (item.predicate[i].match_type == 'any' && showing) {
+                                showing = item.predicate[i].match.some(function (v, i, a) { return match_predicate(event, v); });
+                            } else if (item.predicate[i].match_type == 'all' && showing) {
+                                showing = item.predicate[i].match.every(function (v, i, a) { return match_predicate(event, v); });
                             }
                         }
                     }
@@ -1190,7 +1255,11 @@ $(document).ready(function () {
         });
 
         $('.ctx-item').on('click', function (event) {
-            $('.current-ctx').trigger('ctx:' + $(event.delegateTarget).attr('data-ctx'));
+            $('.current-ctx').trigger({
+                type: 'ctx:' + $(event.delegateTarget).attr('data-ctx'),
+                x: $('#context-menu').offset().left,
+                y: $('#context-menu').offset().top
+            });
             $('#context-menu').hide();
             $('.current-ctx').removeClass('current-ctx');
         });
