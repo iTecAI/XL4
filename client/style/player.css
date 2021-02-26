@@ -392,6 +392,8 @@
     overflow: hidden;
     top: 0px;
     left: 0px;
+}
+.object.character.background .char-token {
     background-color: var(--gradient8);
 }
 .object.character .char-token img {

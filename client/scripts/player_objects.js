@@ -236,10 +236,11 @@ function draw_shape(obj) {
 }
 
 function draw_character(obj) {
-    return $('<div class="object character"></div>')
+    return $('<div class="object character token"></div>')
         .toggleClass('owned', uid == obj.data.owner)
         .attr('data-oid', obj.id)
         .attr('data-cid', obj.data.char_id)
+        .addClass(cond(obj.data.background, 'background', 'no-background'))
         .append(
             $('<span class="char-token"></span>')
                 .append($('<img>').attr('src', cond(
@@ -289,6 +290,24 @@ function draw_character(obj) {
         })
         .on('ctx:edit', function (event) {
             window.open('/character_sheet?sheet=' + $(event.delegateTarget).attr('data-cid'), '_blank');
+        })
+        .on('ctx:enable_background', function () {
+            post(
+                '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/' + $(this).attr('data-oid') + '/modify/',
+                function () { }, {}, {
+                path: 'background',
+                value: true
+            }
+            );
+        })
+        .on('ctx:disable_background', function () {
+            post(
+                '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/' + $(this).attr('data-oid') + '/modify/',
+                function () { }, {}, {
+                path: 'background',
+                value: false
+            }
+            );
         });
 }
 

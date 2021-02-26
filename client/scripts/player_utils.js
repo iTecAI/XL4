@@ -497,4 +497,54 @@ var custom_ctx = {
             ]
         }
     },
+    disable_background: {
+        dms: {
+            classes: [
+                {
+                    match_type: 'all',
+                    match: [
+                        'token',
+                        'background'
+                    ]
+                }
+            ]
+        },
+        players: {
+            classes: [
+                {
+                    match_type: 'all',
+                    match: [
+                        'character',
+                        'background',
+                        'owned'
+                    ]
+                }
+            ]
+        }
+    },
+    enable_background: {
+        dms: {
+            classes: [
+                {
+                    match_type: 'all',
+                    match: [
+                        'token',
+                        'no-background'
+                    ]
+                }
+            ]
+        },
+        players: {
+            classes: [
+                {
+                    match_type: 'all',
+                    match: [
+                        'character',
+                        'no-background',
+                        'owned'
+                    ]
+                }
+            ]
+        }
+    }
 };

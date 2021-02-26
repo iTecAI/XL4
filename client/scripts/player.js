@@ -364,7 +364,8 @@ function setup_map_base() {
                                     object_type: 'character',
                                     data: {
                                         owner: uid,
-                                        char_id: $(event.delegateTarget).attr('data-id')
+                                        char_id: $(event.delegateTarget).attr('data-id'),
+                                        background: true
                                     },
                                     x: pos.x,
                                     y: pos.y
