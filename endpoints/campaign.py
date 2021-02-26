@@ -46,6 +46,23 @@ async def get_campaign_specific(sid: str, response: Response, fp: Optional[str] 
     if sid in server.get('users', server.connections[fp].user).campaigns:
         cmp = server.get('campaigns.campaigns', sid).to_dict()
         cmp['maps'] = [server.get('campaigns.maps', i) for i in cmp['maps']]
+        if (server.connections[fp].user in cmp['dms']):
+            cmp['character_data'] = {i: server.get(
+                'characters', i).to_dict() for i in cmp['characters']}
+        else:
+            cmp['character_data'] = {i: server.get('characters', i).to_dict(
+            ) for i in cmp['characters'] if i in server.get('users', server.connections[fp].user).characters}
+            for c in cmp['characters']:
+                if not c in server.get('users', server.connections[fp].user).characters:
+                    ch = server.get('characters', c).to_dict()
+                    cmp['character_data'][c] = {
+                        'name': ch['name'],
+                        'size': ch['size'],
+                        'id': c,
+                        'appearance': {
+                            'image': ch['appearance']['image']
+                        }
+                    }
         return cmp
     else:
         response.status_code = status.HTTP_404_NOT_FOUND
@@ -370,6 +387,7 @@ async def add_map(sid: str, mid: str, oid: str, model: MoveObjectModel, response
     else:
         response.status_code = status.HTTP_404_NOT_FOUND
         return {'result': f'Could not find campaign {sid}.'}
+
 
 @router.post('/{sid}/maps/{mid}/objects/{oid}/modify/')
 async def add_map(sid: str, mid: str, oid: str, model: ModifyModel, response: Response, fp: Optional[str] = Header(None)):

@@ -309,6 +309,22 @@ function finishSelector() {
     };
 }
 
+function ftToPercentDimensions(w,h) {
+    return {
+        w: w / (current_map_data.dimensions.columns * current_map_data.dimensions.scale)*100,
+        h: h / (current_map_data.dimensions.rows * current_map_data.dimensions.scale)*100
+    };
+}
+
+var size_map = {
+    tiny: 2.5,
+    small: 5,
+    medium: 5,
+    large: 10,
+    huge: 15,
+    gargantuan: 20
+};
+
 // Context Menus
 var custom_ctx = {
     delete: {
@@ -413,7 +429,7 @@ var custom_ctx = {
                     match_type: 'any',
                     match: [
                         '#map-container',
-                        '#map-container img'
+                        '#map-container > img'
                     ]
                 }
             ],
@@ -422,6 +438,12 @@ var custom_ctx = {
                     match_type: 'any',
                     match: [
                         'has_character_in_campaign'
+                    ]
+                },
+                {
+                    match_type: 'not any',
+                    match: [
+                        'all_characters_in_map'
                     ]
                 }
             ]
@@ -432,7 +454,7 @@ var custom_ctx = {
                     match_type: 'any',
                     match: [
                         '#map-container',
-                        '#map-container img'
+                        '#map-container > img'
                     ]
                 }
             ],
@@ -442,10 +464,39 @@ var custom_ctx = {
                     match: [
                         'has_character_in_campaign'
                     ]
+                },
+                {
+                    match_type: 'not any',
+                    match: [
+                        'all_characters_in_map'
+                    ]
                 }
             ]
         }
-    }
+    },
+    edit: {
+        dms: {
+            classes: [
+                {
+                    match_type: 'any',
+                    match: [
+                        'character'
+                    ]
+                }
+            ]
+        },
+        players: {
+            classes: [
+                {
+                    match_type: 'all',
+                    match: [
+                        'character',
+                        'owned'
+                    ]
+                }
+            ]
+        }
+    },
 };
 
 function setup_map_base() {
@@ -599,8 +650,8 @@ function setup_map_base() {
                             player_visible: true,
                             color: 'red'
                         },
-                        x: selector_data.dimensions.left,
-                        y: selector_data.dimensions.top
+                        x: selector_data.dimensions.left + 0.5 * selector_data.dimensions.width,
+                        y: selector_data.dimensions.top + 0.5 * selector_data.dimensions.height
                     }
                     );
                 } else if (selector_data.type == 'circle') {
@@ -616,8 +667,8 @@ function setup_map_base() {
                             player_visible: true,
                             color: 'red'
                         },
-                        x: selector_data.dimensions.left,
-                        y: selector_data.dimensions.top
+                        x: selector_data.dimensions.left + 0.5 * selector_data.dimensions.width,
+                        y: selector_data.dimensions.top + 0.5 * selector_data.dimensions.height
                     }
                     );
                 }
@@ -770,6 +821,63 @@ function setup_map_base() {
             );
         }
     });
+    $(map_container).on('ctx:add_character', function (event) {
+        var uchars = JSON.parse(localStorage.user_data).characters;
+        for (var i = 0; i < Object.values(current_map_data.objects); i++) {
+            if (Object.values(current_map_data.objects)[i].object_type == 'character') {
+                if (uchars.includes(Object.values(current_map_data.objects)[i].data.char_id)) {
+                    uchars.splice(uchars.indexOf(Object.values(current_map_data.objects)[i].data.char_id), 1);
+                }
+            }
+        }
+        var nuchars = [];
+        for (var u = 0; u < uchars.length; u++) {
+            if (current_cmp_data.characters.includes(uchars[u])) {
+                nuchars.push(uchars[u]);
+            }
+        }
+        post(
+            '/character/batchGet/',
+            function (data) {
+                $('<div id="add-character-dialog" class="noselect"></div>')
+                    .attr('data-position', JSON.stringify({ x: event.x, y: event.y }))
+                    .attr('data-characters', JSON.stringify(data.characters))
+                    .append(Object.values(data.characters).map(function (v, i, a) {
+                        console.log(v);
+                        return $('<div class="add-character-item"></div>')
+                            .attr('data-id',v.character.id)
+                            .append(
+                                $('<span class="char-img"></span>')
+                                    .append($('<img>').attr('src',cond(v.character.appearance.image == null, 'assets/logo.png', v.character.appearance.img)))
+                            )
+                            .append(
+                                $('<span class="char-name"></span>')
+                                    .text(v.character.name)
+                            )
+                            .on('click', function (event) {
+                                var pos = JSON.parse($(this).parents('#add-character-dialog').attr('data-position'));
+                                pos = getPercentPosition(pos.x, pos.y);
+                                post(
+                                    '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/add/',
+                                    function () {
+                                        $('#add-character-dialog').remove();
+                                    },
+                                    {}, {
+                                    object_type: 'character',
+                                    data: {
+                                        owner: uid,
+                                        char_id: $(event.delegateTarget).attr('data-id')
+                                    },
+                                    x: pos.x,
+                                    y: pos.y
+                                }
+                                );
+                            });
+                    }))
+                    .appendTo('body');
+            }, {}, { ids: nuchars }
+        );
+    });
 
     setTransform(map_container);
     return map_container;
@@ -834,7 +942,7 @@ function draw_note(obj) {
                 $('.note').attr('contenteditable', 'false');
             }
             if ($(this).attr('data-moving') == 'true') {
-                var pos = getPercentPosition(e.clientX - ($(this).width() / 2), e.clientY - ($(this).height() / 2));
+                var pos = getPercentPosition(e.clientX, e.clientY);
                 $(this).css({
                     top: pos.y + '%',
                     left: pos.x + '%'
@@ -853,7 +961,7 @@ function draw_note(obj) {
                 return;
             }
             $(this).attr('data-moving', 'false');
-            var pos = getPercentPosition(event.clientX - ($(this).width() / 2), event.clientY - ($(this).height() / 2));
+            var pos = getPercentPosition(event.clientX, event.clientY);
             post(
                 '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/' + $(event.delegateTarget).attr('data-oid') + '/move/',
                 function () { },
@@ -957,7 +1065,7 @@ function draw_shape(obj) {
             .toggleClass('player-invisible', !obj.data.player_visible)
             .on('mousemove', function (e) {
                 if ($(this).attr('data-moving') == 'true') {
-                    var pos = getPercentPosition(e.clientX - ($(this).width() / 2), e.clientY - ($(this).height() / 2));
+                    var pos = getPercentPosition(e.clientX, e.clientY);
                     $(this).css({
                         top: pos.y + '%',
                         left: pos.x + '%'
@@ -976,7 +1084,7 @@ function draw_shape(obj) {
                     return;
                 }
                 $(this).attr('data-moving', 'false');
-                var pos = getPercentPosition(event.clientX - ($(this).width() / 2), event.clientY - ($(this).height() / 2));
+                var pos = getPercentPosition(event.clientX, event.clientY);
                 post(
                     '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/' + $(event.delegateTarget).attr('data-oid') + '/move/',
                     function () { },
@@ -1018,6 +1126,63 @@ function draw_shape(obj) {
     }
 }
 
+function draw_character(obj) {
+    return $('<div class="object character"></div>')
+        .toggleClass('owned',uid == obj.data.owner)
+        .attr('data-oid', obj.id)
+        .attr('data-cid', obj.data.char_id)
+        .append(
+            $('<span class="char-token"></span>')
+                .append($('<img>').attr('src', cond(
+                    current_cmp_data.character_data[obj.data.char_id].appearance.image == null, 
+                    'assets/logo.png', 
+                    current_cmp_data.character_data[obj.data.char_id].appearance.image
+                )))
+        )
+        .append($('<span class="char-name"></span>').text(current_cmp_data.character_data[obj.data.char_id].name))
+        .css({
+            top: obj.position.y + '%',
+            left: obj.position.x + '%'
+        })
+        .on('mousemove', function (e) {
+            if ($(this).attr('data-moving') == 'true') {
+                var pos = getPercentPosition(e.clientX, e.clientY);
+                $(this).css({
+                    top: pos.y + '%',
+                    left: pos.x + '%'
+                });
+            }
+        })
+        .on('mousedown', function (event) {
+            if (event.button == 0 && ($(this).hasClass('owned') || current_cmp_data.dms.includes(uid))) {
+                if (current_tool == 'move') {
+                    $(this).attr('data-moving', 'true');
+                }
+            }
+        })
+        .on('mouseup', function (event) {
+            if ($(this).attr('data-moving') != 'true') {
+                return;
+            }
+            $(this).attr('data-moving', 'false');
+            var pos = getPercentPosition(event.clientX, event.clientY);
+            post(
+                '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/' + $(event.delegateTarget).attr('data-oid') + '/move/',
+                function () { },
+                {}, pos
+            );
+        })
+        .on('ctx:delete', function (event) {
+            post(
+                '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/' + $(this).attr('data-oid') + '/delete/',
+                function () { }
+            );
+        })
+        .on('ctx:edit', function (event) {
+            window.open('/character_sheet?sheet='+$(event.delegateTarget).attr('data-cid'), '_blank');
+        });
+}
+
 function draw_objects() {
     var objects = [];
     var object_keys = Object.keys(current_map_data.objects);
@@ -1032,6 +1197,9 @@ function draw_objects() {
                 break;
             case 'shape':
                 objects.push(draw_shape(obj));
+                break;
+            case 'character':
+                objects.push(draw_character(obj));
                 break;
         }
     }
@@ -1048,6 +1216,14 @@ function draw_map() {
     $('#player').attr('data-tool', current_tool);
     $('.object.note .note-content').each(function (i, e) {
         $(e).css('max-width', ($(e).parents('.note').width() + 25) + 'px');
+    });
+    $('.object.character').each(function() {
+        var sz = size_map[cond(Object.keys(size_map).includes(current_cmp_data.character_data[$(this).attr('data-cid')].size), current_cmp_data.character_data[$(this).attr('data-cid')].size, 'medium')];
+        var dims = ftToPercentDimensions(sz,sz);
+        $(this).css({
+            width: dims.w+'%',
+            height: dims.h+'%'
+        });
     });
 }
 
@@ -1090,7 +1266,13 @@ function overall_update(data) {
 
 function pagelocal_update(data) {
     $(document).scrollTop(0);
-    if (data.updates.campaigns.global || data.updates.campaigns.specific[params.campaign] || data.updates.maps.global || data.updates.maps.specific[params.map]) {
+    if (
+        data.updates.campaigns.global || 
+        data.updates.campaigns.specific[params.campaign] || 
+        data.updates.maps.global || 
+        data.updates.maps.specific[params.map] || 
+        current_cmp_data.characters.some(function (v, i, a) {return data.updates.characters.specific[v];})
+    ) {
         get(
             '/campaign/' + params.campaign + '/maps/' + params.map + '/',
             overall_update
@@ -1105,6 +1287,9 @@ $(document).ready(function () {
         if (!$(event.target).is('#context-menu') && $(event.target).parents('#context-menu').length == 0) {
             $('#context-menu').hide();
             $('.current-ctx').removeClass('current-ctx');
+        }
+        if (!$(event.target).is('#add-character-dialog') && $(event.target).parents('#add-character-dialog').length == 0 && $('#add-character-dialog').length > 0) {
+            $('#add-character-dialog').remove();
         }
     });
     params = parse_query_string();
@@ -1196,38 +1381,54 @@ $(document).ready(function () {
                 var showing = Object.keys(item).length != 0;
                 if (showing) {
                     if (Object.keys(item).includes('classes') && showing) {
+                        var classes = [];
                         for (var i = 0; i < item.classes.length; i++) {
-                            if (item.classes[i].match_type == 'any' && showing) {
-                                showing = item.classes[i].match.some(function (v, i, a) { return $(event.target).hasClass(v) || $(event.target).parents('.' + v).length > 0; });
-                            } else if (item.classes[i].match_type == 'all' && showing) {
-                                showing = item.classes[i].match.every(function (v, i, a) { return $(event.target).hasClass(v) || $(event.target).parents('.' + v).length > 0; });
+                            if (item.classes[i].match_type == 'any') {
+                                classes.push(item.classes[i].match.some(function (v, i, a) { return $(event.target).hasClass(v) || $(event.target).parentsUntil('#player','.' + v).length > 0; }));
+                            } else if (item.classes[i].match_type == 'all') {
+                                classes.push(item.classes[i].match.every(function (v, i, a) { return $(event.target).hasClass(v) || $(event.target).parentsUntil('#player','.' + v).length > 0; }));
                             }
                         }
+                        showing = classes.some(function(v) {return v;});
                     }
                     if (Object.keys(item).includes('selector') && showing) {
+                        var selectors = [];
                         for (var i = 0; i < item.selector.length; i++) {
                             if (item.selector[i].match_type == 'any' && showing) {
-                                showing = item.selector[i].match.some(function (v, i, a) { return $(event.target).is(v); });
+                                selectors.push(item.selector[i].match.some(function (v, i, a) { return $(event.target).is(v); }));
                             } else if (item.selector[i].match_type == 'all' && showing) {
-                                showing = item.selector[i].match.every(function (v, i, a) { return $(event.target).is(v); });
+                                selectors.push(item.selector[i].match.every(function (v, i, a) { return $(event.target).is(v); }));
                             }
                         }
+                        showing = selectors.some(function(v) {return v;});
                     }
                     function match_predicate(e, v) {
                         if (v == 'has_character_in_campaign') {
                             var uchars = JSON.parse(localStorage.user_data).characters;
                             return uchars.some(function (x) { return current_cmp_data.characters.includes(x); });
+                        } else if (v == 'all_characters_in_map') {
+                            var uchars = JSON.parse(localStorage.user_data).characters;
+                            var mchars = Object.values(current_map_data.objects).map(function (v, i, a) {
+                                if (v.object_type == 'character') {
+                                    return v.data.char_id;
+                                }
+                            });
+                            return uchars.every(function (x) { return mchars.includes(x); });
                         }
                     }
 
                     if (Object.keys(item).includes('predicate') && showing) {
+                        var predicates = [];
                         for (var i = 0; i < item.predicate.length; i++) {
                             if (item.predicate[i].match_type == 'any' && showing) {
-                                showing = item.predicate[i].match.some(function (v, i, a) { return match_predicate(event, v); });
+                                predicates.push(item.predicate[i].match.some(function (v, i, a) { return match_predicate(event, v); }));
                             } else if (item.predicate[i].match_type == 'all' && showing) {
-                                showing = item.predicate[i].match.every(function (v, i, a) { return match_predicate(event, v); });
+                                predicates.push(item.predicate[i].match.every(function (v, i, a) { return match_predicate(event, v); }));
+                            } else if (item.predicate[i].match_type == 'not any' && showing) {
+                                predicates.push(!item.predicate[i].match.some(function (v, i, a) { return match_predicate(event, v); }));
                             }
                         }
+                        showing = predicates.some(function(v) {return v;});
                     }
 
                     if (showing) {

@@ -166,6 +166,7 @@
     border-radius: 5px;
     background-color: rgba(0,0,0,0);
     z-index: 20;
+    transform: translate(-50%, -50%);
 }
 .note.player-invisible {
     opacity: 0.7;
@@ -295,6 +296,7 @@
     opacity: 0.5;
     z-index: 22;
     cursor: default;
+    transform: translate(-50%, -50%);
 }
 .shape.player-invisible {
     border: 2px solid gold;
@@ -304,4 +306,115 @@
 }
 #player[data-tool=move] .shape {
     cursor: move;
+}
+
+#add-character-dialog {
+    position: absolute;
+    display: inline-block;
+    width: fit-content;
+    height: 120px;
+    padding: 10px;
+    border-radius: 5px;
+    z-index: 110;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--primary);
+    -webkit-box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.46);
+    -moz-box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.46);
+    box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.46);
+}
+#add-character-dialog .add-character-item {
+    position: relative;
+    display: inline-block;
+    width: 80px;
+    height: 100px;
+    padding: 5px;
+    box-sizing: border-box;
+    background-color: var(--primary-dark);
+    margin-right: 5px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+#add-character-dialog .add-character-item:hover {
+    background-color: var(--secondary);
+}
+#add-character-dialog .add-character-item:last-child {
+    margin-right: 0px;
+}
+#add-character-dialog .add-character-item .char-img {
+    position: absolute;
+    display: inline-block;
+    height: 80px;
+    width: 80px;
+    border-radius: 40px;
+    overflow: hidden;
+    top: 0px;
+    left: 0px;
+}
+#add-character-dialog .add-character-item .char-img img {
+    width: 100%;
+    height: 100%;
+}
+#add-character-dialog .add-character-item .char-name {
+    position: absolute;
+    display: inline-block;
+    width: fit-content;
+    height: fit-content;
+    top: 70px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    text-align: center;
+    max-width: 80px;
+    color: white;
+    padding: 4px;
+    background-color: var(--primary-darker);
+    font-family: Roboto;
+    font-size: 12px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+#add-character-dialog .add-character-item:hover .char-name {
+    background-color: var(--secondary-dark);
+}
+
+.object.character {
+    position: absolute;
+    display: inline-block;
+    transform: translate(-50%, -50%);
+}
+.object.character .char-token {
+    position: absolute;
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    overflow: hidden;
+    top: 0px;
+    left: 0px;
+    background-color: var(--gradient8);
+}
+.object.character .char-token img {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+}
+.object.character .char-name {
+    position: absolute;
+    display: inline-block;
+    top: calc(100% + 2px);
+    left: 50%;
+    transform: translate(-50%, 0);
+    width: fit-content;
+    white-space: nowrap;
+    color: white;
+    background-color: rgba(0,0,0,0.1);
+    transition: background-color 0.2s;
+    padding: 2px;
+    font-family: Roboto;
+    font-size: 6px;
+    border-radius: 4px;
+}
+.object.character:hover .char-name {
+    background-color: rgba(0,0,0,0.4);
 }

@@ -592,9 +592,20 @@
                             <div id='char-img' class='output' data-outline="yes">
                                 <img src="assets/logo_large.png" alt="character image">
                             </div>
-                            <div class='input direct update allowedEmpty' data-path='appearance.image' data-style='sub-name'>
+                            <div class='input direct update allowedEmpty' data-path='appearance.image' data-style='sub-name' style='width: calc(66% - 10px);'>
                                 <input spellcheck="false" class='input'>
                                 <span class='label noselect'>Appearance URL</span>
+                            </div>
+                            <div class='input direct update allowedEmpty' data-path='size' data-style='sub-name' style='width: calc(33% - 10px); margin-left: -5px;'>
+                                <select class='input'>
+                                    <option value="tiny">Tiny</option>
+                                    <option value="small">Small</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="large">Large</option>
+                                    <option value="huge">Huge</option>
+                                    <option value="gargantuan">Gargantuan</option>
+                                </select>
+                                <span class='label noselect'>Size</span>
                             </div>
                             <div class='input direct update allowedEmpty' data-path='appearance.age' data-style='sub-name' data-type='number' style='width: calc(33% - 10px);'>
                                 <input spellcheck="false" class='input'>
