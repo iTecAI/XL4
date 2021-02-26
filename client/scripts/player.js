@@ -823,8 +823,8 @@ function setup_map_base() {
     });
     $(map_container).on('ctx:add_character', function (event) {
         var uchars = JSON.parse(localStorage.user_data).characters;
-        for (var i = 0; i < Object.values(current_map_data.objects); i++) {
-            if (Object.values(current_map_data.objects)[i].object_type == 'character') {
+        for (var i = 0; i < Object.values(current_map_data.objects).length; i++) {
+            if (Object.values(current_map_data.objects)[i].type == 'character') {
                 if (uchars.includes(Object.values(current_map_data.objects)[i].data.char_id)) {
                     uchars.splice(uchars.indexOf(Object.values(current_map_data.objects)[i].data.char_id), 1);
                 }
@@ -843,12 +843,11 @@ function setup_map_base() {
                     .attr('data-position', JSON.stringify({ x: event.x, y: event.y }))
                     .attr('data-characters', JSON.stringify(data.characters))
                     .append(Object.values(data.characters).map(function (v, i, a) {
-                        console.log(v);
                         return $('<div class="add-character-item"></div>')
                             .attr('data-id',v.character.id)
                             .append(
                                 $('<span class="char-img"></span>')
-                                    .append($('<img>').attr('src',cond(v.character.appearance.image == null, 'assets/logo.png', v.character.appearance.img)))
+                                    .append($('<img>').attr('src',cond(v.character.appearance.image == null, 'assets/logo.png', v.character.appearance.image)))
                             )
                             .append(
                                 $('<span class="char-name"></span>')
@@ -1408,12 +1407,18 @@ $(document).ready(function () {
                             return uchars.some(function (x) { return current_cmp_data.characters.includes(x); });
                         } else if (v == 'all_characters_in_map') {
                             var uchars = JSON.parse(localStorage.user_data).characters;
+                            var nuchars = [];
+                            for (var c = 0; c < uchars.length; c++) {
+                                if (current_cmp_data.characters.includes(uchars[c])) {
+                                    nuchars.push(uchars[c]);
+                                }
+                            }
                             var mchars = Object.values(current_map_data.objects).map(function (v, i, a) {
-                                if (v.object_type == 'character') {
+                                if (v.type == 'character') {
                                     return v.data.char_id;
                                 }
                             });
-                            return uchars.every(function (x) { return mchars.includes(x); });
+                            return nuchars.every(function (x) { return mchars.includes(x); });
                         }
                     }
 
@@ -1428,7 +1433,7 @@ $(document).ready(function () {
                                 predicates.push(!item.predicate[i].match.some(function (v, i, a) { return match_predicate(event, v); }));
                             }
                         }
-                        showing = predicates.some(function(v) {return v;});
+                        showing = predicates.every(function(v) {return v;});
                     }
 
                     if (showing) {
