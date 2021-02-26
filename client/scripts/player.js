@@ -652,5 +652,15 @@ $(document).ready(function () {
             $('#context-menu').hide();
             $('.current-ctx').removeClass('current-ctx');
         });
+
+        $('#gridlock-toggle button').on('click', function (event) {
+            if ($('#gridlock-toggle').attr('data-on') == 'false') {
+                $('#gridlock-toggle').attr('data-on','true');
+                $('#gridlock-toggle button i').text('grid_on');
+            } else {
+                $('#gridlock-toggle').attr('data-on','false');
+                $('#gridlock-toggle button i').text('grid_off');
+            }
+        });
     }
 });

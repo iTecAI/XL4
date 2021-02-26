@@ -546,5 +546,25 @@ var custom_ctx = {
                 }
             ]
         }
+    },
+    add_npc: {
+        dms: {
+            selector: [
+                {
+                    match_type: 'any',
+                    match: [
+                        '#map-container',
+                        '#map-container > img'
+                    ]
+                }
+            ]
+        },
+        players: {
+            
+        }
     }
 };
+
+function round_to_nearest(n,r) {
+    return Math.round(n / r) * r;
+}

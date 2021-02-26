@@ -420,3 +420,51 @@
 .object.character:hover .char-name {
     background-color: rgba(0,0,0,0.4);
 }
+
+#gridlock-toggle {
+    position: absolute;
+    top: 50%;
+    right: calc(5vh + 10px);
+    transform: translate(0, -50%);
+    display: inline-block;
+    width: fit-content;
+    height: 4vh;
+}
+#gridlock-toggle div {
+    position: relative;
+    margin-left: 4vh;
+    color: white;
+    width: 100px;
+    display: inline-block;
+    height: 100%;
+}
+#gridlock-toggle div span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: inline-block;
+    width: fit-content;
+    height: fit-content;
+}
+#gridlock-toggle button {
+    position: absolute;
+    display: inline-block;
+    top: 0px;
+    left: 0px;
+    width: 4vh;
+    height: 4vh;
+    border: none;
+    background-color: rgba(0,0,0,0);
+}
+#gridlock-toggle button i {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    transition: color 0.2s;
+}
+#gridlock-toggle button:hover i {
+    color: var(--secondary);
+}
