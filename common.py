@@ -310,7 +310,8 @@ class Campaign(BaseObject):
         self.players = error(dct, 'players', [])
         self._update = error(dct, '_update', {
             'self': False,
-            'maps': False
+            'maps': False,
+            'homebrews': False
         })
         self.icon = error(dct, 'icon', None)
         self.update_timeouts = error(dct, 'update_timeouts', {'self':0})
@@ -535,7 +536,8 @@ class Server:
             },
             'campaigns': {
                 'global': False,
-                'specific': {}
+                'specific': {},
+                'homebrew_specific':{}
             },
             'maps': {
                 'global': False,
@@ -553,6 +555,8 @@ class Server:
             updates['campaigns']['global'] = u.check_update('campaigns')
             updates['campaigns']['specific'] = {i: self.get(
                 'campaigns.campaigns', i).check_update() for i in u.campaigns}
+            updates['campaigns']['homebrew_specific'] = {i: self.get(
+                'campaigns.campaigns', i).check_update('homebrews') for i in u.campaigns}
             updates['maps']['global'] = u.check_update('maps')
             maps = []
             for i in u.campaigns:

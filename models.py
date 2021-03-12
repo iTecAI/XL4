@@ -46,3 +46,6 @@ class AddObjectModel(BaseModel):
 class MoveObjectModel(BaseModel):
     x: float
     y: float
+
+class AddBestiaryModel(BaseModel):
+    url: str

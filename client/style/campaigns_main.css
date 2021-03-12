@@ -243,9 +243,25 @@
     transition: width 0.2s;
 }
 
-@media (min-width: 700px) {
+#homebrew-panel {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    display: none;
+    height: 100%;
+    background-color: var(--gradient7);
+    z-index: 15;
+}
+.dm > #homebrew-panel {
+    display: inline-block;
+}
+
+@media (min-width: 800px) {
     #character-panel {
         width: 310px;
+    }
+    #homebrew-panel {
+        width: 450px;
     }
     #maps-panel {
         position: absolute;
@@ -257,10 +273,22 @@
         background-color: white;
         z-index: 15;
     }
+    .dm #maps-panel {
+        width: calc(100% - 760px - 5vh);
+    }
+    .dm #add-map {
+        right: calc(470px + 5vh);
+    }
+    #add-map {
+        right: calc(20px + 5vh);
+    }
 }
-@media (max-width: 699px) {
+@media (max-width: 799px) {
     #character-panel {
         width: 200px;
+    }
+    #homebrew-panel {
+        width: 350px;
     }
     #maps-panel {
         position: absolute;
@@ -271,6 +299,15 @@
         height: 100%;
         background-color: white;
         z-index: 15;
+    }
+    .dm #maps-panel {
+        width: calc(100% - 350px - 5vh);
+    }
+    .dm #add-map {
+        right: calc(370px + 5vh);
+    }
+    #add-map {
+        right: calc(20px + 5vh);
     }
 }
 .character-box {
@@ -313,9 +350,8 @@
     cursor: pointer;
     position: fixed;
     bottom: 20px;
-    right: calc(20px + 5vh);
     background-color: var(--secondary);
-    display: inline-block;
+    display: none;
     width: 64px;
     height: 64px;
     border-radius: 32px;
@@ -325,6 +361,9 @@
     transition: background-color 0.2s, width 0.2s;
     z-index: 18;
     overflow: hidden;
+}
+.dm #add-map {
+    display: inline-block;
 }
 #add-map span {
     position: absolute;
@@ -562,4 +601,58 @@
     overflow-y: visible;
     white-space: nowrap;
     margin: 3px;
+}
+
+.bestiary {
+    position: relative;
+    display: inline-block;
+    margin: 5px;
+    background-color: var(--gradient6);
+    border-radius: 5px;
+    padding: 5px;
+    width: calc(100% - 10px);
+    box-sizing: border-box;
+    -webkit-box-shadow: 0px 0px 4px -1px rgba(89,89,89,1);
+    -moz-box-shadow: 0px 0px 4px -1px rgba(89,89,89,1);
+    box-shadow: 0px 0px 4px -1px rgba(89,89,89,1);
+    font-weight: bold;
+    font-family: Roboto;
+    height: 40px;
+    overflow: hidden;
+    border: None;
+    transition: background-color 0.2s;
+    margin-bottom: 0px;
+}
+.bestiary span {
+    position: absolute;
+    display: inline-block;
+    top: 50%;
+    left: 5px;
+    transform: translate(0,-50%);
+}
+.bestiary .button {
+    position: absolute;
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    top: 0px;
+    background-color: var(--gradient6);
+    border: none;
+    transition: background-color 0.2s;
+}
+.bestiary .button:hover, .new-critter:hover {
+    background-color: var(--gradient5);
+}
+.bestiary .button i {
+    position: absolute;
+    display: inline-block;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+.bestiary .button.delete-bestiary {
+    right: 0px;
+}
+.bestiary .button.refresh-bestiary {
+    right: 40px;
 }

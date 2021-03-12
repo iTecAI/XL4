@@ -29,6 +29,7 @@ async def get_campaigns(response: Response, fp: Optional[str] = Header(None)):
     for c in cmps.keys():
         cmps[c]['maps'] = {i: server.get('campaigns.maps', i)
                            for i in cmps[c]['maps']}
+        cmps[c]['homebrew_creatures'] = {i['bestiary']['name']:[i['bestiary']['id'],i['bestiary']['type'],len(i['data'].keys())] for i in cmps[c]['homebrew_creatures'].values() if i != None}
     return {
         'uid': server.connections[fp].user,
         'campaigns': cmps
@@ -63,7 +64,23 @@ async def get_campaign_specific(sid: str, response: Response, fp: Optional[str] 
                             'image': ch['appearance']['image']
                         }
                     }
+        cmp['homebrew_creatures'] = {i['bestiary']['name']:[i['bestiary']['id'],i['bestiary']['type'],len(i['data'].keys())] for i in cmp['homebrew_creatures'].values() if i != None}
         return cmp
+    else:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return {'result': f'Could not find campaign {sid}.'}
+
+@router.get('/{sid}/homebrew/')
+async def get_campaign_specific(sid: str, response: Response, fp: Optional[str] = Header(None)):
+    response, res = fingerprint_validate(fp, response)
+    if res != 0:
+        return res
+    if server.connections[fp].user == None:
+        response.status_code = status.HTTP_405_METHOD_NOT_ALLOWED
+        return {'result': 'Must be logged in.'}
+    if sid in server.get('users', server.connections[fp].user).campaigns:
+        cmp = server.get('campaigns.campaigns', sid).to_dict()
+        return cmp['homebrew_creatures']
     else:
         response.status_code = status.HTTP_404_NOT_FOUND
         return {'result': f'Could not find campaign {sid}.'}
@@ -278,7 +295,7 @@ async def add_map(sid: str, mid: str, model: ModifyModel, response: Response, fp
 
 
 @router.post('/{sid}/maps/{mid}/objects/add/')
-async def add_map(sid: str, mid: str, model: AddObjectModel, response: Response, fp: Optional[str] = Header(None)):
+async def add_object(sid: str, mid: str, model: AddObjectModel, response: Response, fp: Optional[str] = Header(None)):
     response, res = fingerprint_validate(fp, response)
     if res != 0:
         return res
@@ -315,7 +332,7 @@ async def add_map(sid: str, mid: str, model: AddObjectModel, response: Response,
 
 
 @router.post('/{sid}/maps/{mid}/objects/{oid}/delete')
-async def add_map(sid: str, mid: str, oid: str, response: Response, fp: Optional[str] = Header(None)):
+async def delete_object(sid: str, mid: str, oid: str, response: Response, fp: Optional[str] = Header(None)):
     response, res = fingerprint_validate(fp, response)
     if res != 0:
         return res
@@ -351,7 +368,7 @@ async def add_map(sid: str, mid: str, oid: str, response: Response, fp: Optional
 
 
 @router.post('/{sid}/maps/{mid}/objects/{oid}/move/')
-async def add_map(sid: str, mid: str, oid: str, model: MoveObjectModel, response: Response, fp: Optional[str] = Header(None)):
+async def move_object(sid: str, mid: str, oid: str, model: MoveObjectModel, response: Response, fp: Optional[str] = Header(None)):
     response, res = fingerprint_validate(fp, response)
     if res != 0:
         return res
@@ -390,7 +407,7 @@ async def add_map(sid: str, mid: str, oid: str, model: MoveObjectModel, response
 
 
 @router.post('/{sid}/maps/{mid}/objects/{oid}/modify/')
-async def add_map(sid: str, mid: str, oid: str, model: ModifyModel, response: Response, fp: Optional[str] = Header(None)):
+async def modify_object(sid: str, mid: str, oid: str, model: ModifyModel, response: Response, fp: Optional[str] = Header(None)):
     response, res = fingerprint_validate(fp, response)
     if res != 0:
         return res
@@ -434,6 +451,206 @@ async def add_map(sid: str, mid: str, oid: str, model: ModifyModel, response: Re
         else:
             response.status_code = status.HTTP_404_NOT_FOUND
             return {'result': f'Could not find map {mid} in campaign {sid}.'}
+    else:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return {'result': f'Could not find campaign {sid}.'}
+
+@router.post('/{sid}/critterdb/new/')
+async def add_bestiary(sid: str, model: AddBestiaryModel, response: Response, fp: Optional[str] = Header(None)):
+    response, res = fingerprint_validate(fp, response)
+    if res != 0:
+        return res
+    if server.connections[fp].user == None:
+        response.status_code = status.HTTP_405_METHOD_NOT_ALLOWED
+        return {'result': 'Must be logged in.'}
+    if sid in server.get('users', server.connections[fp].user).campaigns:
+        if server.get('campaigns.campaigns', sid).owner == server.connections[fp].user or server.connections[fp].user in server.get('campaigns.campaigns', sid).dms:
+            _url = model.url.replace(':443','').replace('/#','')
+            
+            url_data = uparse.urlparse(_url)
+            if url_data.netloc != 'critterdb.com':
+                response.status_code = status.HTTP_405_METHOD_NOT_ALLOWED
+                return {'result': 'Must be a critterdb.com URL.'}
+            try:
+                c_type = url_data.path.split('/')[1]
+                item_id = url_data.path.split('/')[3]
+            except:
+                response.status_code = status.HTTP_406_NOT_ACCEPTABLE
+                return {'result': 'Malformed URL'}
+            if not c_type in ['bestiary','publishedbestiary']:
+                response.status_code = status.HTTP_406_NOT_ACCEPTABLE
+                return {'result': 'Malformed URL'}
+            try:
+                if c_type == 'bestiary':
+                    name, crts = get_bestiary_creatures(item_id)
+                    to_add = {}
+                    for c in crts:
+                        cid = fingerprint()
+                        to_add[cid] = {
+                            'id': cid,
+                            'bestiary': {
+                                'id': item_id,
+                                'name': name,
+                                'type': c_type
+                            },
+                            'data': c.to_dict()
+                        }
+                    
+                    for c in to_add.keys():
+                        found = False
+                        for i in server.get('campaigns.campaigns',sid).homebrew_creatures.keys():
+                            if server.get('campaigns.campaigns',sid).homebrew_creatures[i]['data']['name'] == to_add[c]['data']['name'] and server.get('campaigns.campaigns',sid).homebrew_creatures[i]['bestiary']['id'] == to_add[c]['bestiary']['id']:
+                                found = True
+                                to_add[c]['id'] = i
+                                server.get('campaigns.campaigns',sid).homebrew_creatures[i] = copy.deepcopy(to_add[c])
+                        if not found:
+                            server.get('campaigns.campaigns',sid).homebrew_creatures[c] = copy.deepcopy(to_add[c])
+                else:
+                    name, crts = get_published_bestiary_creatures(item_id)
+                    to_add = {}
+                    for c in crts:
+                        cid = fingerprint()
+                        to_add[cid] = {
+                            'id': cid,
+                            'bestiary': {
+                                'id': item_id,
+                                'name': name,
+                                'type': c_type
+                            },
+                            'data': c.to_dict()
+                        }
+                    
+                    for c in to_add.keys():
+                        found = False
+                        for i in server.get('campaigns.campaigns',sid).homebrew_creatures.keys():
+                            if server.get('campaigns.campaigns',sid).homebrew_creatures[i]['data']['name'] == to_add[c]['data']['name'] and server.get('campaigns.campaigns',sid).homebrew_creatures[i]['bestiary']['id'] == to_add[c]['bestiary']['id']:
+                                found = True
+                                to_add[c]['id'] = i
+                                server.get('campaigns.campaigns',sid).homebrew_creatures[i] = copy.deepcopy(to_add[c])
+                        if not found:
+                            server.get('campaigns.campaigns',sid).homebrew_creatures[c] = copy.deepcopy(to_add[c])
+                
+                server.store(sid)
+                server.get('campaigns.campaigns', sid).update('homebrews')
+                server.get('campaigns.campaigns', sid).update()
+                return {'result':'Success.'}
+            except requests.HTTPError:
+                response.status_code = status.HTTP_406_NOT_ACCEPTABLE
+                return {'result': 'Malformed URL'}
+
+        else:
+            response.status_code = status.HTTP_403_FORBIDDEN
+            return {'result': f'You are not a DM of campaign {sid}'}
+    else:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return {'result': f'Could not find campaign {sid}.'}
+
+@router.post('/{sid}/critterdb/{hid}/delete/')
+async def delete_bestiary(sid: str, hid: str, response: Response, fp: Optional[str] = Header(None)):
+    response, res = fingerprint_validate(fp, response)
+    if res != 0:
+        return res
+    if server.connections[fp].user == None:
+        response.status_code = status.HTTP_405_METHOD_NOT_ALLOWED
+        return {'result': 'Must be logged in.'}
+    if sid in server.get('users', server.connections[fp].user).campaigns:
+        if server.get('campaigns.campaigns', sid).owner == server.connections[fp].user or server.connections[fp].user in server.get('campaigns.campaigns', sid).dms:
+            for i in list(server.get('campaigns.campaigns', sid).homebrew_creatures.keys()):
+                if server.get('campaigns.campaigns', sid).homebrew_creatures[i]['bestiary']['id'] == hid:
+                    del server.get('campaigns.campaigns', sid).homebrew_creatures[i]
+                
+            server.store(sid)
+            server.get('campaigns.campaigns', sid).update('homebrews')
+            server.get('campaigns.campaigns', sid).update()
+            return {'result':'Success.'}
+
+        else:
+            response.status_code = status.HTTP_403_FORBIDDEN
+            return {'result': f'You are not a DM of campaign {sid}'}
+    else:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return {'result': f'Could not find campaign {sid}.'}
+
+@router.post('/{sid}/critterdb/{hid}/reload/')
+async def reload_bestiary(sid: str, hid: str, response: Response, fp: Optional[str] = Header(None)):
+    response, res = fingerprint_validate(fp, response)
+    if res != 0:
+        return res
+    if server.connections[fp].user == None:
+        response.status_code = status.HTTP_405_METHOD_NOT_ALLOWED
+        return {'result': 'Must be logged in.'}
+    if sid in server.get('users', server.connections[fp].user).campaigns:
+        if server.get('campaigns.campaigns', sid).owner == server.connections[fp].user or server.connections[fp].user in server.get('campaigns.campaigns', sid).dms:
+            b_type = None
+            for i in list(server.get('campaigns.campaigns', sid).homebrew_creatures.keys()):
+                if server.get('campaigns.campaigns', sid).homebrew_creatures[i]['bestiary']['id'] == hid:
+                    b_type = server.get('campaigns.campaigns', sid).homebrew_creatures[i]['bestiary']['type']
+                    del server.get('campaigns.campaigns', sid).homebrew_creatures[i]
+            if b_type == None:
+                response.status_code = status.HTTP_404_NOT_FOUND
+                return {'result': f'Could not find bestiary {hid}.'}
+            
+            try:
+                if b_type == 'bestiary':
+                    name, crts = get_bestiary_creatures(hid)
+                    to_add = {}
+                    for c in crts:
+                        cid = fingerprint()
+                        to_add[cid] = {
+                            'id': cid,
+                            'bestiary': {
+                                'id': hid,
+                                'name': name,
+                                'type': b_type
+                            },
+                            'data': c.to_dict()
+                        }
+                    
+                    for c in to_add.keys():
+                        found = False
+                        for i in server.get('campaigns.campaigns',sid).homebrew_creatures.keys():
+                            if server.get('campaigns.campaigns',sid).homebrew_creatures[i]['data']['name'] == to_add[c]['data']['name'] and server.get('campaigns.campaigns',sid).homebrew_creatures[i]['bestiary']['id'] == to_add[c]['bestiary']['id']:
+                                found = True
+                                to_add[c]['id'] = i
+                                server.get('campaigns.campaigns',sid).homebrew_creatures[i] = copy.deepcopy(to_add[c])
+                        if not found:
+                            server.get('campaigns.campaigns',sid).homebrew_creatures[c] = copy.deepcopy(to_add[c])
+                else:
+                    name, crts = get_published_bestiary_creatures(hid)
+                    to_add = {}
+                    for c in crts:
+                        cid = fingerprint()
+                        to_add[cid] = {
+                            'id': cid,
+                            'bestiary': {
+                                'id': hid,
+                                'name': name,
+                                'type': b_type
+                            },
+                            'data': c.to_dict()
+                        }
+                    
+                    for c in to_add.keys():
+                        found = False
+                        for i in server.get('campaigns.campaigns',sid).homebrew_creatures.keys():
+                            if server.get('campaigns.campaigns',sid).homebrew_creatures[i]['data']['name'] == to_add[c]['data']['name'] and server.get('campaigns.campaigns',sid).homebrew_creatures[i]['bestiary']['id'] == to_add[c]['bestiary']['id']:
+                                found = True
+                                to_add[c]['id'] = i
+                                server.get('campaigns.campaigns',sid).homebrew_creatures[i] = copy.deepcopy(to_add[c])
+                        if not found:
+                            server.get('campaigns.campaigns',sid).homebrew_creatures[c] = copy.deepcopy(to_add[c])
+                
+                server.store(sid)
+                server.get('campaigns.campaigns', sid).update('homebrews')
+                server.get('campaigns.campaigns', sid).update()
+                return {'result':'Success.'}
+            except requests.HTTPError:
+                response.status_code = status.HTTP_406_NOT_ACCEPTABLE
+                return {'result': 'Malformed URL'}
+
+        else:
+            response.status_code = status.HTTP_403_FORBIDDEN
+            return {'result': f'You are not a DM of campaign {sid}'}
     else:
         response.status_code = status.HTTP_404_NOT_FOUND
         return {'result': f'Could not find campaign {sid}.'}

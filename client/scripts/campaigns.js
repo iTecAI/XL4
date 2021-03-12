@@ -183,22 +183,70 @@ function load_cmp_maps(data) {
     maps_panel.replaceAll('#maps-panel')
 }
 
-function load_cmp_page(data) {
-    update_cmp_directory(data);
-    load_cmp_characters(data);
-    load_cmp_maps(data);
+function load_homebrew(data) {
+    var dummy_hb = $('<div id="homebrew-panel"></div>');
+    var hcrts = data.campaigns[current_cmp].homebrew_creatures;
+    var hbs = Object.keys(hcrts);
+    for (var h = 0; h < hbs.length; h++) {
+        dummy_hb.append(
+            $('<div class="bestiary noselect"></div>')
+                .attr('data-id',hcrts[hbs[h]][0])
+                .attr('data-type',hcrts[hbs[h]][1])
+                .append(
+                    $('<span></span>')
+                        .text(hbs[h] + ' - ' + hcrts[hbs[h]][2] + ' creatures')
+                )
+                .append(
+                    $('<button class="delete-bestiary button"></button>')
+                        .append($('<i class="material-icons">delete</i>'))
+                        .on('click',function(event) {
+                            post('/campaign/'+current_cmp+'/critterdb/'+$(this).parents('.bestiary').attr('data-id')+'/delete/',console.log);
+                        })
+                )
+                .append(
+                    $('<button class="refresh-bestiary button"></button>')
+                        .append($('<i class="material-icons">refresh</i>'))
+                        .on('click',function(event) {
+                            post('/campaign/'+current_cmp+'/critterdb/'+$(this).parents('.bestiary').attr('data-id')+'/reload/',console.log);
+                        })
+                )
+        );
+    }
+    dummy_hb.append(
+        $('<button class="new-critter bestiary noselect">Add Bestiary or Creature</button>')
+            .on('click', function(event) {
+                bootbox.prompt('Enter URL of CritterDB Bestiary.', function(result) {
+                    if (result) {
+                        post('/campaign/'+current_cmp+'/critterdb/new',console.log,{},{url:result},true);
+                    }
+                });
+            })
+    );
+    dummy_hb.replaceAll($('#homebrew-panel'));
+}
+
+function cmp_load_wrapper(updates) {
+    return function (data) {
+        update_cmp_directory(data);
+        load_cmp_characters(data);
+        load_cmp_maps(data);
+        load_homebrew(data);
+    
+        $('#content-box').toggleClass('dm',data.campaigns[current_cmp].dms.includes(data.uid));
+        
+    }
 }
 
 function pagelocal_update(data) {
     if (data.updates.campaigns.global || data.updates.campaigns.specific[current_cmp]) {
-        get('/campaign/', load_cmp_page);
+        get('/campaign/', cmp_load_wrapper(data));
     }
 }
 
 $(document).ready(function () {
     $('#add-map-dialog').hide();
     $('#dialog-modal').hide();
-    get('/campaign/', load_cmp_page);
+    get('/campaign/', cmp_load_wrapper(null));
 
     $('#add-cmp').on('click', function (event) {
         bootbox.prompt('Enter name of new campaign.', function (result) {
