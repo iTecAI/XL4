@@ -53,8 +53,8 @@ function draw_note(obj) {
             if ($(this).attr('data-moving') == 'true') {
                 var pos = getPercentPosition(e.clientX, e.clientY);
                 $(this).css({
-                    top: pos.y + '%',
-                    left: pos.x + '%'
+                    top: (pos.y - ($(this).height() / $('#map-container').height() * 50)) + '%',
+                    left: (pos.x - ($(this).width() / $('#map-container').width() * 50)) + '%'
                 });
             }
         })
@@ -71,6 +71,8 @@ function draw_note(obj) {
             }
             $(this).attr('data-moving', 'false');
             var pos = getPercentPosition(event.clientX, event.clientY);
+            pos.x = (pos.x - ($(this).width() / $('#map-container').width() * 50));
+            pos.y = (pos.y - ($(this).height() / $('#map-container').height() * 50));
             post(
                 '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/' + $(event.delegateTarget).attr('data-oid') + '/move/',
                 function () { },
@@ -176,8 +178,8 @@ function draw_shape(obj) {
                 if ($(this).attr('data-moving') == 'true') {
                     var pos = getPercentPosition(e.clientX, e.clientY);
                     $(this).css({
-                        top: pos.y + '%',
-                        left: pos.x + '%'
+                        top: (pos.y - ($(this).height() / $('#map-container').height() * 50)) + '%',
+                        left: (pos.x - ($(this).width() / $('#map-container').width() * 50)) + '%'
                     });
                 }
             })
@@ -194,6 +196,8 @@ function draw_shape(obj) {
                 }
                 $(this).attr('data-moving', 'false');
                 var pos = getPercentPosition(event.clientX, event.clientY);
+                pos.x = (pos.x - ($(this).width() / $('#map-container').width() * 50));
+                pos.y = (pos.y - ($(this).height() / $('#map-container').height() * 50));
                 post(
                     '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/' + $(event.delegateTarget).attr('data-oid') + '/move/',
                     function () { },
@@ -258,8 +262,8 @@ function draw_character(obj) {
             if ($(this).attr('data-moving') == 'true') {
                 var pos = getPercentPosition(e.clientX, e.clientY);
                 $(this).css({
-                    top: pos.y + '%',
-                    left: pos.x + '%'
+                    top: (pos.y - ($(this).height() / $('#map-container').height() * 50)) + '%',
+                    left: (pos.x - ($(this).width() / $('#map-container').width() * 50)) + '%'
                 });
             }
         })
@@ -276,6 +280,8 @@ function draw_character(obj) {
             }
             $(this).attr('data-moving', 'false');
             var pos = getPercentPosition(event.clientX, event.clientY);
+            pos.x = (pos.x - ($(this).width() / $('#map-container').width() * 50));
+            pos.y = (pos.y - ($(this).height() / $('#map-container').height() * 50));
             post(
                 '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/' + $(event.delegateTarget).attr('data-oid') + '/move/',
                 function () { },

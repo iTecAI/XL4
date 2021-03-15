@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Header, Response, status
 from typing import Optional
+from fastapi.param_functions import Query
 
 from starlette.status import HTTP_403_FORBIDDEN, HTTP_404_NOT_FOUND, HTTP_405_METHOD_NOT_ALLOWED, HTTP_409_CONFLICT
 from common import *
@@ -651,6 +652,32 @@ async def reload_bestiary(sid: str, hid: str, response: Response, fp: Optional[s
         else:
             response.status_code = status.HTTP_403_FORBIDDEN
             return {'result': f'You are not a DM of campaign {sid}'}
+    else:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return {'result': f'Could not find campaign {sid}.'}
+
+@router.get('/{sid}/npcs')
+async def search_npcs(sid: str, q: str, response: Response, limit: Optional[int] = Query(100), fp: Optional[str] = Header(None)):
+    response, res = fingerprint_validate(fp, response)
+    q = q.strip('?')
+    if res != 0:
+        return res
+    if server.connections[fp].user == None:
+        response.status_code = status.HTTP_405_METHOD_NOT_ALLOWED
+        return {'result': 'Must be logged in.'}
+    if sid in server.get('users', server.connections[fp].user).campaigns:
+        results = []
+        for i in server.get('campaigns.campaigns',sid).homebrew_creatures.values():
+            if i['data']['name'].lower() in q.lower() or q.lower() in i['data']['name'].lower():
+                x = copy.deepcopy(i)
+                x['data']['homebrew'] = True
+                results.append(x['data'])
+            if len(results) >= limit:
+                return results
+        results.extend(search_static(q,endpoint='monsters'))
+        if len(results) > limit:
+            results = results[:limit]
+        return results
     else:
         response.status_code = status.HTTP_404_NOT_FOUND
         return {'result': f'Could not find campaign {sid}.'}

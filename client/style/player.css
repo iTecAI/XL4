@@ -166,7 +166,6 @@
     border-radius: 5px;
     background-color: rgba(0,0,0,0);
     z-index: 20;
-    transform: translate(-50%, -50%);
 }
 .note.player-invisible {
     opacity: 0.7;
@@ -296,7 +295,6 @@
     opacity: 0.5;
     z-index: 22;
     cursor: default;
-    transform: translate(-50%, -50%);
 }
 .shape.player-invisible {
     border: 2px solid gold;
@@ -381,7 +379,6 @@
 .object.character {
     position: absolute;
     display: inline-block;
-    transform: translate(-50%, -50%);
 }
 .object.character .char-token {
     position: absolute;
