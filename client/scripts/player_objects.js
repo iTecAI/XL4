@@ -240,6 +240,25 @@ function draw_shape(obj) {
 }
 
 function draw_character(obj) {
+    if (current_cmp_data.dms.includes(uid) || uid == obj.data.owner) {
+        var stats_obj = $('<span class="char-stats"></span>')
+            .append(
+                $('<input class="cur-hp-inp">')
+                    .val(current_cmp_data.character_data[obj.data.char_id].hit_points.base)
+                    .on('change', function (event) {
+                        post(
+                            '/character/' + $(this).parents('.char-stats').parents('.character').attr('data-cid') + '/modify/',
+                            function () { }, {}, {
+                            path: 'hit_points.base',
+                            value: Number($(this).val())
+                        }
+                        );
+                    })
+            )
+            .append('/' + current_cmp_data.character_data[obj.data.char_id].hit_points.max + ' - AC: ' + current_cmp_data.character_data[obj.data.char_id].armor_class.base);
+    } else {
+        var stats_obj = '';
+    }
     return $('<div class="object character token"></div>')
         .toggleClass('owned', uid == obj.data.owner)
         .attr('data-oid', obj.id)
@@ -254,6 +273,7 @@ function draw_character(obj) {
                 )))
         )
         .append($('<span class="char-name"></span>').text(current_cmp_data.character_data[obj.data.char_id].name))
+        .append(stats_obj)
         .css({
             top: obj.position.y + '%',
             left: obj.position.x + '%'
@@ -268,7 +288,7 @@ function draw_character(obj) {
             }
         })
         .on('mousedown', function (event) {
-            if (event.button == 0 && ($(this).hasClass('owned') || current_cmp_data.dms.includes(uid))) {
+            if (event.button == 0 && ($(this).hasClass('owned') || current_cmp_data.dms.includes(uid)) && !$(event.target).is('input')) {
                 if (current_tool == 'move') {
                     $(this).attr('data-moving', 'true');
                 }
@@ -317,6 +337,228 @@ function draw_character(obj) {
         });
 }
 
+function draw_npc(obj) {
+    if (!obj.data.player_visible && !current_cmp_data.dms.includes(uid)) {
+        return;
+    }
+    if (current_cmp_data.dms.includes(uid)) {
+        var stats_obj = $('<span class="npc-stats"></span>')
+            .append(
+                $('<input class="cur-hp-inp">')
+                    .val(obj.data.dynamic.hp)
+                    .on('change', function (event) {
+                        post(
+                            '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/' + $(this).parents('.npc-stats').parents('.npc').attr('data-oid') + '/modify/',
+                            function () { }, {}, {
+                            path: 'dynamic.hp',
+                            value: Number($(this).val())
+                        }
+                        );
+                    })
+            )
+            .append('/' + obj.data.data.hit_points.max + ' - AC: ' + obj.data.data.armor_class.base);
+    } else {
+        var stats_obj = '';
+    }
+    return $('<div class="object npc npc-full token"></div>')
+        .attr('data-oid', obj.id)
+        .addClass(cond(obj.data.background, 'background', 'no-background'))
+        .addClass(cond(obj.data.player_visible, 'player-visible', 'player-invisible'))
+        .append(
+            $('<span class="npc-token"></span>')
+                .append($('<img>').attr('src', obj.data.data.image))
+        )
+        .append($('<span class="npc-name"></span>').text(obj.data.data.name))
+        .append(stats_obj)
+        .css({
+            top: obj.position.y + '%',
+            left: obj.position.x + '%'
+        })
+        .on('mousemove', function (e) {
+            if ($(this).attr('data-moving') == 'true') {
+                var pos = getPercentPosition(e.clientX, e.clientY);
+                $(this).css({
+                    top: (pos.y - ($(this).height() / $('#map-container').height() * 50)) + '%',
+                    left: (pos.x - ($(this).width() / $('#map-container').width() * 50)) + '%'
+                });
+            }
+        })
+        .on('mousedown', function (event) {
+            if (event.button == 0 && ($(this).hasClass('owned') || current_cmp_data.dms.includes(uid)) && !$(event.target).is('input')) {
+                if (current_tool == 'move') {
+                    $(this).attr('data-moving', 'true');
+                }
+            }
+        })
+        .on('mouseup', function (event) {
+            if ($(this).attr('data-moving') != 'true') {
+                return;
+            }
+            $(this).attr('data-moving', 'false');
+            var pos = getPercentPosition(event.clientX, event.clientY);
+            pos.x = (pos.x - ($(this).width() / $('#map-container').width() * 50));
+            pos.y = (pos.y - ($(this).height() / $('#map-container').height() * 50));
+            post(
+                '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/' + $(event.delegateTarget).attr('data-oid') + '/move/',
+                function () { },
+                {}, pos
+            );
+        })
+        .on('ctx:delete', function (event) {
+            post(
+                '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/' + $(this).attr('data-oid') + '/delete/',
+                function () { }
+            );
+        })
+        .on('ctx:enable_background', function () {
+            post(
+                '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/' + $(this).attr('data-oid') + '/modify/',
+                function () { }, {}, {
+                path: 'background',
+                value: true
+            }
+            );
+        })
+        .on('ctx:disable_background', function () {
+            post(
+                '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/' + $(this).attr('data-oid') + '/modify/',
+                function () { }, {}, {
+                path: 'background',
+                value: false
+            }
+            );
+        })
+        .on('ctx:visibility_off', function () {
+            post(
+                '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/' + $(this).attr('data-oid') + '/modify/',
+                function () { }, {}, {
+                path: 'player_visible',
+                value: false
+            }
+            );
+        })
+        .on('ctx:visibility_on', function () {
+            post(
+                '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/' + $(this).attr('data-oid') + '/modify/',
+                function () { }, {}, {
+                path: 'player_visible',
+                value: true
+            }
+            );
+        });
+}
+
+function draw_basic_npc(obj) {
+    if (!obj.data.player_visible && !current_cmp_data.dms.includes(uid)) {
+        return;
+    }
+    if (current_cmp_data.dms.includes(uid)) {
+        var stats_obj = $('<span class="npc-stats"></span>')
+            .append(
+                $('<input class="cur-hp-inp">')
+                    .val(obj.data.dynamic.hp)
+                    .on('change', function (event) {
+                        post(
+                            '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/' + $(this).parents('.npc-stats').parents('.npc').attr('data-oid') + '/modify/',
+                            function () { }, {}, {
+                            path: 'dynamic.hp',
+                            value: Number($(this).val())
+                        }
+                        );
+                    })
+            )
+            .append('/' + obj.data.data.hit_points + ' - AC: ' + obj.data.data.armor_class);
+    } else {
+        var stats_obj = '';
+    }
+    return $('<div class="object npc token"></div>')
+        .attr('data-oid', obj.id)
+        .addClass(cond(obj.data.background, 'background', 'no-background'))
+        .addClass(cond(obj.data.player_visible, 'player-visible', 'player-invisible'))
+        .append(
+            $('<span class="npc-token"></span>')
+                .append($('<img>').attr('src', obj.data.data.image))
+        )
+        .append($('<span class="npc-name"></span>').text(obj.data.data.name))
+        .append(stats_obj)
+        .css({
+            top: obj.position.y + '%',
+            left: obj.position.x + '%'
+        })
+        .on('mousemove', function (e) {
+            if ($(this).attr('data-moving') == 'true') {
+                var pos = getPercentPosition(e.clientX, e.clientY);
+                $(this).css({
+                    top: (pos.y - ($(this).height() / $('#map-container').height() * 50)) + '%',
+                    left: (pos.x - ($(this).width() / $('#map-container').width() * 50)) + '%'
+                });
+            }
+        })
+        .on('mousedown', function (event) {
+            if (event.button == 0 && ($(this).hasClass('owned') || current_cmp_data.dms.includes(uid)) && !$(event.target).is('input')) {
+                if (current_tool == 'move') {
+                    $(this).attr('data-moving', 'true');
+                }
+            }
+        })
+        .on('mouseup', function (event) {
+            if ($(this).attr('data-moving') != 'true') {
+                return;
+            }
+            $(this).attr('data-moving', 'false');
+            var pos = getPercentPosition(event.clientX, event.clientY);
+            pos.x = (pos.x - ($(this).width() / $('#map-container').width() * 50));
+            pos.y = (pos.y - ($(this).height() / $('#map-container').height() * 50));
+            post(
+                '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/' + $(event.delegateTarget).attr('data-oid') + '/move/',
+                function () { },
+                {}, pos
+            );
+        })
+        .on('ctx:delete', function (event) {
+            post(
+                '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/' + $(this).attr('data-oid') + '/delete/',
+                function () { }
+            );
+        })
+        .on('ctx:enable_background', function () {
+            post(
+                '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/' + $(this).attr('data-oid') + '/modify/',
+                function () { }, {}, {
+                path: 'background',
+                value: true
+            }
+            );
+        })
+        .on('ctx:disable_background', function () {
+            post(
+                '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/' + $(this).attr('data-oid') + '/modify/',
+                function () { }, {}, {
+                path: 'background',
+                value: false
+            }
+            );
+        })
+        .on('ctx:visibility_off', function () {
+            post(
+                '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/' + $(this).attr('data-oid') + '/modify/',
+                function () { }, {}, {
+                path: 'player_visible',
+                value: false
+            }
+            );
+        })
+        .on('ctx:visibility_on', function () {
+            post(
+                '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/' + $(this).attr('data-oid') + '/modify/',
+                function () { }, {}, {
+                path: 'player_visible',
+                value: true
+            }
+            );
+        });
+}
+
 function draw_objects() {
     var objects = [];
     var object_keys = Object.keys(current_map_data.objects);
@@ -334,6 +576,12 @@ function draw_objects() {
                 break;
             case 'character':
                 objects.push(draw_character(obj));
+                break;
+            case 'npc':
+                objects.push(draw_npc(obj));
+                break;
+            case 'npc_basic':
+                objects.push(draw_basic_npc(obj));
                 break;
         }
     }

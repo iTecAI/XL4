@@ -417,6 +417,114 @@
 .object.character:hover .char-name {
     background-color: rgba(0,0,0,0.4);
 }
+.object.character .char-stats {
+    position: absolute;
+    display: inline-block;
+    opacity: 0;
+    bottom: calc(100% + 2px);
+    left: 50%;
+    transform: translate(-50%, 0);
+    width: fit-content;
+    white-space: nowrap;
+    color: white;
+    background-color: rgba(0,0,0,0.1);
+    transition: opacity 0.2s, background-color 0.2s;
+    padding: 2px;
+    font-family: Roboto;
+    font-size: 6px;
+    border-radius: 4px;
+}
+.object.character:hover .char-stats {
+    background-color: rgba(0,0,0,0.4);
+    opacity: 1;
+}
+.object.character .char-stats .cur-hp-inp {
+    border: none;
+    background-color: rgba(0,0,0,0.3);
+    margin-right: 2px;
+    border-radius: 2px;
+    color: white;
+    width: 24px;
+    text-align: right;
+    display: inline-block;
+}
+
+.object.npc {
+    position: absolute;
+    display: inline-block;
+}
+.object.npc .npc-token {
+    position: absolute;
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    overflow: hidden;
+    top: 0px;
+    left: 0px;
+}
+.object.npc.background .npc-token {
+    background-color: var(--gradient8);
+}
+.object.npc .npc-token img {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+}
+.object.npc .npc-name {
+    position: absolute;
+    display: inline-block;
+    top: calc(100% + 2px);
+    left: 50%;
+    transform: translate(-50%, 0);
+    width: fit-content;
+    white-space: nowrap;
+    color: white;
+    background-color: rgba(0,0,0,0.1);
+    transition: background-color 0.2s;
+    padding: 2px;
+    font-family: Roboto;
+    font-size: 6px;
+    border-radius: 4px;
+}
+.object.npc:hover .npc-name {
+    background-color: rgba(0,0,0,0.4);
+}
+.object.npc.player-invisible .npc-token {
+    opacity: 0.75;
+    border: 2px solid gold;
+}
+.object.npc .npc-stats {
+    position: absolute;
+    display: inline-block;
+    opacity: 0;
+    bottom: calc(100% + 2px);
+    left: 50%;
+    transform: translate(-50%, 0);
+    width: fit-content;
+    white-space: nowrap;
+    color: white;
+    background-color: rgba(0,0,0,0.1);
+    transition: opacity 0.2s, background-color 0.2s;
+    padding: 2px;
+    font-family: Roboto;
+    font-size: 6px;
+    border-radius: 4px;
+}
+.object.npc:hover .npc-stats {
+    background-color: rgba(0,0,0,0.4);
+    opacity: 1;
+}
+.object.npc .npc-stats .cur-hp-inp {
+    border: none;
+    background-color: rgba(0,0,0,0.3);
+    margin-right: 2px;
+    border-radius: 2px;
+    color: white;
+    width: 24px;
+    text-align: right;
+    display: inline-block;
+}
 
 #gridlock-toggle {
     position: absolute;
@@ -464,4 +572,309 @@
 }
 #gridlock-toggle button:hover i {
     color: var(--secondary);
+}
+
+#add-npc-dialog {
+    position: absolute;
+    top: 5vh;
+    left: 0px;
+    display: inline-block;
+    height: 95vh;
+    z-index: 100;
+    background-color: var(--primary-dark);
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+    overflow: hidden;
+}
+@media screen and (min-width: 400px) {
+    #add-npc-dialog {
+        width: 400px;
+    }
+}
+@media screen and (max-width: 399px) {
+    #add-npc-dialog {
+        width: calc(100vw - 5vh);
+    }
+}
+
+#add-npc-dialog .title {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    display: inline-block;
+    height: 50px;
+    width: 100%;
+    background-color: var(--primary-darker);
+    z-index: 3;
+}
+
+#add-npc-dialog .title span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: Roboto;
+}
+
+#add-npc-dialog .npc-search {
+    position: absolute;
+    top: 50px;
+    left: 0px;
+    display: inline-block;
+    height: 40px;
+    width: 100%;
+    z-index: 4;
+}
+#add-npc-dialog .npc-search input {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    color: white;
+    font-size: 16px;
+    font-family: Roboto;
+    background-color: var(--primary-dark);
+    border: none;
+    padding-left: 40px;
+    transition: background-color 0.2s;
+}
+#add-npc-dialog .npc-search input:hover, #add-npc-dialog .npc-search input:focus {
+    background-color: var(--primary-darker);
+}
+#add-npc-dialog .npc-search i {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    font-size: 24px;
+    color: white;
+}
+
+#add-npc-dialog .npc-list {
+    position: absolute;
+    top: 90px;
+    left: 0px;
+    display: inline-block;
+    height: calc(85% - 90px);
+    width: 100%;
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+    border-radius: 0 0 10px 10px;
+    z-index: 2;
+    background-color: var(--primary-dark);
+    overflow: scroll;
+}
+
+#add-npc-dialog .npc-options {
+    position: absolute;
+    top: calc(85% - 10px);
+    left: 0px;
+    display: inline-block;
+    height: calc(30% + 10px);
+    width: 100%;
+    background-color: var(--primary-darker);
+    z-index: 1;
+}
+#add-npc-dialog .npc-list .npc-item {
+    position: relative;
+    display: inline-block;
+    margin: 5px;
+    border-radius: 5px;
+    background-color: var(--primary);
+    font-family: Roboto;
+    height: 64px;
+    width: calc(100% - 10px);
+    box-sizing: border-box;
+    margin-bottom: 0px;
+    cursor: pointer;
+}
+#add-npc-dialog .npc-list .npc-item .npc-name {
+    position: absolute;
+    top: calc(50% - 10px);
+    font-size: 16px;
+    left: 64px;
+    color: white;
+    transform: translate(0, -50%);
+}
+#add-npc-dialog .npc-list .npc-item .npc-name i {
+    font-size: 16px;
+    margin-right: 5px;
+}
+#add-npc-dialog .npc-list .npc-item .npc-cr {
+    position: absolute;
+    top: 50%;
+    font-size: 24px;
+    right: 10px;
+    color: white;
+    transform: translate(0, -50%);
+}
+#add-npc-dialog .npc-list .npc-item .npc-basics {
+    position: absolute;
+    top: calc(50% + 10px);
+    font-size: 12px;
+    left: 64px;
+    color: white;
+    transform: translate(0, -50%);
+}
+#add-npc-dialog .npc-list .npc-item img {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    display: inline-block;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+}
+
+#npc-img-button {
+    position: absolute;
+    top: 15px;
+    left: 5px;
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    border: none;
+    overflow: hidden;
+    border-radius: 50%;
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+}
+#npc-img-button img {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+#npc-name-inp {
+    position: absolute;
+    top: 15px;
+    left: 42px;
+    display: inline-block;
+    height: 32px;
+    width: calc(60% - 47px);
+    background-color: var(--primary-dark);
+    color: white;
+    padding-left: 10px;
+    border: none;
+    border-radius: 5px;
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+    transition: background-color 0.2s;
+}
+#npc-name-inp:focus, #npc-name-inp:hover {
+    background-color: var(--primary);
+}
+#npc-size-select {
+    position: absolute;
+    top: 15px;
+    left: calc(60% + 5px);
+    display: inline-block;
+    height: 32px;
+    width: calc(40% - 10px);
+    background-color: var(--primary-dark);
+    color: white;
+    padding-left: 10px;
+    border: none;
+    border-radius: 5px;
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+    transition: background-color 0.2s;
+}
+#npc-size-select:focus, #npc-size-select:hover {
+    background-color: var(--primary);
+}
+#npc-img-upload {
+    display: none;
+}
+
+.npc-options .option-inp {
+    position: relative;
+    display: inline-block;
+    width: calc(100% - 10px);
+    height: 32px;
+    border-radius: 5px;
+    margin: 5px;
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+}
+.npc-options .option-inp input {
+    position: relative;
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+    background-color: var(--primary-dark);
+    border-radius: 5px;
+    padding-left: 37px;
+    color: white;
+    border: none;
+}
+.npc-options .option-inp span.label {
+    position: absolute;
+    top: 50%;
+    left: 0px;
+    transform: translate(0, -50%);
+    display: inline-block;
+    height: 100%;
+    width: 32px;
+    color: white;
+    font-family: Roboto;
+    background-color: var(--primary-darker);
+}
+.npc-options .option-inp span.label span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#hp-input {
+    position: absolute;
+    top: 52px;
+    left: 5px;
+    width: calc(50% - 10px);
+}
+#ac-input {
+    position: absolute;
+    top: 52px;
+    left: calc(50% + 5px);
+    width: calc(50% - 15px);
+}
+#finish-npc {
+    position: absolute;
+    top: 99px;
+    left: 10px;
+    display: inline-block;
+    width: calc(100% - 15px);
+    height: 32px;
+    background-color: var(--secondary);
+    color: white;
+    font-family: Roboto;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 5px;
+    border: none;
+    transition: background-color 0.2s, color 0.2s;
+    color: black;
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+}
+#finish-npc:hover {
+    background-color: var(--secondary-dark);
+    color: white;
 }

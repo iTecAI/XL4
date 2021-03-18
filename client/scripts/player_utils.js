@@ -372,6 +372,13 @@ var custom_ctx = {
                         'shape',
                         'player-visible'
                     ]
+                },
+                {
+                    match_type: 'all',
+                    match: [
+                        'npc',
+                        'player-visible'
+                    ]
                 }
             ]
         },
@@ -391,6 +398,13 @@ var custom_ctx = {
                     match_type: 'all',
                     match: [
                         'shape',
+                        'player-invisible'
+                    ]
+                },
+                {
+                    match_type: 'all',
+                    match: [
+                        'npc',
                         'player-invisible'
                     ]
                 }

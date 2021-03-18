@@ -22,7 +22,7 @@ function setup_map_base() {
     $(map_container).on('mousedown', function (e) {
         if ($(e.target).hasClass('object') || $(e.target).parents('.object').length > 0) {
             if ((!current_cmp_data.dms.includes(uid) && !(
-                ($(e.target).hasClass('character') || $(e.target).parents('.character').length > 0) ||
+                (($(e.target).hasClass('character') && $(e.target).hasClass('owned')) || $(e.target).parents('.character.owned').length > 0) ||
                 ($(e.target).hasClass('shape') || $(e.target).parents('.shape').length > 0)
             )) || ($(e.target).hasClass('obscure') || $(e.target).parents('.obscure').length > 0)) {
 
@@ -343,10 +343,10 @@ function setup_map_base() {
                     .attr('data-characters', JSON.stringify(data.characters))
                     .append(Object.values(data.characters).map(function (v, i, a) {
                         return $('<div class="add-character-item"></div>')
-                            .attr('data-id',v.character.id)
+                            .attr('data-id', v.character.id)
                             .append(
                                 $('<span class="char-img"></span>')
-                                    .append($('<img>').attr('src',cond(v.character.appearance.image == null, 'assets/logo.png', v.character.appearance.image)))
+                                    .append($('<img>').attr('src', cond(v.character.appearance.image == null, 'assets/logo.png', v.character.appearance.image)))
                             )
                             .append(
                                 $('<span class="char-name"></span>')
@@ -377,6 +377,16 @@ function setup_map_base() {
             }, {}, { ids: nuchars }
         );
     });
+    $(map_container).on('ctx:add_npc', function (event) {
+        $('#finish-npc').attr('data-pos',JSON.stringify({x:event.x,y:event.y}));
+        $('#add-npc-dialog .npc-search input').val('');
+        $('#add-npc-dialog .npc-list .npc-item').remove();
+        $('#add-npc-dialog .npc-options input').val('');
+        $('#add-npc-dialog .npc-options select').val('medium');
+        $('#add-npc-dialog .npc-options img').attr('src','assets/logo.png');
+        $('#finish-npc').attr('data-npc', '{}');
+        $('#add-npc-dialog').animate({ width: 'show' }, 200);
+    });
 
     setTransform(map_container);
     return map_container;
@@ -399,12 +409,20 @@ function draw_map() {
     $('.object.note .note-content').each(function (i, e) {
         $(e).css('max-width', ($(e).parents('.note').width() + 25) + 'px');
     });
-    $('.object.character').each(function() {
+    $('.object.character').each(function () {
         var sz = size_map[cond(Object.keys(size_map).includes(current_cmp_data.character_data[$(this).attr('data-cid')].size), current_cmp_data.character_data[$(this).attr('data-cid')].size, 'medium')];
-        var dims = ftToPercentDimensions(sz,sz);
+        var dims = ftToPercentDimensions(sz, sz);
         $(this).css({
-            width: dims.w+'%',
-            height: dims.h+'%'
+            width: dims.w + '%',
+            height: dims.h + '%'
+        });
+    });
+    $('.object.npc').each(function () {
+        var sz = size_map[cond(Object.keys(size_map).includes(current_map_data.objects[$(this).attr('data-oid')].data.data.size), current_map_data.objects[$(this).attr('data-oid')].data.data.size, 'medium')];
+        var dims = ftToPercentDimensions(sz, sz);
+        $(this).css({
+            width: dims.w + '%',
+            height: dims.h + '%'
         });
     });
 }
@@ -449,11 +467,11 @@ function overall_update(data) {
 function pagelocal_update(data) {
     $(document).scrollTop(0);
     if (
-        data.updates.campaigns.global || 
-        data.updates.campaigns.specific[params.campaign] || 
-        data.updates.maps.global || 
-        data.updates.maps.specific[params.map] || 
-        current_cmp_data.characters.some(function (v, i, a) {return data.updates.characters.specific[v];})
+        data.updates.campaigns.global ||
+        data.updates.campaigns.specific[params.campaign] ||
+        data.updates.maps.global ||
+        data.updates.maps.specific[params.map] ||
+        current_cmp_data.characters.some(function (v, i, a) { return data.updates.characters.specific[v]; })
     ) {
         get(
             '/campaign/' + params.campaign + '/maps/' + params.map + '/',
@@ -462,9 +480,15 @@ function pagelocal_update(data) {
     }
 }
 
+function setup_tagifiers() {
+    
+}
+
 $(document).ready(function () {
     $('#context-menu').hide();
     $('#toolbar-shapes').hide();
+    $('#add-npc-dialog').animate({ width: 'hide' }, 0);
+
     $(document).on('click', function (event) {
         if (!$(event.target).is('#context-menu') && $(event.target).parents('#context-menu').length == 0) {
             $('#context-menu').hide();
@@ -473,6 +497,15 @@ $(document).ready(function () {
         if (!$(event.target).is('#add-character-dialog') && $(event.target).parents('#add-character-dialog').length == 0 && $('#add-character-dialog').length > 0) {
             $('#add-character-dialog').remove();
         }
+        if (
+            !$(event.target).is('#add-npc-dialog') && 
+            $(event.target).parents('#add-npc-dialog').length == 0 && 
+            $('#add-npc-dialog').length > 0 && 
+            !$(event.target).is('#context-menu') && 
+            $(event.target).parents('#context-menu').length == 0
+        ) {
+            $('#add-npc-dialog').animate({'width':'hide'}, 200);
+        }
     });
     params = parse_query_string();
     if (Object.keys(params).length != 2) {
@@ -480,6 +513,7 @@ $(document).ready(function () {
             window.location = '/campaigns';
         });
     } else {
+        setup_tagifiers();
         get(
             '/campaign/' + params.campaign + '/maps/' + params.map + '/',
             overall_update
@@ -566,12 +600,12 @@ $(document).ready(function () {
                         var classes = [];
                         for (var i = 0; i < item.classes.length; i++) {
                             if (item.classes[i].match_type == 'any') {
-                                classes.push(item.classes[i].match.some(function (v, i, a) { return $(event.target).hasClass(v) || $(event.target).parentsUntil('#player','.' + v).length > 0; }));
+                                classes.push(item.classes[i].match.some(function (v, i, a) { return $(event.target).hasClass(v) || $(event.target).parentsUntil('#player', '.' + v).length > 0; }));
                             } else if (item.classes[i].match_type == 'all') {
-                                classes.push(item.classes[i].match.every(function (v, i, a) { return $(event.target).hasClass(v) || $(event.target).parentsUntil('#player','.' + v).length > 0; }));
+                                classes.push(item.classes[i].match.every(function (v, i, a) { return $(event.target).hasClass(v) || $(event.target).parentsUntil('#player', '.' + v).length > 0; }));
                             }
                         }
-                        showing = classes.some(function(v) {return v;});
+                        showing = classes.some(function (v) { return v; });
                     }
                     if (Object.keys(item).includes('selector') && showing) {
                         var selectors = [];
@@ -582,7 +616,7 @@ $(document).ready(function () {
                                 selectors.push(item.selector[i].match.every(function (v, i, a) { return $(event.target).is(v); }));
                             }
                         }
-                        showing = selectors.some(function(v) {return v;});
+                        showing = selectors.some(function (v) { return v; });
                     }
                     function match_predicate(e, v) {
                         if (v == 'has_character_in_campaign') {
@@ -616,7 +650,7 @@ $(document).ready(function () {
                                 predicates.push(!item.predicate[i].match.some(function (v, i, a) { return match_predicate(event, v); }));
                             }
                         }
-                        showing = predicates.every(function(v) {return v;});
+                        showing = predicates.every(function (v) { return v; });
                     }
 
                     if (showing) {
@@ -655,12 +689,140 @@ $(document).ready(function () {
 
         $('#gridlock-toggle button').on('click', function (event) {
             if ($('#gridlock-toggle').attr('data-on') == 'false') {
-                $('#gridlock-toggle').attr('data-on','true');
+                $('#gridlock-toggle').attr('data-on', 'true');
                 $('#gridlock-toggle button i').text('grid_on');
             } else {
-                $('#gridlock-toggle').attr('data-on','false');
+                $('#gridlock-toggle').attr('data-on', 'false');
                 $('#gridlock-toggle button i').text('grid_off');
             }
+        });
+        $('#add-npc-dialog .npc-search input').on('change', function (event) {
+            if ($(this).val().length > 0) {
+                get('/campaign/' + current_cmp_data.id + '/npcs/?q=' + $(this).val(), function (result) {
+                    var dummy_npc_list = $('<div class="npc-list noscroll"></div>');
+                    console.log(result);
+                    for (var c = 0; c < result.length; c++) {
+                        var npc = result[c];
+                        var npc_item = $('<div class="npc-item noselect"></div>');
+                        npc_item.attr('id', 'hb-index-' + c);
+                        npc_item.attr('data-npc', JSON.stringify(npc));
+                        npc_item
+                            .append($('<span class="npc-name"></span>').html(cond(npc.homebrew, '<i class="material-icons">sports_bar</i>', '') + npc.name))
+                            .append($('<span class="npc-cr"></span>').text(npc.challenge_rating))
+                            .append($('<span class="npc-basics"></span>').text('HP: ' + npc.hit_dice + ' (' + npc.hit_points.max + ') - AC: ' + npc.armor_class.base));
+                        if (npc_imgs.includes(npc.name.toLowerCase().replace(/ /g, '-'))) {
+                            npc_item.append($('<img class="npc-img">').attr('src', 'assets/npcs/' + npc.name.toLowerCase().replace(/ /g, '-') + '.png'));
+                        } else if (npc.image != null && npc.image != '') {
+                            npc_item.append($('<img class="npc-img">').attr('src', npc.image));
+                        } else {
+                            npc_item.append($('<img class="npc-img">').attr('src', 'assets/logo.png'));
+                        }
+                        npc_item.on('click', function (event) {
+                            $('#npc-img-button img').attr('src',$(this).children('img').attr('src'));
+                            var npc = JSON.parse($(this).attr('data-npc'));
+                            $('#npc-name-inp').val(npc.name);
+                            $('#npc-size-select').val(npc.size.toLowerCase());
+                            $('#hp-input input').val(npc.hit_points.max);
+                            $('#ac-input input').val(npc.armor_class.base);
+                            $('#finish-npc').attr('data-npc',$(this).attr('data-npc'));
+                        });
+                        dummy_npc_list.append(npc_item);
+                    }
+                    dummy_npc_list.replaceAll('#add-npc-dialog .npc-list');
+                });
+            }
+        });
+        $('#npc-img-button').on('click', function (event) {
+            $('#npc-img-upload').trigger('click');
+        });
+        $('#npc-img-upload').on('change', function(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.addEventListener("load", function () {
+                $('#npc-img-button img').attr('src', reader.result);
+            }, false);
+
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        });
+        $('#finish-npc').on('click', function (event) {
+            if (
+                $('#npc-name-inp').val().length == 0 || 
+                $('#npc-img-button img').attr('src').length == 0 ||
+                $('#hp-input input').val().length == 0 ||
+                isNaN(Number($('#hp-input input').val())) ||
+                $('#ac-input input').val().length == 0 ||
+                isNaN(Number($('#ac-input input').val()))
+            ) {
+                $(this).animate({'background-color':'red'}, 200);
+                window.setTimeout(function () {
+                    $('#finish-npc').removeAttr('style');
+                }, 1000);
+                return;
+            }
+            if ($(this).attr('data-npc') == '{}') {
+                var pos = JSON.parse($(this).attr('data-pos'));
+                pos = getPercentPosition(pos.x, pos.y);
+                var data = {}
+                data.name = $('#npc-name-inp').val();
+                data.image = $('#npc-img-button img').attr('src');
+                data.hit_points = Number($('#hp-input input').val());
+                data.armor_class = Number($('#ac-input input').val());
+                data.size = $('#npc-size-select').val();
+                post(
+                    '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/add/',
+                    function () {
+                        $('#add-character-dialog').remove();
+                    },
+                    {}, {
+                    object_type: 'npc_basic',
+                    data: {
+                        player_visible: true,
+                        background: true,
+                        data: data,
+                        dynamic: {
+                            hp: data.hit_points,
+                            conditions: []
+                        }
+                    },
+                    x: pos.x,
+                    y: pos.y
+                }
+                );
+            } else {
+                var pos = JSON.parse($(this).attr('data-pos'));
+                pos = getPercentPosition(pos.x, pos.y);
+                var data = JSON.parse($(this).attr('data-npc'));
+                data.name = $('#npc-name-inp').val();
+                data.image = $('#npc-img-button img').attr('src');
+                data.hit_points.max = Number($('#hp-input input').val());
+                data.armor_class.base = Number($('#ac-input input').val());
+                data.size = $('#npc-size-select').val();
+                post(
+                    '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/add/',
+                    function () {
+                        $('#add-character-dialog').remove();
+                    },
+                    {}, {
+                    object_type: 'npc',
+                    data: {
+                        player_visible: true,
+                        background: true,
+                        data: data,
+                        dynamic: {
+                            hp: data.hit_points.max,
+                            conditions: []
+                        }
+                    },
+                    x: pos.x,
+                    y: pos.y
+                }
+                );
+            }
+            $('#add-npc-dialog').animate({ width: 'hide' }, 200);
+            
         });
     }
 });

@@ -3,6 +3,7 @@
     <head>
         <title>Player</title>
         <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <!-- Libraries -->
         <script
@@ -25,6 +26,8 @@
         <link rel="stylesheet" href="style/tippy_material.css">
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/3.0.16/svg.min.js" integrity="sha512-p3Tp2zn+wApBreZCgRkmMwnfpN8MUPXzzOihXx7iGYXqE7t6m9drY8HeyMeeFuDWiTFKrGUrq3jpbT0vX6zY/Q==" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tagify/3.23.1/jQuery.tagify.min.js" integrity="sha512-rTGB6PwoLTbBh7iZQhaJIn8LpSohPzRTIi3Eejb6moBVgDSm37Sne0LfQ9VFg5AQloJn7Vd/5rVIbnLjDVjViw==" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tagify/3.23.1/tagify.min.css" integrity="sha512-1CG2eaZ3B/p7OqthY2eBpVCD2A+0b2T7aEXfMnr4FqZFoKddxURdxcD8EcKI66qthtkGAWA/Hnwy7ceNHcHJKw==" crossorigin="anonymous" />
 
         <!-- Local Files -->
         <script src="scripts/sensitive.js"></script> <!-- Must be added after clone. Contains non-open-source code for password derivation etc -->
@@ -157,6 +160,40 @@
             </div>
             <div class='ctx-item' data-ctx='add_npc'>
                 <div class="menu-icon"><i class='material-icons'>attribution</i></div><div class="menu-label"><span>Add NPC</span></div>
+            </div>
+        </div>
+        <div id='add-npc-dialog'>
+            <div class='title noselect'>
+                <span>Add NPC</span>
+            </div>
+            <div class='npc-search'>
+                <input>
+                <i class="material-icons noselect">search</i>
+            </div>
+            <div class='npc-list noscroll'>
+                
+            </div>
+            <div class='npc-options'>
+                <button id='npc-img-button'><img src='assets/logo.png' alt=''></button>
+                <input id='npc-img-upload' type='file'>
+                <input id='npc-name-inp' placeholder="Name" autocomplete="off">
+                <select id='npc-size-select'>
+                    <option value="tiny">Tiny</option>
+                    <option value="small">Small</option>
+                    <option value="medium">Medium</option>
+                    <option value="large">Large</option>
+                    <option value="huge">Huge</option>
+                    <option value="gargantuan">Gargantuan</option>
+                </select>
+                <div id='hp-input' class='option-inp'>
+                    <input>
+                    <span class='label'><span>HP</span></span>
+                </div>
+                <div id='ac-input' class='option-inp'>
+                    <input>
+                    <span class='label'><span>AC</span></span>
+                </div>
+                <button id='finish-npc' data-pos='{x:0,y:0}' data-npc='{}'>Add</button>
             </div>
         </div>
     </body>
