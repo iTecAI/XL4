@@ -360,8 +360,22 @@ function draw_npc(obj) {
     } else {
         var stats_obj = '';
     }
+    if (stats_showing[obj.id] == true) {
+        var statblock = generate_creature_editable(
+            obj.data.data,
+            obj.data.dynamic,
+            obj.id
+        );
+        var stat_showing = 'showing-stats';
+    } else {
+        var statblock = '';
+        var stat_showing = 'hiding-stats';
+    }
     return $('<div class="object npc npc-full token"></div>')
         .attr('data-oid', obj.id)
+        .attr('data-npc', JSON.stringify(obj.data.data))
+        .attr('data-dynamic', JSON.stringify(obj.data.dynamic))
+        .addClass(stat_showing)
         .addClass(cond(obj.data.background, 'background', 'no-background'))
         .addClass(cond(obj.data.player_visible, 'player-visible', 'player-invisible'))
         .append(
@@ -370,6 +384,7 @@ function draw_npc(obj) {
         )
         .append($('<span class="npc-name"></span>').text(obj.data.data.name))
         .append(stats_obj)
+        .append(statblock)
         .css({
             top: obj.position.y + '%',
             left: obj.position.x + '%'
@@ -384,7 +399,7 @@ function draw_npc(obj) {
             }
         })
         .on('mousedown', function (event) {
-            if (event.button == 0 && ($(this).hasClass('owned') || current_cmp_data.dms.includes(uid)) && !$(event.target).is('input')) {
+            if (event.button == 0 && ($(this).hasClass('owned') || current_cmp_data.dms.includes(uid)) && !$(event.target).is('input') && !($(event.target).hasClass('creature') || $(event.target).parents('.creature').length > 0)) {
                 if (current_tool == 'move') {
                     $(this).attr('data-moving', 'true');
                 }
@@ -445,6 +460,21 @@ function draw_npc(obj) {
                 value: true
             }
             );
+        })
+        .on('ctx:show_stats', function (event) {
+            stats_showing[$(this).attr('data-oid')] = true;
+            $(this).children('.creature').remove();
+            $(this).append(generate_creature_editable(
+                JSON.parse($(this).attr('data-npc')),
+                JSON.parse($(this).attr('data-dynamic')),
+                $(this).attr('data-oid')
+            ));
+            $(this).addClass('showing-stats').removeClass('hiding-stats');
+        })
+        .on('ctx:hide_stats', function (event) {
+            stats_showing[$(this).attr('data-oid')] = false;
+            $(this).children('.creature').remove();
+            $(this).addClass('hiding-stats').removeClass('showing-stats');
         });
 }
 

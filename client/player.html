@@ -28,6 +28,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/3.0.16/svg.min.js" integrity="sha512-p3Tp2zn+wApBreZCgRkmMwnfpN8MUPXzzOihXx7iGYXqE7t6m9drY8HeyMeeFuDWiTFKrGUrq3jpbT0vX6zY/Q==" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/tagify/3.23.1/jQuery.tagify.min.js" integrity="sha512-rTGB6PwoLTbBh7iZQhaJIn8LpSohPzRTIi3Eejb6moBVgDSm37Sne0LfQ9VFg5AQloJn7Vd/5rVIbnLjDVjViw==" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tagify/3.23.1/tagify.min.css" integrity="sha512-1CG2eaZ3B/p7OqthY2eBpVCD2A+0b2T7aEXfMnr4FqZFoKddxURdxcD8EcKI66qthtkGAWA/Hnwy7ceNHcHJKw==" crossorigin="anonymous" />
+        <script src="https://unpkg.com/showdown/dist/showdown.min.js"></script>
 
         <!-- Local Files -->
         <script src="scripts/sensitive.js"></script> <!-- Must be added after clone. Contains non-open-source code for password derivation etc -->
@@ -151,6 +152,12 @@
             </div>
             <div class='ctx-item' data-ctx='edit'>
                 <div class="menu-icon"><i class='material-icons'>create</i></div><div class="menu-label"><span>Edit</span></div>
+            </div>
+            <div class='ctx-item' data-ctx='hide_stats'>
+                <div class="menu-icon"><i class='material-icons'>insert_chart_outlined</i></div><div class="menu-label"><span>Hide Statblock</span></div>
+            </div>
+            <div class='ctx-item' data-ctx='show_stats'>
+                <div class="menu-icon"><i class='material-icons'>insert_chart</i></div><div class="menu-label"><span>Show Statblock</span></div>
             </div>
             <div class='ctx-item' data-ctx='enable_background'>
                 <div class="menu-icon"><i class='material-icons'>account_circle</i></div><div class="menu-label"><span>Enable Background</span></div>

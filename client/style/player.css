@@ -452,6 +452,7 @@
 .object.npc {
     position: absolute;
     display: inline-block;
+    z-index: 88;
 }
 .object.npc .npc-token {
     position: absolute;
@@ -877,4 +878,122 @@
 #finish-npc:hover {
     background-color: var(--secondary-dark);
     color: white;
+}
+
+.creature {
+    position: absolute;
+    left: calc(100% + 5px);
+    border-radius: 10px;
+    display: inline-block;
+    width: 500px;
+    box-sizing: border-box;
+    height: fit-content;
+    max-height: 600px;
+    background-color: var(--gradient8);
+    transition: background-color 0.2s;
+    overflow-y: scroll;
+    padding: 5px;
+}
+.creature .basic-info {
+    position: relative;
+    display: inline-block;
+    width: calc(100% + 10px);
+    height: fit-content;
+    background-color: var(--gradient8);
+    margin-left: -5px;
+    margin-top: -5px;
+    padding: 5px;
+}
+.creature .name {
+    font-family: serif;
+    color: var(--dnd-text);
+    font-weight: 400;
+    font-size: 20pt;
+}
+.creature .name-subtitle {
+    font-family: Roboto;
+    font-style: italic;
+    font-size: 10pt;
+    margin-top: -5px;
+}
+.creature .cr {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translate(0,-50%);
+    font-size: 20pt;
+    color: var(--dnd-text);
+    font-family: serif;
+    font-style: normal;
+}
+.creature .cr-title {
+    font-size: 10pt;
+}
+.creature .cr-val {
+    display: inline-block;
+    width: 40px;
+}
+.creature .monster-separator {
+    position: relative;
+    display: inline-block;
+    width: 40%;
+    height: 2px;
+    background-image: linear-gradient(90deg, rgba(172,17,17,1) 56%, rgba(0,212,255,0) 100%);
+}
+.creature .smallstat-title {
+    margin-right: 5px;
+    font-family: Roboto;
+    font-weight: 600;
+    color: var(--dnd-small-text);
+}
+.ability-table {
+    display: block;
+    width: 70%;
+    position: relative;
+}
+.ability-table > *, .ability-table tr {
+    position: relative;
+    width: 100%;
+    display: inline-block;
+}
+.ability-table th, .ability-table td {
+    width: calc(100% / 6);
+    display: inline-block;
+    position: relative;
+    text-align: center;
+}
+.creature .trait {
+    position: relative;
+    margin-bottom: 15px;
+}
+.creature .trait .trait-title {
+    font-weight: 700;
+    font-style: italic;
+}
+.creature .actions-title {
+    position: relative;
+    display: block;
+    width: 100%;
+    border-bottom: 2px solid var(--dnd-text);
+    color: var(--dnd-text);
+    font-family: Roboto;
+    font-size: 16pt;
+}
+.creature .trait .action-automated {
+    padding-left: 25px;
+}
+.creature .npc-stat-mod {
+    border: none;
+    transition: background-color 0.2s;
+    border-radius: 4px;
+}
+.creature .npc-stat-mod:focus {
+    background-color: var(--gradient7);
+}
+.creature .hp .npc-stat-mod {
+    display: inline-block;
+    width: 50px;
+}
+.creature .hp .npc-stat-mod:first-child {
+    text-align: right;
 }

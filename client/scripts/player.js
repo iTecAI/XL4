@@ -266,6 +266,9 @@ function setup_map_base() {
         }
     });
     $(map_container).on('wheel', function (e) {
+        if ($(e.target).hasClass('creature') || $(e.target).parents('.creature').length > 0) {
+            return;
+        }
         e.preventDefault();
         e = e.originalEvent;
         // take the scale into account with the offset
