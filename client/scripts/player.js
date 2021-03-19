@@ -381,12 +381,12 @@ function setup_map_base() {
         );
     });
     $(map_container).on('ctx:add_npc', function (event) {
-        $('#finish-npc').attr('data-pos',JSON.stringify({x:event.x,y:event.y}));
+        $('#finish-npc').attr('data-pos', JSON.stringify({ x: event.x, y: event.y }));
         $('#add-npc-dialog .npc-search input').val('');
         $('#add-npc-dialog .npc-list .npc-item').remove();
         $('#add-npc-dialog .npc-options input').val('');
         $('#add-npc-dialog .npc-options select').val('medium');
-        $('#add-npc-dialog .npc-options img').attr('src','assets/logo.png');
+        $('#add-npc-dialog .npc-options img').attr('src', 'assets/logo.png');
         $('#finish-npc').attr('data-npc', '{}');
         $('#add-npc-dialog').animate({ width: 'show' }, 200);
     });
@@ -484,7 +484,7 @@ function pagelocal_update(data) {
 }
 
 function setup_tagifiers() {
-    
+
 }
 
 $(document).ready(function () {
@@ -501,13 +501,13 @@ $(document).ready(function () {
             $('#add-character-dialog').remove();
         }
         if (
-            !$(event.target).is('#add-npc-dialog') && 
-            $(event.target).parents('#add-npc-dialog').length == 0 && 
-            $('#add-npc-dialog').length > 0 && 
-            !$(event.target).is('#context-menu') && 
+            !$(event.target).is('#add-npc-dialog') &&
+            $(event.target).parents('#add-npc-dialog').length == 0 &&
+            $('#add-npc-dialog').length > 0 &&
+            !$(event.target).is('#context-menu') &&
             $(event.target).parents('#context-menu').length == 0
         ) {
-            $('#add-npc-dialog').animate({'width':'hide'}, 200);
+            $('#add-npc-dialog').animate({ 'width': 'hide' }, 200);
         }
     });
     params = parse_query_string();
@@ -603,9 +603,9 @@ $(document).ready(function () {
                         var classes = [];
                         for (var i = 0; i < item.classes.length; i++) {
                             if (item.classes[i].match_type == 'any') {
-                                classes.push(item.classes[i].match.some(function (v, i, a) { return $(event.target).hasClass(v) || $(event.target).parentsUntil('#player', '.' + v).length > 0; }));
+                                classes.push(item.classes[i].match.some(function (v, i, a) { return (!$(event.target).hasClass(v.slice(1)) && !$(event.target).parentsUntil('#player', '.' + v.slice(1)).length > 0 && v[0] == '!') || ($(event.target).hasClass(v) || $(event.target).parentsUntil('#player', '.' + v).length > 0); }));
                             } else if (item.classes[i].match_type == 'all') {
-                                classes.push(item.classes[i].match.every(function (v, i, a) { return $(event.target).hasClass(v) || $(event.target).parentsUntil('#player', '.' + v).length > 0; }));
+                                classes.push(item.classes[i].match.every(function (v, i, a) { return (!$(event.target).hasClass(v.slice(1)) && !$(event.target).parentsUntil('#player', '.' + v.slice(1)).length > 0 && v[0] == '!') || ($(event.target).hasClass(v) || $(event.target).parentsUntil('#player', '.' + v).length > 0); }));
                             }
                         }
                         showing = classes.some(function (v) { return v; });
@@ -721,13 +721,13 @@ $(document).ready(function () {
                             npc_item.append($('<img class="npc-img">').attr('src', 'assets/logo.png'));
                         }
                         npc_item.on('click', function (event) {
-                            $('#npc-img-button img').attr('src',$(this).children('img').attr('src'));
+                            $('#npc-img-button img').attr('src', $(this).children('img').attr('src'));
                             var npc = JSON.parse($(this).attr('data-npc'));
                             $('#npc-name-inp').val(npc.name);
                             $('#npc-size-select').val(npc.size.toLowerCase());
                             $('#hp-input input').val(npc.hit_points.max);
                             $('#ac-input input').val(npc.armor_class.base);
-                            $('#finish-npc').attr('data-npc',$(this).attr('data-npc'));
+                            $('#finish-npc').attr('data-npc', $(this).attr('data-npc'));
                         });
                         dummy_npc_list.append(npc_item);
                     }
@@ -738,7 +738,7 @@ $(document).ready(function () {
         $('#npc-img-button').on('click', function (event) {
             $('#npc-img-upload').trigger('click');
         });
-        $('#npc-img-upload').on('change', function(event) {
+        $('#npc-img-upload').on('change', function (event) {
             const file = event.target.files[0];
             const reader = new FileReader();
 
@@ -752,14 +752,14 @@ $(document).ready(function () {
         });
         $('#finish-npc').on('click', function (event) {
             if (
-                $('#npc-name-inp').val().length == 0 || 
+                $('#npc-name-inp').val().length == 0 ||
                 $('#npc-img-button img').attr('src').length == 0 ||
                 $('#hp-input input').val().length == 0 ||
                 isNaN(Number($('#hp-input input').val())) ||
                 $('#ac-input input').val().length == 0 ||
                 isNaN(Number($('#ac-input input').val()))
             ) {
-                $(this).animate({'background-color':'red'}, 200);
+                $(this).animate({ 'background-color': 'red' }, 200);
                 window.setTimeout(function () {
                     $('#finish-npc').removeAttr('style');
                 }, 1000);
@@ -825,7 +825,7 @@ $(document).ready(function () {
                 );
             }
             $('#add-npc-dialog').animate({ width: 'hide' }, 200);
-            
+
         });
     }
 });

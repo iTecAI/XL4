@@ -605,6 +605,62 @@ var custom_ctx = {
         players: {
 
         }
+    },
+    roll_init: {
+        dms: {
+            classes: [
+                {
+                    match_type: 'all',
+                    match: [
+                        'npc',
+                        '!in-initiative'
+                    ]
+                },
+                {
+                    match_type: 'all',
+                    match: [
+                        'character',
+                        '!in-initiative'
+                    ]
+                }
+            ]
+        },
+        players: {
+            classes: [
+                {
+                    match_type: 'all',
+                    match: [
+                        'character',
+                        '!in-initiative',
+                        'owned'
+                    ]
+                }
+            ]
+        }
+    },
+    attack: {
+        dms: {
+            classes: [
+                {
+                    match_type: 'any',
+                    match: [
+                        'npc',
+                        'character'
+                    ]
+                }
+            ]
+        },
+        players: {
+            classes: [
+                {
+                    match_type: 'any',
+                    match: [
+                        'npc',
+                        'character'
+                    ]
+                }
+            ]
+        }
     }
 };
 
@@ -635,7 +691,28 @@ function generate_creature_editable(creature, dynamic, oid) {
                 .append(
                     $('<div class="name-subtitle"></div>')
                         .append(
-                            $('<span class="size"></span>').text(creature.size)
+                            $('<span class="size"></span>').append(
+                                $('<select class="npc-stat-mod"></select>')
+                                    .append('<option value="tiny">Tiny</option>')
+                                    .append('<option value="small">Small</option>')
+                                    .append('<option value="medium">Medium</option>')
+                                    .append('<option value="large">Large</option>')
+                                    .append('<option value="huge">Huge</option>')
+                                    .append('<option value="gargantuan">Gargantuan</option>')
+                                    .val(creature.size.toLowerCase())
+                                    .on('change', function (event) {
+                                        post(
+                                            '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/objects/' + $(this).parents('.basic-info').parents('.creature').attr('data-oid') + '/modify/',
+                                            function () { }, {}, {
+                                                path: 'data.size',
+                                                value: $(this).val().toLowerCase()
+                                            }
+                                        );
+                                    })
+                                    .css({
+                                        color: 'var(--dnd1)'
+                                    })
+                            )
                         )
                         .append('<span> </span>')
                         .append(
