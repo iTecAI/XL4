@@ -661,6 +661,38 @@ var custom_ctx = {
                 }
             ]
         }
+    },
+    init_remove: {
+        dms: {
+            classes: [
+                {
+                    match_type: 'all',
+                    match: [
+                        'npc',
+                        'in-initiative'
+                    ]
+                },
+                {
+                    match_type: 'all',
+                    match: [
+                        'character',
+                        'in-initiative'
+                    ]
+                }
+            ]
+        },
+        players: {
+            classes: [
+                {
+                    match_type: 'all',
+                    match: [
+                        'character',
+                        'in-initiative',
+                        'owned'
+                    ]
+                }
+            ]
+        }
     }
 };
 

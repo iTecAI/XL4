@@ -49,3 +49,6 @@ class MoveObjectModel(BaseModel):
 
 class AddBestiaryModel(BaseModel):
     url: str
+
+class InitiativeModel(BaseModel):
+    oid: str

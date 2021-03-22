@@ -129,6 +129,16 @@
                         <i class="material-icons">panorama_fish_eye</i>
                     </button>
                 </div>
+                <div id='initiative-bar' class='noselect noscroll'>
+                    <div id='init-buttons'>
+                        <button id='run-init' data-tippy-content="Start"><i class='material-icons'>play_circle</i></button>
+                        <button id='end-init' data-tippy-content="End"><i class='material-icons'>cancel</i></button>
+                        <button id='next-init' data-tippy-content="Next"><i class='material-icons'>play_circle</i></button>
+                    </div>
+                    <div id='init-items'>
+                        
+                    </div>
+                </div>
             </div>
         </div>
         <div id='noconn' class='noselect small-box-shadow'>
@@ -173,6 +183,9 @@
             </div>
             <div class='ctx-item' data-ctx='attack'>
                 <div class="menu-icon"><i class='material-icons'>colorize</i></div><div class="menu-label"><span>Attack</span></div>
+            </div>
+            <div class='ctx-item' data-ctx='init_remove'>
+                <div class="menu-icon"><i class='material-icons'>cancel</i></div><div class="menu-label"><span>Remove from Initiative</span></div>
             </div>
         </div>
         <div id='add-npc-dialog'>

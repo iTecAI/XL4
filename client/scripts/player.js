@@ -455,6 +455,111 @@ function toolbar_check() {
     $('#content-box').toggleClass('dm', current_cmp_data.dms.includes(uid));
 }
 
+function update_initiative() {
+    if (Object.keys(current_map_data.initiative.combatants).length == 0) {
+        $('#initiative-bar').hide();
+    } else {
+        $('#initiative-bar').show();
+    }
+    if (current_map_data.initiative.active) {
+        $('#run-init').hide();
+        $('#end-init').show();
+        $('#next-init').show();
+    } else {
+        $('#run-init').show();
+        $('#end-init').hide();
+        $('#next-init').hide();
+    }
+
+    if (Object.keys(current_map_data.initiative.combatants).length > 0) {
+        var dummy_init = $('<div id="init-items"></div>');
+        var combatants = Object.keys(current_map_data.initiative.combatants).sort((a, b) => a - b).reverse();
+        for (var c = 0; c < combatants.length; c++) {
+            if (current_map_data.objects[current_map_data.initiative.combatants[combatants[c]]].type == 'character') {
+                if (current_cmp_data.character_data[current_map_data.objects[current_map_data.initiative.combatants[combatants[c]]].data.char_id].appearance.image == null) {
+                    var img = 'assets/logo.png';
+                } else {
+                    var img = current_cmp_data.character_data[current_map_data.objects[current_map_data.initiative.combatants[combatants[c]]].data.char_id].appearance.image;
+                }
+                var name = current_cmp_data.character_data[current_map_data.objects[current_map_data.initiative.combatants[combatants[c]]].data.char_id].name;
+            } else if (current_map_data.objects[current_map_data.initiative.combatants[combatants[c]]].type == 'npc_basic') {
+                if (current_map_data.objects[current_map_data.initiative.combatants[combatants[c]]].data.data.image == null) {
+                    var img = 'assets/logo.png';
+                } else {
+                    var img = current_map_data.objects[current_map_data.initiative.combatants[combatants[c]]].data.data.image;
+                }
+                var name = current_map_data.objects[current_map_data.initiative.combatants[combatants[c]]].data.data.name;
+            } else if (current_map_data.objects[current_map_data.initiative.combatants[combatants[c]]].type == 'npc') {
+                if (current_map_data.objects[current_map_data.initiative.combatants[combatants[c]]].data.data.image == null) {
+                    var img = 'assets/logo.png';
+                } else {
+                    var img = current_map_data.objects[current_map_data.initiative.combatants[combatants[c]]].data.data.image;
+                }
+                var name = current_map_data.objects[current_map_data.initiative.combatants[combatants[c]]].data.data.name;
+            } else {
+                continue;
+            }
+
+            dummy_init.append(
+                $('<div class="init-item"></div>')
+                    .attr('data-oid', current_map_data.initiative.combatants[combatants[c]])
+                    .attr('data-tippy-content', name)
+                    .toggleClass('current', current_map_data.initiative.current == combatants[c] && current_map_data.initiative.active)
+                    .append(
+                        $('<span class="init-img"></span>')
+                            .append(
+                                $('<img>')
+                                    .attr('src', img)
+                            )
+                    )
+                    .append(
+                        $('<div class="init-val"></div>')
+                            .append(
+                                $('<span></span>')
+                                    .text(Math.round(combatants[c]))
+                            )
+                    )
+                    .append(
+                        $('<button class="skip-to-init"><i class="material-icons">skip_next</i></button>')
+                        .on('click', function (event) {
+                            post(
+                                '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/initiative/skip_to/',
+                                console.log,
+                                {},
+                                {
+                                    oid: $(this).parents('.init-item').attr('data-oid')
+                                }
+                            );
+                            $('.object[data-oid=' + $(this).parents('.init-item').attr('data-oid') + ']').removeClass('in-initiative');
+                        })
+                    )
+                    .append(
+                        $('<button class="remove-init"><i class="material-icons">delete</i></button>')
+                            .on('click', function (event) {
+                                post(
+                                    '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/initiative/remove/',
+                                    console.log,
+                                    {},
+                                    {
+                                        oid: $(this).parents('.init-item').attr('data-oid')
+                                    }
+                                );
+                                $('.object[data-oid=' + $(this).parents('.init-item').attr('data-oid') + ']').removeClass('in-initiative');
+                            })
+                    )
+            );
+        }
+        dummy_init.replaceAll('#init-items');
+        tippy('#init-items .init-item', {
+            placement: 'right',
+            arrow: true,
+            theme: 'material',
+            offset: [0, 15],
+            delay: [200, 0]
+        });
+    }
+}
+
 function overall_update(data) {
     current_map_data = data;
     get('/campaign/' + data.campaign + '/', function (_data) {
@@ -464,6 +569,8 @@ function overall_update(data) {
 
         prep_dynamic_event_listeners();
         toolbar_check();
+
+        update_initiative();
     });
 }
 
@@ -490,6 +597,7 @@ function setup_tagifiers() {
 $(document).ready(function () {
     $('#context-menu').hide();
     $('#toolbar-shapes').hide();
+    $('#initiative-bar').hide()
     $('#add-npc-dialog').animate({ width: 'hide' }, 0);
 
     $(document).on('click', function (event) {
@@ -591,6 +699,12 @@ $(document).ready(function () {
             theme: 'material',
             offset: [0, 15]
         });
+        tippy('#init-buttons button', {
+            placement: 'right',
+            arrow: true,
+            theme: 'material',
+            offset: [0, 15]
+        });
 
         $(document).on('contextmenu', function (event) {
             var ctx_keys = Object.keys(custom_ctx);
@@ -603,9 +717,9 @@ $(document).ready(function () {
                         var classes = [];
                         for (var i = 0; i < item.classes.length; i++) {
                             if (item.classes[i].match_type == 'any') {
-                                classes.push(item.classes[i].match.some(function (v, i, a) { return (!$(event.target).hasClass(v.slice(1)) && !$(event.target).parentsUntil('#player', '.' + v.slice(1)).length > 0 && v[0] == '!') || ($(event.target).hasClass(v) || $(event.target).parentsUntil('#player', '.' + v).length > 0); }));
+                                classes.push(item.classes[i].match.some(function (v, i, a) { return (!$(event.target).hasClass(v.slice(1)) && !$(event.target).parentsUntil('#player', '.' + v.slice(1)).length > 0 && v[0] == '!') || (v[0] != '!' && ($(event.target).hasClass(v) || ($(event.target).parentsUntil('#player', '.' + v.replace(/!/g, '')).length > 0))); }));
                             } else if (item.classes[i].match_type == 'all') {
-                                classes.push(item.classes[i].match.every(function (v, i, a) { return (!$(event.target).hasClass(v.slice(1)) && !$(event.target).parentsUntil('#player', '.' + v.slice(1)).length > 0 && v[0] == '!') || ($(event.target).hasClass(v) || $(event.target).parentsUntil('#player', '.' + v).length > 0); }));
+                                classes.push(item.classes[i].match.every(function (v, i, a) { return (!$(event.target).hasClass(v.slice(1)) && !$(event.target).parentsUntil('#player', '.' + v.slice(1)).length > 0 && v[0] == '!') || (v[0] != '!' && ($(event.target).hasClass(v) || ($(event.target).parentsUntil('#player', '.' + v.replace(/!/g, '')).length > 0))); }));
                             }
                         }
                         showing = classes.some(function (v) { return v; });
@@ -748,6 +862,28 @@ $(document).ready(function () {
 
             if (file) {
                 reader.readAsDataURL(file);
+            }
+        });
+        $('#run-init').on('click', function (event) {
+            if (Object.keys(current_map_data.initiative.combatants).length > 0) {
+                post(
+                    '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/initiative/start/',
+                    function(){}
+                );
+            }
+        });
+        $('#end-init').on('click', function (event) {
+            post(
+                '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/initiative/stop/',
+                function(){}
+            );
+        });
+        $('#next-init').on('click', function (event) {
+            if (Object.keys(current_map_data.initiative.combatants).length > 0 && current_map_data.initiative.active) {
+                post(
+                    '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/initiative/next/',
+                    function(){}
+                );
             }
         });
         $('#finish-npc').on('click', function (event) {

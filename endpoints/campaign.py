@@ -681,3 +681,212 @@ async def search_npcs(sid: str, q: str, response: Response, limit: Optional[int]
     else:
         response.status_code = status.HTTP_404_NOT_FOUND
         return {'result': f'Could not find campaign {sid}.'}
+
+@router.post('/{sid}/maps/{mid}/initiative/add/')
+async def add_init(sid: str, mid: str, model: InitiativeModel, response: Response, fp: Optional[str] = Header(None)):
+    response, res = fingerprint_validate(fp, response)
+    if res != 0:
+        return res
+    if server.connections[fp].user == None:
+        response.status_code = status.HTTP_405_METHOD_NOT_ALLOWED
+        return {'result': 'Must be logged in.'}
+    if sid in server.get('users', server.connections[fp].user).campaigns:
+        if mid in server.get('campaigns.campaigns', sid).maps:
+            if model.oid in server.get("campaigns.maps",mid).objects.keys():
+                if model.oid in server.get("campaigns.maps",mid).initiative['combatants'].values():
+                    for i in list(server.get("campaigns.maps",mid).initiative['combatants'].keys()):
+                        if server.get("campaigns.maps",mid).initiative['combatants'][i] == model.oid:
+                            _roll = i
+                            break
+                    return {'result':'Success', 'initiative':{
+                        'roll':int(_roll),
+                        'position':sorted(list(server.get("campaigns.maps",mid).initiative['combatants'].keys()),reverse=True).index(_roll),
+                        'active':server.get("campaigns.maps",mid).initiative['current'] == _roll
+                    }}
+                else:
+                    if server.get("campaigns.maps",mid).objects[model.oid]['type'] == 'npc':
+                        init_mod = get_mod(server.get("campaigns.maps",mid).objects[model.oid]['data']['data']['abilities']['dexterity']['score_base'])
+                    elif server.get("campaigns.maps",mid).objects[model.oid]['type'] == 'npc_basic':
+                        init_mod = 0
+                    elif server.get("campaigns.maps",mid).objects[model.oid]['type'] == 'character':
+                        dex_ab = server.get('characters',server.get("campaigns.maps",mid).objects[model.oid]['data']['char_id']).abilities['dexterity']
+                        init_mod = get_mod(dex_ab['score_base'] + sum(dex_ab['score_mod']) + dex_ab['score_manual_mod'])
+                    else:
+                        response.status_code = status.HTTP_405_METHOD_NOT_ALLOWED
+                        return {'result': f'Cannot add object of type {server.get("campaigns.maps",mid).objects[model.oid]["type"]} to initiative.'}
+                    roll = random.random()*20 + init_mod
+                    server.get("campaigns.maps",mid).initiative['combatants'][roll] = model.oid
+                    server.get('campaigns.maps', mid).update()
+                    server.store(sid)
+                    server.store(mid)
+                    return {'result':'Success', 'initiative':{
+                        'roll':int(roll),
+                        'position':sorted(list(server.get("campaigns.maps",mid).initiative['combatants'].keys()),reverse=True).index(roll),
+                        'active':server.get("campaigns.maps",mid).initiative['current'] == roll
+                    }}
+                    
+            else:
+                response.status_code = status.HTTP_404_NOT_FOUND
+                return {'result': f'Could not find object {model.oid} on map {mid} in campaign {sid}.'}
+        else:
+            response.status_code = status.HTTP_404_NOT_FOUND
+            return {'result': f'Could not find map {mid} in campaign {sid}.'}
+    else:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return {'result': f'Could not find campaign {sid}.'}
+
+@router.post('/{sid}/maps/{mid}/initiative/remove/')
+async def remove_init(sid: str, mid: str, model: InitiativeModel, response: Response, fp: Optional[str] = Header(None)):
+    response, res = fingerprint_validate(fp, response)
+    if res != 0:
+        return res
+    if server.connections[fp].user == None:
+        response.status_code = status.HTTP_405_METHOD_NOT_ALLOWED
+        return {'result': 'Must be logged in.'}
+    if sid in server.get('users', server.connections[fp].user).campaigns:
+        if mid in server.get('campaigns.campaigns', sid).maps:
+            if model.oid in server.get("campaigns.maps",mid).objects.keys():
+                if model.oid in server.get("campaigns.maps",mid).initiative['combatants'].values():
+                    for i in list(server.get("campaigns.maps",mid).initiative['combatants'].keys()):
+                        if server.get("campaigns.maps",mid).initiative['combatants'][i] == model.oid:
+                            _roll = i
+                            break
+                    if server.get("campaigns.maps",mid).initiative['current'] == _roll:
+                        if sorted(list(server.get("campaigns.maps",mid).initiative['combatants'].keys()), reverse=True).index(_roll) == len(list(server.get("campaigns.maps",mid).initiative['combatants'].keys())) - 1:
+                            server.get("campaigns.maps",mid).initiative['current'] = sorted(list(server.get("campaigns.maps",mid).initiative['combatants'].keys()),reverse=True)[0]
+                        else:
+                            server.get("campaigns.maps",mid).initiative['current'] = sorted(list(server.get("campaigns.maps",mid).initiative['combatants'].keys()), reverse=True)[sorted(list(server.get("campaigns.maps",mid).initiative['combatants'].keys()), reverse=True).index(_roll)+1]
+                    del server.get("campaigns.maps",mid).initiative['combatants'][_roll]
+                    if len(server.get("campaigns.maps",mid).initiative['combatants'].keys()) == 0:
+                        server.get("campaigns.maps",mid).initiative['active'] = False
+                        server.get("campaigns.maps",mid).initiative['current'] = None
+                    server.get('campaigns.maps', mid).update()
+                    server.store(sid)
+                    server.store(mid)
+                    return {'result':'Success'}
+                else:
+                    response.status_code = status.HTTP_404_NOT_FOUND
+                    return {'result': f'Object {model.oid} not in initiative of map {mid} in campaign {sid}.'}
+            else:
+                response.status_code = status.HTTP_404_NOT_FOUND
+                return {'result': f'Could not find object {model.oid} on map {mid} in campaign {sid}.'}
+        else:
+            response.status_code = status.HTTP_404_NOT_FOUND
+            return {'result': f'Could not find map {mid} in campaign {sid}.'}
+    else:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return {'result': f'Could not find campaign {sid}.'}
+
+@router.post('/{sid}/maps/{mid}/initiative/skip_to/')
+async def skip_to_init(sid: str, mid: str, model: InitiativeModel, response: Response, fp: Optional[str] = Header(None)):
+    response, res = fingerprint_validate(fp, response)
+    if res != 0:
+        return res
+    if server.connections[fp].user == None:
+        response.status_code = status.HTTP_405_METHOD_NOT_ALLOWED
+        return {'result': 'Must be logged in.'}
+    if sid in server.get('users', server.connections[fp].user).campaigns:
+        if mid in server.get('campaigns.campaigns', sid).maps:
+            if model.oid in server.get("campaigns.maps",mid).objects.keys():
+                if model.oid in server.get("campaigns.maps",mid).initiative['combatants'].values():
+                    if not server.get("campaigns.maps",mid).initiative['active']:
+                        response.status_code = status.HTTP_405_METHOD_NOT_ALLOWED
+                        return {'result': f'Initiative is not yet active.'}
+                    for i in list(server.get("campaigns.maps",mid).initiative['combatants'].keys()):
+                        if server.get("campaigns.maps",mid).initiative['combatants'][i] == model.oid:
+                            _roll = i
+                            break
+                    server.get("campaigns.maps",mid).initiative['current'] = _roll
+                    server.get('campaigns.maps', mid).update()
+                    server.store(sid)
+                    server.store(mid)
+                    return {'result':'Success'}
+                else:
+                    response.status_code = status.HTTP_404_NOT_FOUND
+                    return {'result': f'Object {model.oid} not in initiative of map {mid} in campaign {sid}.'}
+            else:
+                response.status_code = status.HTTP_404_NOT_FOUND
+                return {'result': f'Could not find object {model.oid} on map {mid} in campaign {sid}.'}
+        else:
+            response.status_code = status.HTTP_404_NOT_FOUND
+            return {'result': f'Could not find map {mid} in campaign {sid}.'}
+    else:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return {'result': f'Could not find campaign {sid}.'}
+
+@router.post('/{sid}/maps/{mid}/initiative/next/')
+async def next_init(sid: str, mid: str, response: Response, fp: Optional[str] = Header(None)):
+    response, res = fingerprint_validate(fp, response)
+    if res != 0:
+        return res
+    if server.connections[fp].user == None:
+        response.status_code = status.HTTP_405_METHOD_NOT_ALLOWED
+        return {'result': 'Must be logged in.'}
+    if sid in server.get('users', server.connections[fp].user).campaigns:
+        if mid in server.get('campaigns.campaigns', sid).maps:
+            if server.get("campaigns.maps",mid).initiative['active']:
+                if sorted(list(server.get("campaigns.maps",mid).initiative['combatants'].keys()), reverse=True).index(server.get("campaigns.maps",mid).initiative['current']) == len(list(server.get("campaigns.maps",mid).initiative['combatants'].keys())) - 1:
+                    server.get("campaigns.maps",mid).initiative['current'] = sorted(list(server.get("campaigns.maps",mid).initiative['combatants'].keys()),reverse=True)[0]
+                else:
+                    server.get("campaigns.maps",mid).initiative['current'] = sorted(list(server.get("campaigns.maps",mid).initiative['combatants'].keys()), reverse=True)[sorted(list(server.get("campaigns.maps",mid).initiative['combatants'].keys()), reverse=True).index(server.get("campaigns.maps",mid).initiative['current'])+1]
+                server.get('campaigns.maps', mid).update()
+                server.store(sid)
+                server.store(mid)
+                return server.get("campaigns.maps",mid).initiative
+            else:
+                response.status_code = status.HTTP_405_METHOD_NOT_ALLOWED
+                return {'result': f'Initiative is not yet active.'}
+        else:
+            response.status_code = status.HTTP_404_NOT_FOUND
+            return {'result': f'Could not find map {mid} in campaign {sid}.'}
+    else:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return {'result': f'Could not find campaign {sid}.'}
+
+@router.post('/{sid}/maps/{mid}/initiative/start/')
+async def start_init(sid: str, mid: str, response: Response, fp: Optional[str] = Header(None)):
+    response, res = fingerprint_validate(fp, response)
+    if res != 0:
+        return res
+    if server.connections[fp].user == None:
+        response.status_code = status.HTTP_405_METHOD_NOT_ALLOWED
+        return {'result': 'Must be logged in.'}
+    if sid in server.get('users', server.connections[fp].user).campaigns:
+        if mid in server.get('campaigns.campaigns', sid).maps:
+            if not server.get("campaigns.maps",mid).initiative['active'] and len(server.get("campaigns.maps",mid).initiative['combatants']) > 0:
+                server.get("campaigns.maps",mid).initiative['active'] = True
+                server.get("campaigns.maps",mid).initiative['current'] = sorted(list(server.get("campaigns.maps",mid).initiative['combatants']), reverse=True)[0]
+            server.get('campaigns.maps', mid).update()
+            server.store(sid)
+            server.store(mid)
+            return server.get("campaigns.maps",mid).initiative
+        else:
+            response.status_code = status.HTTP_404_NOT_FOUND
+            return {'result': f'Could not find map {mid} in campaign {sid}.'}
+    else:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return {'result': f'Could not find campaign {sid}.'}
+
+@router.post('/{sid}/maps/{mid}/initiative/stop/')
+async def stop_init(sid: str, mid: str, response: Response, fp: Optional[str] = Header(None)):
+    response, res = fingerprint_validate(fp, response)
+    if res != 0:
+        return res
+    if server.connections[fp].user == None:
+        response.status_code = status.HTTP_405_METHOD_NOT_ALLOWED
+        return {'result': 'Must be logged in.'}
+    if sid in server.get('users', server.connections[fp].user).campaigns:
+        if mid in server.get('campaigns.campaigns', sid).maps:
+            server.get("campaigns.maps",mid).initiative['active'] = False
+            server.get("campaigns.maps",mid).initiative['current'] = None
+            server.get("campaigns.maps",mid).initiative['combatants'] = {}
+            server.get('campaigns.maps', mid).update()
+            server.store(sid)
+            server.store(mid)
+            return {'result':'Success'}
+        else:
+            response.status_code = status.HTTP_404_NOT_FOUND
+            return {'result': f'Could not find map {mid} in campaign {sid}.'}
+    else:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return {'result': f'Could not find campaign {sid}.'}

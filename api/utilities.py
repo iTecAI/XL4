@@ -92,3 +92,6 @@ def search_static(search,endpoint=None,exclude=['spellcasting','classes','races'
 
 def copath(cpath):
     return os.path.join(*cpath.split('/'))
+
+def get_mod(score):
+    return int((score - 10) / 2)

@@ -261,6 +261,8 @@ function draw_character(obj) {
     }
     return $('<div class="object character token"></div>')
         .toggleClass('owned', uid == obj.data.owner)
+        .toggleClass('in-initiative', Object.values(current_map_data.initiative.combatants).includes(obj.id))
+        .toggleClass('initiative-current', current_map_data.initiative.combatants[current_map_data.initiative.current] == obj.id)
         .attr('data-oid', obj.id)
         .attr('data-cid', obj.data.char_id)
         .addClass(cond(obj.data.background, 'background', 'no-background'))
@@ -272,7 +274,7 @@ function draw_character(obj) {
                     current_cmp_data.character_data[obj.data.char_id].appearance.image
                 )))
         )
-        .append($('<span class="char-name"></span>').text(current_cmp_data.character_data[obj.data.char_id].name))
+        .append($('<span class="char-name"></span>').html(cond(Object.values(current_map_data.initiative.combatants).includes(obj.id),'<i class="material-icons">casino</i>','') + current_cmp_data.character_data[obj.data.char_id].name))
         .append(stats_obj)
         .css({
             top: obj.position.y + '%',
@@ -334,6 +336,28 @@ function draw_character(obj) {
                 value: false
             }
             );
+        })
+        .on('ctx:roll_init', function (event) {
+            post(
+                '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/initiative/add/',
+                console.log,
+                {},
+                {
+                    oid: $(this).attr('data-oid')
+                }
+            );
+            $(this).addClass('in-initiative');
+        })
+        .on('ctx:init_remove', function (event) {
+            post(
+                '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/initiative/remove/',
+                console.log,
+                {},
+                {
+                    oid: $(this).attr('data-oid')
+                }
+            );
+            $(this).removeClass('in-initiative').removeClass('initiative-current');
         });
 }
 
@@ -377,12 +401,14 @@ function draw_npc(obj) {
         .attr('data-dynamic', JSON.stringify(obj.data.dynamic))
         .addClass(stat_showing)
         .addClass(cond(obj.data.background, 'background', 'no-background'))
+        .toggleClass('in-initiative', Object.values(current_map_data.initiative.combatants).includes(obj.id))
+        .toggleClass('initiative-current', current_map_data.initiative.combatants[current_map_data.initiative.current] == obj.id)
         .addClass(cond(obj.data.player_visible, 'player-visible', 'player-invisible'))
         .append(
             $('<span class="npc-token"></span>')
                 .append($('<img>').attr('src', obj.data.data.image))
         )
-        .append($('<span class="npc-name"></span>').text(obj.data.data.name))
+        .append($('<span class="npc-name"></span>').html(cond(Object.values(current_map_data.initiative.combatants).includes(obj.id),'<i class="material-icons">casino</i>','') + obj.data.data.name))
         .append(stats_obj)
         .append(statblock)
         .css({
@@ -475,6 +501,28 @@ function draw_npc(obj) {
             stats_showing[$(this).attr('data-oid')] = false;
             $(this).children('.creature').remove();
             $(this).addClass('hiding-stats').removeClass('showing-stats');
+        })
+        .on('ctx:roll_init', function (event) {
+            post(
+                '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/initiative/add/',
+                console.log,
+                {},
+                {
+                    oid: $(this).attr('data-oid')
+                }
+            );
+            $(this).addClass('in-initiative');
+        })
+        .on('ctx:init_remove', function (event) {
+            post(
+                '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/initiative/remove/',
+                console.log,
+                {},
+                {
+                    oid: $(this).attr('data-oid')
+                }
+            );
+            $(this).removeClass('in-initiative').removeClass('initiative-current');
         });
 }
 
@@ -505,11 +553,13 @@ function draw_basic_npc(obj) {
         .attr('data-oid', obj.id)
         .addClass(cond(obj.data.background, 'background', 'no-background'))
         .addClass(cond(obj.data.player_visible, 'player-visible', 'player-invisible'))
+        .toggleClass('in-initiative', Object.values(current_map_data.initiative.combatants).includes(obj.id))
+        .toggleClass('initiative-current', current_map_data.initiative.combatants[current_map_data.initiative.current] == obj.id)
         .append(
             $('<span class="npc-token"></span>')
                 .append($('<img>').attr('src', obj.data.data.image))
         )
-        .append($('<span class="npc-name"></span>').text(obj.data.data.name))
+        .append($('<span class="npc-name"></span>').html(cond(Object.values(current_map_data.initiative.combatants).includes(obj.id),'<i class="material-icons">casino</i>','') + obj.data.data.name))
         .append(stats_obj)
         .css({
             top: obj.position.y + '%',
@@ -586,6 +636,28 @@ function draw_basic_npc(obj) {
                 value: true
             }
             );
+        })
+        .on('ctx:roll_init', function (event) {
+            post(
+                '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/initiative/add/',
+                console.log,
+                {},
+                {
+                    oid: $(this).attr('data-oid')
+                }
+            );
+            $(this).addClass('in-initiative');
+        })
+        .on('ctx:init_remove', function (event) {
+            post(
+                '/campaign/' + current_cmp_data.id + '/maps/' + current_map_data.id + '/initiative/remove/',
+                console.log,
+                {},
+                {
+                    oid: $(this).attr('data-oid')
+                }
+            );
+            $(this).removeClass('in-initiative').removeClass('initiative-current');
         });
 }
 

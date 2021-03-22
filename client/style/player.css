@@ -417,6 +417,11 @@
 .object.character:hover .char-name {
     background-color: rgba(0,0,0,0.4);
 }
+.object.character .char-name i {
+    font-size: 6px;
+    vertical-align: middle;
+    margin-right: 3px;
+}
 .object.character .char-stats {
     position: absolute;
     display: inline-block;
@@ -490,6 +495,11 @@
 }
 .object.npc:hover .npc-name {
     background-color: rgba(0,0,0,0.4);
+}
+.object.npc .npc-name i {
+    font-size: 6px;
+    vertical-align: middle;
+    margin-right: 3px;
 }
 .object.npc.player-invisible .npc-token {
     opacity: 0.75;
@@ -996,4 +1006,163 @@
 }
 .creature .hp .npc-stat-mod:first-child {
     text-align: right;
+}
+
+#initiative-bar {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    display: inline-block;
+    height: 60%;
+    width: 160px;
+    z-index: 10;
+    overflow: visible;
+    border-radius: 5px;
+}
+#init-items {
+    position: absolute;
+    top: 85px;
+    left: 0px;
+    display: inline-block;
+    height: calc(100% - 85px);
+    width: 100%;
+}
+#init-buttons {
+    position: absolute;
+    display: inline-block;
+    width: 40px;
+    height: 85px;
+    top: 0px;
+    left: 0px;
+}
+#init-buttons button {
+    position: absolute;
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    background-color: var(--primary-darker);
+    transition: background-color 0.2s;
+    color: white;
+    border: none;
+    left: 0px;
+    -webkit-box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.46);
+    -moz-box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.46);
+    box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.46);
+}
+#init-buttons button:hover {
+    background-color: var(--secondary-dark);
+}
+#init-buttons button i {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+#next-init {
+    top: 0px;
+}
+#run-init {
+    top: 45px;
+}
+#end-init {
+    top: 45px;
+}
+
+#init-items .init-item {
+    position: relative;
+    display: block;
+    height: 40px;
+    width: 80px;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-top: 5px;
+    border: 2px solid var(--primary-darker);
+    -webkit-box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.46);
+    -moz-box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.46);
+    box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.46);
+    box-sizing: border-box;
+    background-color: var(--primary-darker);
+    transition: background-color 0.2s, border-color 0.2s, width 0.2s;
+}
+#init-items .init-item.current, #init-items .init-item:hover {
+    background-color: var(--secondary-dark);
+    border-color: var(--secondary-dark);
+    width: 160px;
+}
+#init-items .init-item .init-img {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    display: inline-block;
+    width: 36px;
+    height: 36px;
+}
+#init-items .init-item .init-img img {
+    width: 100%;
+    height: 100%;
+}
+#init-items .init-item .init-val {
+    position: absolute;
+    top: 0px;
+    left: 36px;
+    border-radius: 20px;
+    display: inline-block;
+    width: 36px;
+    height: 36px;
+}
+#init-items .init-item .init-val span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 18px;
+    font-family: Roboto;
+    font-weight: bold;
+}
+#init-items .init-item .skip-to-init {
+    position: absolute;
+    top: 0px;
+    left: 80px;
+    border-radius: 20px;
+    display: inline-block;
+    width: 36px;
+    height: 36px;
+    border: none;
+    color: white;
+    background-color: var(--primary-darker);
+    transition: background-color 0.2s;
+}
+#init-items .init-item:hover button, #init-items .init-item.current button {
+    background-color: var(--secondary-dark);
+}
+#init-items .init-item .skip-to-init:hover {
+    background-color: var(--secondary);
+}
+#init-items .init-item .remove-init {
+    position: absolute;
+    top: 0px;
+    left: 120px;
+    border-radius: 20px;
+    display: inline-block;
+    width: 36px;
+    height: 36px;
+    border: none;
+    color: white;
+    background-color: var(--primary-darker);
+    transition: background-color 0.2s;
+}
+#init-items .init-item .remove-init:hover {
+    background-color: var(--secondary);
+}
+#init-items .init-item button i {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.object.initiative-current {
+    border: 2px solid red;
+    border-radius: 50%;
 }
